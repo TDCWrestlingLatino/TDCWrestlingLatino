@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Plataforma Premium - TDC Wrestling</title>
     
-    <!-- FUENTE OSWALD DE TU CÓDIGO VIEJO -->
+    <!-- INYECCIÓN DE LA FUENTE PROFESIONAL DEPORTIVA OSWALD -->
     <link href="https://googleapis.com" rel="stylesheet" type="text/css" />
 
     <style>
@@ -14,10 +14,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Oswald', Arial, sans-serif; /* Cambio radical de fuente en todo el sitio */
         }
 
         body {
-            background: #0b0f19; /* Fondo oscuro base */
+            background: #0b0f19;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -25,7 +26,7 @@
             padding-top: 5px;
         }
 
-        /* CONTENEDOR TOTAL FIJADO A TUS 970PX DE ANCHO */
+        /* CONTENEDOR TOTAL DE 970PX DE ANCHO */
         .plataforma-tnt {
             width: 970px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
@@ -37,49 +38,63 @@
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR DE CANALES ESTILO OSWALD METÁLICO */
+        /* BARRA SUPERIOR SLIDER DE 30 CANALES COMPACTOS */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
             border-bottom: 3px solid #2563eb;
             padding: 6px 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .fila-botones {
             display: flex;
             gap: 4px;
+            overflow-x: auto; /* Permite scroll horizontal fluido si no caben en pantalla */
+            padding-bottom: 4px;
+            width: 100%;
+        }
+        
+        /* Ocultar barra de scroll fea en navegadores */
+        .fila-botones::-webkit-scrollbar {
+            height: 4px;
+        }
+        .fila-botones::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 10px;
         }
 
-        /* DISEÑO BOTONERA DE CANALES PREMIUM */
+        /* DISEÑO DE LOS BOTONES COMPACTOS ESTILO C1, C2... */
         .btn-canal {
             background: #1e293b;
             color: #ffffff;
             border: 1px solid #334155;
-            padding: 6px 12px;
-            font-family: 'Oswald', Arial, sans-serif;
-            font-size: 12px;
+            padding: 4px 10px; /* Tamaño reducido para que no se vean gigantes */
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
             display: inline-block;
+            min-width: 42px;
+            text-align: center;
         }
-        .btn-canal:hover {
+        .btn-canal:hover, .btn-canal.activo {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #ffffff;
             border-color: #38bdf8;
-            box-shadow: inset 0 0 6px #38bdf8;
+            box-shadow: inset 0 0 5px #38bdf8;
         }
 
-        /* ESPACIO DE TRABAJO GEOMÉTRICO (310px + 660px = 970px) */
+        /* ESPACIO DE TRABAJO GEOMÉTRICO (310px + 660px) */
         .workspace {
             display: grid;
-            grid-template-columns: 310px 660px; /* TUS MEDIDAS EXACTAS */
+            grid-template-columns: 310px 660px;
             width: 100%;
-            height: 464px; /* TU ALTURA EXACTA */
+            height: 464px;
             background: #111827;
         }
 
@@ -100,30 +115,19 @@
             background: #000000;
         }
 
-        /* REPRODUCTOR INDEPENDIENTE TOTAL */
         .iframe-player {
-            width: 660px;  /* TU MEDIDA REAL */
-            height: 464px; /* TU MEDIDA REAL */
+            width: 660px;
+            height: 464px;
             border: 0px;
             background: #000000;
         }
     </style>
 
-    <!-- TUS SCRIPTS ORIGINALES DE PROTECCIÓN ANTICUÑA REALES -->
+    <!-- TUS SCRIPTS ORIGINALES DE PROTECCIÓN -->
     <script type="text/javascript">
         document.oncontextmenu = function(){return false}
-    </script> 
-    <script type="text/javascript">
-        // Simulación manual del bind sin depender de librerías externas pesadas
-        document.addEventListener("contextmenu", function(e){
-            e.preventDefault();
-        }, false);
-    </script>  
-    <script language="JavaScript">
-        function KeyPress() {
-            alert('inhabilitado');
-            return false;
-        }
+        document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false);
+        function KeyPress() { alert('inhabilitado'); return false; }
         document.onkeydown = KeyPress;
     </script>
 </head>
@@ -131,35 +135,53 @@
 
     <div class="plataforma-tnt">
         
-        <!-- BARRA SUPERIOR CON TU SISTEMA DE TARGET NATIVO "HOME" -->
+        <!-- BARRA SUPERIOR CON 30 BOTONES COMPACTOS -->
         <nav class="barra-canales">
             <div class="fila-botones">
-                <!-- Tu enlace original de la Agenda -->
-                <a href="agenda.htm" target="home" class="btn-canal">Agenda TV</a>                               
-                <!-- Tus señales reales apuntando directamente a tu reproductor -->
-                <a href="https://dlive.sx/stream/stream-930.php" target="home" class="btn-canal">CANAL 1 (DLIVE)</a>                               
-                <a href="https://transmision.activo.mx/h3-senal-1.htm" target="home" class="btn-canal">CANAL 2</a>                               
-                <a href="https://transmision.activo.mx/h4-senal-2" target="home" class="btn-canal">CANAL 3</a>                               
-                <a href="https://transmision.activo.mx/h5-senal-3" target="home" class="btn-canal">CANAL 4</a>                               
+                <a href="agenda.html" target="home" class="btn-canal">AGENDA</a>                               
+                <a href="https://dlive.sx" target="home" class="btn-canal">C1</a>                               
+                <a href="URL_CANAL_2" target="home" class="btn-canal">C2</a>                               
+                <a href="URL_CANAL_3" target="home" class="btn-canal">C3</a>                               
+                <a href="URL_CANAL_4" target="home" class="btn-canal">C4</a>                               
+                <a href="URL_CANAL_5" target="home" class="btn-canal">C5</a>                               
+                <a href="URL_CANAL_6" target="home" class="btn-canal">C6</a>                               
+                <a href="URL_CANAL_7" target="home" class="btn-canal">C7</a>                               
+                <a href="URL_CANAL_8" target="home" class="btn-canal">C8</a>                               
+                <a href="URL_CANAL_9" target="home" class="btn-canal">C9</a>                               
+                <a href="URL_CANAL_10" target="home" class="btn-canal">C10</a>                               
+                <a href="URL_CANAL_11" target="home" class="btn-canal">C11</a>                               
+                <a href="URL_CANAL_12" target="home" class="btn-canal">C12</a>                               
+                <a href="URL_CANAL_13" target="home" class="btn-canal">C13</a>                               
+                <a href="URL_CANAL_14" target="home" class="btn-canal">C14</a>                               
+                <a href="URL_CANAL_15" target="home" class="btn-canal">C15</a>                               
+                <a href="URL_CANAL_16" target="home" class="btn-canal">C16</a>                               
+                <a href="URL_CANAL_17" target="home" class="btn-canal">C17</a>                               
+                <a href="URL_CANAL_18" target="home" class="btn-canal">C18</a>                               
+                <a href="URL_CANAL_19" target="home" class="btn-canal">C19</a>                               
+                <a href="URL_CANAL_20" target="home" class="btn-canal">C20</a>                               
+                <a href="URL_CANAL_21" target="home" class="btn-canal">C21</a>                               
+                <a href="URL_CANAL_22" target="home" class="btn-canal">C22</a>                               
+                <a href="URL_CANAL_23" target="home" class="btn-canal">C23</a>                               
+                <a href="URL_CANAL_24" target="home" class="btn-canal">C24</a>                               
+                <a href="URL_CANAL_25" target="home" class="btn-canal">C25</a>                               
+                <a href="URL_CANAL_26" target="home" class="btn-canal">C26</a>                               
+                <a href="URL_CANAL_27" target="home" class="btn-canal">C27</a>                               
+                <a href="URL_CANAL_28" target="home" class="btn-canal">C28</a>                               
+                <a href="URL_CANAL_29" target="home" class="btn-canal">C29</a>                               
+                <a href="URL_CANAL_30" target="home" class="btn-canal">C30</a>                               
             </div>
         </nav>
 
-        <!-- ESPACIO DE TRABAJO CON LAS DIMENSIONES EXACTAS DE TU BLOGGER -->
+        <!-- ESPACIO DE TRABAJO -->
         <main class="workspace">
-            
-            <!-- CHAT FLOTANTE IZQUIERDO (310px x 464px) -->
             <div class="panel-bloque" id="panel-chat">
-                <!-- Chatango oficial directo -->
                 <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
             </div>
 
-            <!-- CAJA DE TRANSMISIONES DE ANCHO COMPLETO (660px x 464px) -->
             <div class="panel-bloque zona-contenido">
-                <!-- EL MARCO DE VIDEO INDEPENDIENTE CON EL NOMBRE "HOME" QUE TUS BOTONES REFIEREN -->
-                <!-- Inicia cargando tu señal en vivo tal cual como lo tenías configurado -->
-                <iframe allowfullscreen="" name="home" class="iframe-player" src="https://dlive.sx/stream/stream-930.php"></iframe>
+                <!-- Inicia mostrando tu agenda.html de forma nativa -->
+                <iframe allowfullscreen="" name="home" class="iframe-player" src="agenda.html"></iframe>
             </div>
-
         </main>
     </div>
 
