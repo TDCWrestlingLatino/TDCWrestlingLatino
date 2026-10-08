@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Plataforma Premium - TDC Wrestling</title>
+    
+    <!-- FUENTE OSWALD DE TU CÓDIGO VIEJO -->
+    <link href="https://googleapis.com" rel="stylesheet" type="text/css" />
+
     <style>
         /* RESET AMBIENTAL */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Impact', 'Arial Black', sans-serif;
         }
 
         body {
-            background: #0b0f19;
+            background: #0b0f19; /* Fondo oscuro base */
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -34,7 +37,7 @@
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR DE CANALES */
+        /* BARRA SUPERIOR DE CANALES ESTILO OSWALD METÁLICO */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
@@ -50,40 +53,28 @@
             gap: 4px;
         }
 
+        /* DISEÑO BOTONERA DE CANALES PREMIUM */
         .btn-canal {
             background: #1e293b;
-            color: #94a3b8;
+            color: #ffffff;
             border: 1px solid #334155;
-            padding: 5px 10px;
-            font-size: 0.75rem;
+            padding: 6px 12px;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 12px;
             text-transform: uppercase;
             cursor: pointer;
+            text-decoration: none;
             transition: all 0.2s;
+            display: inline-block;
         }
-        .btn-canal:hover, .btn-canal.activo {
+        .btn-canal:hover {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #ffffff;
             border-color: #38bdf8;
             box-shadow: inset 0 0 6px #38bdf8;
         }
 
-        .btn-doble {
-            background: linear-gradient(180deg, #718096 0%, #4a5568 100%);
-            color: white;
-            border: 2px solid #cbd5e1;
-            padding: 4px 10px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            border-radius: 3px;
-        }
-        .btn-doble:hover {
-            background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
-            border-color: #f87171;
-            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
-        }
-
-        /* AREA INFERIOR DE TRABAJO MATEMÁTICO */
+        /* ESPACIO DE TRABAJO GEOMÉTRICO (310px + 660px = 970px) */
         .workspace {
             display: grid;
             grid-template-columns: 310px 660px; /* TUS MEDIDAS EXACTAS */
@@ -106,206 +97,71 @@
         .zona-contenido {
             width: 100%;
             height: 100%;
-            position: relative;
-            background: #0f172a;
+            background: #000000;
         }
 
-        /* LA AGENDA PREMIUM METÁLICA */
-        .vista-agenda {
-            width: 100%;
-            height: 100%;
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-        .cabecera-agenda {
-            display: grid;
-            grid-template-columns: 80px 1fr 110px;
-            background: #1e293b;
-            border: 1px solid #4a5568;
-            padding: 6px 0;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-
-        .grid-eventos {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .fila-evento {
-            display: grid;
-            grid-template-columns: 80px 1fr 110px;
-            align-items: center;
-            background: #1a202c;
-            border: 1px solid #2d3748;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .fila-evento:hover {
-            background: #2d3748;
-            border-color: #3b82f6;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
-        }
-
-        .ev-hora {
-            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
-            color: white;
-            font-size: 0.95rem;
-            text-align: center;
-            padding: 10px 0;
-            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
-        }
-
-        .ev-detalles {
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-            gap: 10px;
-        }
-
-        .ev-logo {
-            height: 25px;
-            width: 45px;
-            object-fit: contain;
-        }
-
-        .ev-titulo {
-            font-family: 'Arial', sans-serif;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: #e2e8f0;
-        }
-
-        .ev-estado {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
-        }
-
-        .badge {
-            width: 100%;
-            padding: 6px 0;
-            text-align: center;
-            font-size: 0.75rem;
-        }
-        .badge-vivo {
-            background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
-            color: white;
-            box-shadow: 0 0 8px #dc2626;
-        }
-
-        /* COMPONENTE DE REPRODUCTORES */
-        .zona-videos {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
+        /* REPRODUCTOR INDEPENDIENTE TOTAL */
         .iframe-player {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #000;
+            width: 660px;  /* TU MEDIDA REAL */
+            height: 464px; /* TU MEDIDA REAL */
+            border: 0px;
+            background: #000000;
         }
-
-        #player-2 { display: none; }
-
-        /* MODO DOBLE PANTALLA ACTIVE */
-        body.modo-doble-activo .workspace {
-            grid-template-columns: 1fr;
-        }
-        body.modo-doble-activo #panel-chat { display: none; }
-        body.modo-doble-activo .zona-videos {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
-            padding: 4px;
-            background: #0b0f19;
-        }
-        body.modo-doble-activo #player-2 { display: block; }
     </style>
+
+    <!-- TUS SCRIPTS ORIGINALES DE PROTECCIÓN ANTICUÑA REALES -->
+    <script type="text/javascript">
+        document.oncontextmenu = function(){return false}
+    </script> 
+    <script type="text/javascript">
+        // Simulación manual del bind sin depender de librerías externas pesadas
+        document.addEventListener("contextmenu", function(e){
+            e.preventDefault();
+        }, false);
+    </script>  
+    <script language="JavaScript">
+        function KeyPress() {
+            alert('inhabilitado');
+            return false;
+        }
+        document.onkeydown = KeyPress;
+    </script>
 </head>
 <body>
 
     <div class="plataforma-tnt">
         
-        <!-- BARRA SUPERIOR DE BOTONES -->
+        <!-- BARRA SUPERIOR CON TU SISTEMA DE TARGET NATIVO "HOME" -->
         <nav class="barra-canales">
             <div class="fila-botones">
-                <button class="btn-canal activo" onclick="mostrarAgenda()">🏠 PROGRAMACIÓN</button>
-                <!-- ENLACE DE EMBED OFICIAL DE YOUTUBE (TOTALMENTE PERMITIDO) -->
-                <button class="btn-canal" onclick="cargarSeñal('https://youtube.com')">CANAL 1 (TEST)</button>
-                <button class="btn-canal" onclick="cargarSeñal('https://youtube.com')">CANAL 2</button>
+                <!-- Tu enlace original de la Agenda -->
+                <a href="https://transmision.activo.mx/h23-plataforma" target="home" class="btn-canal">Agenda TV</a>                               
+                <!-- Tus señales reales apuntando directamente a tu reproductor -->
+                <a href="https://dlive.sx/stream/stream-930.php" target="home" class="btn-canal">CANAL 1 (DLIVE)</a>                               
+                <a href="https://transmision.activo.mx/h3-senal-1.htm" target="home" class="btn-canal">CANAL 2</a>                               
+                <a href="https://transmision.activo.mx/h4-senal-2" target="home" class="btn-canal">CANAL 3</a>                               
+                <a href="https://transmision.activo.mx/h5-senal-3" target="home" class="btn-canal">CANAL 4</a>                               
             </div>
-            <button class="btn-doble" onclick="alternarMultipantalla()">🖥️ DOBLE PANTALLA</button>
         </nav>
 
-        <!-- ESPACIO DE TRABAJO CALIBRADO -->
+        <!-- ESPACIO DE TRABAJO CON LAS DIMENSIONES EXACTAS DE TU BLOGGER -->
         <main class="workspace">
             
             <!-- CHAT FLOTANTE IZQUIERDO (310px x 464px) -->
             <div class="panel-bloque" id="panel-chat">
-                <!-- Chatango oficial seguro en formato Widget directo -->
+                <!-- Chatango oficial directo -->
                 <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
             </div>
 
-            <!-- CONTENEDOR INTERCAMBIABLE DERECHO (660px x 464px) -->
+            <!-- CAJA DE TRANSMISIONES DE ANCHO COMPLETO (660px x 464px) -->
             <div class="panel-bloque zona-contenido">
-                
-                <!-- LA AGENDA INTERNA (VISTA INICIAL) -->
-                <div class="vista-agenda" id="bloque-agenda">
-                    <div class="cabecera-agenda">
-                        <div>HORA</div>
-                        <div>CARTELERA DE HOY</div>
-                        <div>ESTADO</div>
-                    </div>
-
-                    <div class="grid-eventos">
-                        
-                        <!-- Evento Interactivo conectado a YouTube -->
-                        <div class="fila-evento" onclick="cargarSeñal('https://youtube.com')">
-                            <div class="ev-hora">7:00 PM</div>
-                            <div class="ev-detalles">
-                                <img src="https://placeholder.com" alt="Logo" class="ev-logo">
-                                <div class="ev-titulo">PRUEBA DE REPRODUCCIÓN EN DIRECTO</div>
-                            </div>
-                            <div class="ev-estado">
-                                <div class="badge badge-vivo">((•)) EN VIVO</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- CONTENEDOR DE SEÑALES -->
-                <div class="zona-videos" id="bloque-videos">
-                    <iframe src="" id="player-1" class="iframe-player" allowfullscreen></iframe>
-                    <!-- Pantalla 2 fija con YouTube para el test dual -->
-                    <iframe src="https://youtube.com" id="player-2" class="iframe-player" allowfullscreen></iframe>
-                </div>
-
+                <!-- EL MARCO DE VIDEO INDEPENDIENTE CON EL NOMBRE "HOME" QUE TUS BOTONES REFIEREN -->
+                <!-- Inicia cargando tu señal en vivo tal cual como lo tenías configurado -->
+                <iframe allowfullscreen="" name="home" class="iframe-player" src="https://dlive.sx/stream/stream-930.php"></iframe>
             </div>
 
         </main>
     </div>
 
-    <!-- SCRIPT DE CONTROL FLUIDO INTERACTIVO -->
-    <script>
-        const agenda = document.getElementById('bloque-agenda');
-        const videos = document.getElementById('bloque-videos');
-        const player1 = document.getElementById('player-1');
-
-        function mostrarAgenda() {
-            videos.style.display = 'none';
-            agenda.style.display = 'block';
-            player1.src = ""; 
-        }
-
-        function cargarSeñal(url) {
-            agenda.style.display = 'none';
+</body>
+</html>
