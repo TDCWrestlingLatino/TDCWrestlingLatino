@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartelera Oficial - TDC</title>
     
-    <!-- FUENTE OSWALD -->
-    <link href="https://googleapis.com" rel="stylesheet" type="text/css" />
+    <!-- FUENTES DE ACCIÓN E INFORMALES DIRECTAS -->
+    <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
         * {
@@ -18,7 +18,8 @@
         body {
             background-color: #0b0f19;
             color: #ffffff;
-            font-family: 'Oswald', Arial, sans-serif;
+            /* Forzamos tipografías de impacto e informales en toda la cartelera */
+            font-family: 'Teko', 'Oswald', 'Impact', sans-serif;
             padding: 10px;
             width: 660px;  /* TU ANCHO EXACTO */
             height: 464px; /* TU ALTURA EXACTA */
@@ -33,24 +34,28 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.7);
         }
 
+        /* BARRA SUPERIOR CON LETRA INFORMAL DE ACCIÓN */
         .fecha-cabecera {
-            background: linear-gradient(90deg, #334155 0%, #475569 50%, #334155 100%);
-            border-bottom: 3px solid #2563eb;
+            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
+            border-bottom: 3px solid #38bdf8;
             color: #ffffff;
             text-align: center;
-            padding: 8px 0;
-            font-size: 1.2rem;
+            padding: 6px 0;
+            font-family: 'Teko', 'Impact', sans-serif;
+            font-size: 1.6rem; /* Letra más alta, imponente e informal */
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 0 5px rgba(37, 99, 235, 0.6);
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
         }
 
+        /* TITULOS DE COLUMNAS */
         .columnas-etiquetas {
             display: grid;
             grid-template-columns: 85px 1fr 100px;
             padding: 6px 10px;
-            font-size: 0.8rem;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
             color: #94a3b8;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -75,17 +80,18 @@
         }
         .fila-show:hover {
             border-color: #38bdf8;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
         .celda-hora {
             background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
             color: #38bdf8;
-            font-size: 1rem;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.3rem;
             font-weight: 700;
             text-align: center;
-            padding: 12px 0;
+            padding: 8px 0;
             border-right: 1px solid #334155;
             clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
         }
@@ -101,7 +107,6 @@
             gap: 15px;
         }
 
-        /* CLASE MAESTRA DE ÍCONOS INTELIGENTES */
         .logo-empresa {
             height: 28px;
             width: 50px;
@@ -112,7 +117,7 @@
             filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
         }
 
-        /* DICCIONARIO DE IMÁGENES REALES (Tus links de Foroactivo cargados de forma nativa) */
+        /* Diccionario de logos */
         .logo-empresa.aaa { background-image: url('https://2img.net'); }
         .logo-empresa.wwe { background-image: url('https://2img.net'); }
         .logo-empresa.raw { background-image: url('https://2img.net'); }
@@ -120,12 +125,17 @@
         .logo-empresa.njpw { background-image: url('https://2img.net'); }
         .logo-empresa.roh { background-image: url('https://2img.net'); }
 
+        /* TITULO DEL SHOW TRANSFORMA AL LOOK INFORMAL DE LUCHA */
         .show-titulo {
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #e2e8f0;
+            font-family: 'Oswald', 'Impact', sans-serif; /* Eliminamos Arial por completo */
+            font-weight: 700;
+            font-size: 1rem;
+            color: #ffffff;
             letter-spacing: 0.5px;
+            text-transform: uppercase; /* Forzamos mayúsculas deportivas */
+        }
+        .fila-show:hover .show-titulo {
+            color: #38bdf8; /* El texto brilla en celeste al pasar el cursor */
         }
 
         .celda-estado {
@@ -140,12 +150,14 @@
 
         .badge {
             width: 100%;
-            padding: 5px 0;
+            padding: 4px 0;
             text-align: center;
-            font-size: 0.75rem;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.1rem;
             font-weight: 700;
             border-radius: 2px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .badge-vivo {
@@ -165,6 +177,7 @@
 <body>
 
     <div class="tabla-metalica">
+        <!-- CABECERA PRINCIPAL CON NUEVA FUENTE INFORMAL -->
         <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
 
         <div class="columnas-etiquetas">
@@ -175,7 +188,7 @@
 
         <div class="lista-shows">
 
-            <!-- EJEMPLO 1: MUESTRA EL LOGO DE RAW DE FORMA AUTOMÁTICA -->
+            <!-- SHOW 1 -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
@@ -187,7 +200,7 @@
                 </div>
             </div>
 
-            <!-- EJEMPLO 2: MUESTRA EL LOGO DE SMACKDOWN -->
+            <!-- SHOW 2 -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
@@ -199,7 +212,7 @@
                 </div>
             </div>
 
-            <!-- EJEMPLO 3: MUESTRA EL LOGO DE AAA -->
+            <!-- SHOW 3 -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
@@ -211,7 +224,7 @@
                 </div>
             </div>
 
-            <!-- EJEMPLO 4: MUESTRA EL LOGO DE ROH -->
+            <!-- SHOW 4 -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
