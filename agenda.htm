@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartelera Oficial - TDC</title>
     
-    <!-- FUENTES DE ACCIÓN E INFORMALES DIRECTAS -->
+    <!-- FUENTE OSWALD DELGADA Y ELEGANTE -->
     <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
@@ -18,15 +18,13 @@
         body {
             background-color: #0b0f19;
             color: #ffffff;
-            /* Forzamos tipografías de impacto e informales en toda la cartelera */
-            font-family: 'Teko', 'Oswald', 'Impact', sans-serif;
+            font-family: 'Oswald', 'Arial Narrow', sans-serif;
             padding: 10px;
-            width: 660px;  /* TU ANCHO EXACTO */
-            height: 464px; /* TU ALTURA EXACTA */
+            width: 660px;
+            height: 464px;
             overflow-y: auto;
         }
 
-        /* Contenedor principal estilo acero */
         .tabla-metalica {
             width: 100%;
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
@@ -34,30 +32,27 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.7);
         }
 
-        /* BARRA SUPERIOR CON LETRA INFORMAL DE ACCIÓN */
+        /* BARRA SUPERIOR REBAJADA Y DELGADA REFINADA */
         .fecha-cabecera {
             background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
             border-bottom: 3px solid #38bdf8;
             color: #ffffff;
             text-align: center;
-            padding: 6px 0;
-            font-family: 'Teko', 'Impact', sans-serif;
-            font-size: 1.6rem; /* Letra más alta, imponente e informal */
-            font-weight: 700;
+            padding: 8px 0;
+            font-size: 1.15rem;
+            font-weight: 500; /* REBAJADO PARA EVITAR QUE SE VEA TOCHO */
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+            text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
         }
 
-        /* TITULOS DE COLUMNAS */
         .columnas-etiquetas {
             display: grid;
             grid-template-columns: 85px 1fr 100px;
             padding: 6px 10px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #94a3b8;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
@@ -80,20 +75,20 @@
         }
         .fila-show:hover {
             border-color: #38bdf8;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
         .celda-hora {
             background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
             color: #38bdf8;
-            font-family: 'Teko', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 500;
             text-align: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-right: 1px solid #334155;
             clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+            letter-spacing: 1px;
         }
         .fila-show:hover .celda-hora {
             color: #ffffff;
@@ -117,25 +112,23 @@
             filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
         }
 
-        /* Diccionario de logos */
-        .logo-empresa.aaa { background-image: url('https://2img.net'); }
-        .logo-empresa.wwe { background-image: url('https://2img.net'); }
-        .logo-empresa.raw { background-image: url('https://2img.net'); }
-        .logo-empresa.smackdown { background-image: url('https://2img.net'); }
+        .aew { background-image: url('https://2img.net/i.imgur.com/XWTv5yO.png'); }
+        .roh { background-image: url('https://2img.net/i.imgur.com/9hVv9Wn.png'); }
+        .raw { background-image: url('https://2img.net/i.imgur.com/mVpXNF9.png'); }
+        .smackdown { background-image: url('https://2img.net/i.imgur.com/oijCtZh.png'); }
         .logo-empresa.njpw { background-image: url('https://2img.net'); }
         .logo-empresa.roh { background-image: url('https://2img.net'); }
 
-        /* TITULO DEL SHOW TRANSFORMA AL LOOK INFORMAL DE LUCHA */
+        /* TÍTULO REBAJADO TOTALMENTE LIMPIO */
         .show-titulo {
-            font-family: 'Oswald', 'Impact', sans-serif; /* Eliminamos Arial por completo */
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-            letter-spacing: 0.5px;
-            text-transform: uppercase; /* Forzamos mayúsculas deportivas */
+            font-size: 0.9rem;
+            font-weight: 400; /* REBAJADO PARA QUITAR EL EFECTO GRUESO TOCHO */
+            color: #e2e8f0;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
         }
         .fila-show:hover .show-titulo {
-            color: #38bdf8; /* El texto brilla en celeste al pasar el cursor */
+            color: #38bdf8;
         }
 
         .celda-estado {
@@ -150,11 +143,10 @@
 
         .badge {
             width: 100%;
-            padding: 4px 0;
+            padding: 5px 0;
             text-align: center;
-            font-family: 'Teko', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 0.8rem;
+            font-weight: 600;
             border-radius: 2px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -177,7 +169,6 @@
 <body>
 
     <div class="tabla-metalica">
-        <!-- CABECERA PRINCIPAL CON NUEVA FUENTE INFORMAL -->
         <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
 
         <div class="columnas-etiquetas">
@@ -187,8 +178,6 @@
         </div>
 
         <div class="lista-shows">
-
-            <!-- SHOW 1 -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
@@ -200,7 +189,6 @@
                 </div>
             </div>
 
-            <!-- SHOW 2 -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
@@ -212,7 +200,6 @@
                 </div>
             </div>
 
-            <!-- SHOW 3 -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
@@ -224,7 +211,6 @@
                 </div>
             </div>
 
-            <!-- SHOW 4 -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
@@ -235,7 +221,6 @@
                     <span class="badge badge-repeticion">REPETICIÓN</span>
                 </div>
             </div>
-
         </div>
     </div>
 
