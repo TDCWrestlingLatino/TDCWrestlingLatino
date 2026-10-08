@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartelera Oficial - TDC</title>
     
-    <!-- FUENTE OSWALD DE TU LOGICA ORIGINAL -->
+    <!-- FUENTE OSWALD -->
     <link href="https://googleapis.com" rel="stylesheet" type="text/css" />
 
     <style>
@@ -16,27 +16,26 @@
         }
 
         body {
-            background-color: #0b0f19; /* Fondo oscuro de respaldo */
+            background-color: #0b0f19;
             color: #ffffff;
             font-family: 'Oswald', Arial, sans-serif;
             padding: 10px;
             width: 660px;  /* TU ANCHO EXACTO */
             height: 464px; /* TU ALTURA EXACTA */
-            overflow-y: auto; /* Permite scroll si tienes muchos shows */
+            overflow-y: auto;
         }
 
-        /* Contenedor principal con textura de acero oscuro */
+        /* Contenedor principal estilo acero */
         .tabla-metalica {
             width: 100%;
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #475569; /* Borde gris acero */
+            border: 2px solid #475569;
             box-shadow: 0 8px 24px rgba(0,0,0,0.7);
         }
 
-        /* FECHA / ENCABEZADO PRINCIPAL (GRIS ACERO CON NEÓN AZUL) */
         .fecha-cabecera {
             background: linear-gradient(90deg, #334155 0%, #475569 50%, #334155 100%);
-            border-bottom: 3px solid #2563eb; /* Línea neón azul */
+            border-bottom: 3px solid #2563eb;
             color: #ffffff;
             text-align: center;
             padding: 8px 0;
@@ -47,7 +46,6 @@
             text-shadow: 0 0 5px rgba(37, 99, 235, 0.6);
         }
 
-        /* TITULOS DE COLUMNAS */
         .columnas-etiquetas {
             display: grid;
             grid-template-columns: 85px 1fr 100px;
@@ -60,7 +58,6 @@
         }
         .text-center { text-align: center; }
 
-        /* GRILLA DE FILAS */
         .lista-shows {
             display: flex;
             flex-direction: column;
@@ -68,7 +65,6 @@
             padding: 8px;
         }
 
-        /* FILA DE EVENTO ESTILO PANEL ARMADO (GRIS Y AZUL) */
         .fila-show {
             display: grid;
             grid-template-columns: 85px 1fr 100px;
@@ -78,28 +74,26 @@
             transition: all 0.2s ease;
         }
         .fila-show:hover {
-            border-color: #38bdf8; /* Brillo celeste neón al pasar el mouse */
+            border-color: #38bdf8;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
-        /* CELDA 1: BLOQUE DE HORA CON CORTE DIAGONAL */
         .celda-hora {
-            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%); /* Azul premium oscuro */
-            color: #38bdf8; /* Texto celeste neón */
+            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+            color: #38bdf8;
             font-size: 1rem;
             font-weight: 700;
             text-align: center;
             padding: 12px 0;
             border-right: 1px solid #334155;
-            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%); /* Ángulo idéntico a tu referencia */
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
         }
         .fila-show:hover .celda-hora {
             color: #ffffff;
             background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
         }
 
-        /* CELDA 2: CONTENIDO CENTRAL (LOGO + TEXTO) */
         .celda-contenido {
             display: flex;
             align-items: center;
@@ -107,12 +101,24 @@
             gap: 15px;
         }
 
-        .show-logo {
+        /* CLASE MAESTRA DE ÍCONOS INTELIGENTES */
+        .logo-empresa {
             height: 28px;
             width: 50px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
         }
+
+        /* DICCIONARIO DE IMÁGENES REALES (Tus links de Foroactivo cargados de forma nativa) */
+        .logo-empresa.aaa { background-image: url('https://2img.net'); }
+        .logo-empresa.wwe { background-image: url('https://2img.net'); }
+        .logo-empresa.raw { background-image: url('https://2img.net'); }
+        .logo-empresa.smackdown { background-image: url('https://2img.net'); }
+        .logo-empresa.njpw { background-image: url('https://2img.net'); }
+        .logo-empresa.roh { background-image: url('https://2img.net'); }
 
         .show-titulo {
             font-family: Arial, sans-serif;
@@ -122,7 +128,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* CELDA 3: ESTADO CON CORTE DIAGONAL INVERTIDO */
         .celda-estado {
             height: 100%;
             display: flex;
@@ -133,7 +138,6 @@
             background: rgba(0, 0, 0, 0.3);
         }
 
-        /* Etiquetas de estados estilizadas con tus textos reales */
         .badge {
             width: 100%;
             padding: 5px 0;
@@ -146,7 +150,7 @@
 
         .badge-vivo {
             background: #ffffff;
-            color: #1e40af; /* Texto azul en fondo blanco brillante */
+            color: #1e40af;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             border: 1px solid #38bdf8;
         }
@@ -161,25 +165,21 @@
 <body>
 
     <div class="tabla-metalica">
-        <!-- CABECERA DE LA FECHA (Editable según el día) -->
-        <div class="fecha-cabecera">CARTELERA OFICIAL DE HOY</div>
+        <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
 
-        <!-- ETIQUETAS DE COLUMNAS -->
         <div class="columnas-etiquetas">
             <div class="text-center">HORA</div>
             <div>EVENTO EN TRANSMISIÓN</div>
             <div class="text-center">ESTADO</div>
         </div>
 
-        <!-- LISTA INFORMATIVA -->
         <div class="lista-shows">
 
-            <!-- FILA 1: WWE RAW (EN VIVO) -->
+            <!-- EJEMPLO 1: MUESTRA EL LOGO DE RAW DE FORMA AUTOMÁTICA -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
-                    <!-- Placeholder de imagen: Reemplaza con la URL de tu logo real de RAW -->
-                    <img src="https://placeholder.com" alt="RAW" class="show-logo">
+                    <span class="logo-empresa raw"></span>
                     <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
                 </div>
                 <div class="celda-estado">
@@ -187,24 +187,36 @@
                 </div>
             </div>
 
-            <!-- FILA 2: WWE SMACKDOWN (REPETICIÓN) -->
+            <!-- EJEMPLO 2: MUESTRA EL LOGO DE SMACKDOWN -->
+            <div class="fila-show">
+                <div class="celda-hora">8:00 PM</div>
+                <div class="celda-contenido">
+                    <span class="logo-empresa smackdown"></span>
+                    <div class="show-titulo">WWE SMACKDOWN - COBERTURA LATINA</div>
+                </div>
+                <div class="celda-estado">
+                    <span class="badge badge-vivo">EN VIVO</span>
+                </div>
+            </div>
+
+            <!-- EJEMPLO 3: MUESTRA EL LOGO DE AAA -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
-                    <img src="https://placeholder.com" alt="Smackdown" class="show-logo">
-                    <div class="show-titulo">WWE SMACKDOWN ESPAÑOL - REPETICIÓN</div>
+                    <span class="logo-empresa aaa"></span>
+                    <div class="show-titulo">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</div>
                 </div>
                 <div class="celda-estado">
                     <span class="badge badge-repeticion">REPETICIÓN</span>
                 </div>
             </div>
 
-            <!-- FILA 3: AEW DYNAMITE (REPETICIÓN) -->
+            <!-- EJEMPLO 4: MUESTRA EL LOGO DE ROH -->
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
-                    <img src="https://placeholder.com" alt="AEW" class="show-logo">
-                    <div class="show-titulo">AEW DYNAMITE - REPETICIÓN COMPLETA</div>
+                    <span class="logo-empresa roh"></span>
+                    <div class="show-titulo">RING OF HONOR - EVENTO COMPLETO</div>
                 </div>
                 <div class="celda-estado">
                     <span class="badge badge-repeticion">REPETICIÓN</span>
