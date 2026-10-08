@@ -14,7 +14,7 @@
         }
 
         body {
-            background: transparent; /* Permite que luzca el fondo de tu estadio en Blogger */
+            background: #0b0f19; /* Fondo oscuro de respaldo */
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -201,7 +201,7 @@
             box-shadow: 0 0 8px #dc2626;
         }
 
-        /* COMPONENTE DE REPRODUCTORES (INICIA OCULTO) */
+        /* COMPONENTE DE REPRODUCTORES (INICIA CON LA AGENDA VISIBLE) */
         .zona-videos {
             display: none;
             width: 100%;
@@ -222,12 +222,12 @@
            AJUSTE MATEMÁTICO DEL MODO DOBLE PANTALLA
            ======================================================== */
         body.modo-doble-activo .workspace {
-            grid-template-columns: 1fr; /* Borra los 310px del chat */
+            grid-template-columns: 1fr;
         }
         body.modo-doble-activo #panel-chat { display: none; }
         body.modo-doble-activo .zona-videos {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Divide los 970px en dos pantallas de 485px cada una */
+            grid-template-columns: 1fr 1fr;
             gap: 4px;
             padding: 4px;
             background: #0b0f19;
@@ -239,14 +239,13 @@
 
     <div class="plataforma-tnt">
         
-        <!-- BARRA SUPERIOR DE BOTONES INTERACTIVOS -->
+        <!-- BARRA SUPERIOR DE BOTONES -->
         <nav class="barra-canales">
             <div class="fila-botones">
                 <button class="btn-canal activo" onclick="mostrarAgenda()">🏠 PROGRAMACIÓN</button>
-                <!-- Tu señal real inyectada con la URL segura de DLive -->
-                <button class="btn-canal" onclick="cargarSeñal('https://dlive.tv')">CANAL 1 (EN VIVO)</button>
+                <!-- URL de inserción segura HTTPS para Twitch de prueba (reemplazable por tus señales en el futuro) -->
+                <button class="btn-canal" onclick="cargarSeñal('https://twitch.tv')">CANAL 1 (TEST)</button>
                 <button class="btn-canal" onclick="cargarSeñal('https://youtube.com')">CANAL 2</button>
-                <button class="btn-canal" onclick="cargarSeñal('URL_SEÑAL_3')">CANAL 3</button>
             </div>
             <button class="btn-doble" onclick="alternarMultipantalla()">🖥️ DOBLE PANTALLA</button>
         </nav>
@@ -254,12 +253,12 @@
         <!-- ESPACIO DE TRABAJO CALIBRADO -->
         <main class="workspace">
             
-            <!-- CHAT FLOTANTE IZQUIERDO (310px x 464px) -->
+            <!-- CHAT FLOTANTE IZQUIERDO CON CONEXIÓN SEGURA HTTPS -->
             <div class="panel-bloque" id="panel-chat">
-                <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0"></iframe>
+                <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
             </div>
 
-            <!-- CONTENEDOR INTERCAMBIABLE DERECHO (660px x 464px) -->
+            <!-- CONTENEDOR INTERCAMBIABLE DERECHO -->
             <div class="panel-bloque zona-contenido">
                 
                 <!-- LA AGENDA INTERNA (VISTA INICIAL) -->
@@ -272,12 +271,12 @@
 
                     <div class="grid-eventos">
                         
-                        <!-- Evento Interactivo: Al dar clic abre tu señal segura de DLive -->
-                        <div class="fila-evento" onclick="cargarSeñal('https://dlive.tv')">
+                        <!-- Evento Interactivo con señal HTTPS segura -->
+                        <div class="fila-evento" onclick="cargarSeñal('https://twitch.tv')">
                             <div class="ev-hora">7:00 PM</div>
                             <div class="ev-detalles">
                                 <img src="https://placeholder.com" alt="Logo" class="ev-logo">
-                                <div class="ev-titulo">TDC SHOW ESPECIAL EN DIRECTO</div>
+                                <div class="ev-titulo">TDC TRANSMISIÓN OFICIAL EN DIRECTO</div>
                             </div>
                             <div class="ev-estado">
                                 <div class="badge badge-vivo">((•)) EN VIVO</div>
@@ -287,11 +286,10 @@
                     </div>
                 </div>
 
-                <!-- CONTENEDOR DE SEÑALES (660px x 464px) -->
+                <!-- CONTENEDOR DE SEÑALES SECURE -->
                 <div class="zona-videos" id="bloque-videos">
                     <iframe src="" id="player-1" class="iframe-player" allowfullscreen></iframe>
-                    <!-- Pantalla 2 con señal fija para la Doble Señal -->
-                    <iframe src="https://dlive.tv" id="player-2" class="iframe-player" allowfullscreen></iframe>
+                    <iframe src="https://twitch.tv" id="player-2" class="iframe-player" allowfullscreen></iframe>
                 </div>
 
             </div>
@@ -301,3 +299,5 @@
 
     <!-- SCRIPT DE CONTROL FLUIDO INTERACTIVO -->
     <script>
+        const agenda = document.getElementById('bloque-agenda');
+        const videos = document.getElementById('bloque-videos');
