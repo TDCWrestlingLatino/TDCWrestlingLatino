@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma Premium - TDC Wrestling</title>
     
-    <!-- INYECCIÓN DE FUENTES DE ALTA ACCIÓN E INFORMALES -->
-    <link href="https://googleapis.com" rel="stylesheet">
-
     <style>
-        /* RESET AMBIENTAL */
+        /* FUENTE DEPORTIVA E INFORMAL INYECTADA DE FORMA GLOBAL */
+        @import url('https://googleapis.com');
+
         * {
             margin: 0;
             padding: 0;
@@ -51,8 +50,8 @@
         /* LA GRILLA MAGICA: 10 botones exactos por fila */
         .grid-botones-canales {
             display: grid;
-            grid-template-columns: repeat(10, 1fr); /* 10 Columnas iguales */
-            gap: 4px; /* Espacio compacto entre botones */
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
             width: 100%;
         }
 
@@ -62,8 +61,9 @@
             color: #ffffff;
             border: 1px solid #334155;
             padding: 3px 0;
-            font-family: 'Teko', sans-serif; /* Letra ultra informal, alta y compacta */
-            font-size: 1.1rem;
+            /* Forzamos combinaciones de fuentes tipográficas de acción por si falla una */
+            font-family: 'Teko', 'Oswald', 'Impact', sans-serif; 
+            font-size: 1.2rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -95,10 +95,9 @@
             border: 1px solid #3b82f6;
             padding: 5px 0;
             cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-style: italic; /* Inclinación deportiva agresiva */
-            font-weight: 800;
-            font-size: 0.8rem;
+            font-family: 'Oswald', 'Impact', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s;
@@ -106,7 +105,7 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
         }
         .btn-doble:hover {
-            background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #b91c1c 100%); /* Cambia a rojo fuego */
+            background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #b91c1c 100%);
             border-color: #f87171;
             box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
         }
@@ -161,7 +160,7 @@
         <nav class="barra-canales">
             
             <div class="grid-botones-canales">
-                <!-- FILA 1 (Botón de Agenda + Canales del 1 al 9) -->
+                <!-- FILA 1 -->
                 <a href="agenda.htm" target="home" class="btn-canal" style="color: #38bdf8;">AGENDA</a>                               
                 <a href="https://dlive.sx" target="home" class="btn-canal">C1</a>                               
                 <a href="URL_CANAL_2" target="home" class="btn-canal">C2</a>                               
@@ -173,7 +172,7 @@
                 <a href="URL_CANAL_8" target="home" class="btn-canal">C8</a>                               
                 <a href="URL_CANAL_9" target="home" class="btn-canal">C9</a>
 
-                <!-- FILA 2 (Canales del 10 al 19) -->
+                <!-- FILA 2 -->
                 <a href="URL_CANAL_10" target="home" class="btn-canal">C10</a>                               
                 <a href="URL_CANAL_11" target="home" class="btn-canal">C11</a>                               
                 <a href="URL_CANAL_12" target="home" class="btn-canal">C12</a>                               
@@ -185,7 +184,7 @@
                 <a href="URL_CANAL_18" target="home" class="btn-canal">C18</a>                               
                 <a href="URL_CANAL_19" target="home" class="btn-canal">C19</a>
 
-                <!-- FILA 3 (Canales del 20 al 29) -->
+                <!-- FILA 3 -->
                 <a href="URL_CANAL_20" target="home" class="btn-canal">C20</a>                               
                 <a href="URL_CANAL_21" target="home" class="btn-canal">C21</a>                               
                 <a href="URL_CANAL_22" target="home" class="btn-canal">C22</a>                               
@@ -198,7 +197,7 @@
                 <a href="URL_CANAL_29" target="home" class="btn-canal">C29</a>
             </div>
 
-            <!-- FILA DE REMATE: El canal 30 y el botón de Doble Pantalla unificados abajo -->
+            <!-- FILA DE REMATE -->
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 9fr;">
                 <a href="URL_CANAL_30" target="home" class="btn-canal">C30</a>
                 <button class="btn-doble" onclick="alert('Ingeniería del modo Doble Pantalla en desarrollo...')">🖥️ ACTIVAR MODO MULTI-TRANSMISIÓN DOBLE PANTALLA</button>
@@ -213,6 +212,7 @@
             </div>
 
             <div class="panel-bloque zona-contenido">
+                <!-- Se conecta de forma nativa a tu archivo agenda.html -->
                 <iframe allowfullscreen="" name="home" class="iframe-player" src="agenda.html"></iframe>
             </div>
         </main>
