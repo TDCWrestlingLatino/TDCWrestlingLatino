@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Plataforma Premium - TDC Wrestling</title>
+    <style>
+        /* RESET AMBIENTAL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
+
+        body {
+            background: transparent; /* Permite que luzca el fondo de tu estadio en Blogger */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5px;
+        }
+
+        /* CONTENEDOR TOTAL FIJADO A TUS 970PX DE ANCHO */
+        .plataforma-tnt {
+            width: 970px;
+            background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+            border: 3px solid #4a5568;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* BARRA SUPERIOR DE CANALES */
+        .barra-canales {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 3px solid #2563eb;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fila-botones {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-canal {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-canal:hover, .btn-canal.activo {
+            background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: inset 0 0 6px #38bdf8;
+        }
+
+        .btn-doble {
+            background: linear-gradient(180deg, #718096 0%, #4a5568 100%);
+            color: white;
+            border: 2px solid #cbd5e1;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border-radius: 3px;
+        }
+        .btn-doble:hover {
+            background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+            border-color: #f87171;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
+        /* AREA INFERIOR DE TRABAJO MATEMÁTICO */
+        .workspace {
+            display: grid;
+            grid-template-columns: 310px 660px; /* TUS MEDIDAS EXACTAS */
+            width: 100%;
+            height: 464px; /* TU ALTURA EXACTA */
+            background: #111827;
+        }
+
+        /* MARCOS INDIVIDUALES */
+        .panel-bloque {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #panel-chat {
+            border-right: 2px solid #4a5568;
+            background: #0b0f19;
+        }
+
+        .zona-contenido {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #0f172a;
+        }
+
+        /* LA AGENDA PREMIUM METÁLICA */
+        .vista-agenda {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .cabecera-agenda {
+            display: grid;
+            grid-template-columns: 80px 1fr 110px;
+            background: #1e293b;
+            border: 1px solid #4a5568;
+            padding: 6px 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .grid-eventos {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .fila-evento {
+            display: grid;
+            grid-template-columns: 80px 1fr 110px;
+            align-items: center;
+            background: #1a202c;
+            border: 1px solid #2d3748;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fila-evento:hover {
+            background: #2d3748;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .ev-hora {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            color: white;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 10px 0;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+        }
+
+        .ev-detalles {
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            gap: 10px;
+        }
+
+        .ev-logo {
+            height: 25px;
+            width: 45px;
+            object-fit: contain;
+        }
+
+        .ev-titulo {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .ev-estado {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        .badge {
+            width: 100%;
+            padding: 6px 0;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+        .badge-vivo {
+            background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            box-shadow: 0 0 8px #dc2626;
+        }
+
+        /* COMPONENTE DE REPRODUCTORES (INICIA OCULTO) */
+        .zona-videos {
+            display: none;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 1fr;
+        }
+
+        .iframe-player {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
+        #player-2 { display: none; }
+
+        /* ========================================================
+           AJUSTE MATEMÁTICO DEL MODO DOBLE PANTALLA
+           ======================================================== */
+        body.modo-doble-activo .workspace {
+            grid-template-columns: 1fr; /* Borra los 310px del chat */
+        }
+        body.modo-doble-activo #panel-chat { display: none; }
+        body.modo-doble-activo .zona-videos {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Divide los 970px en dos pantallas de 485px cada una */
+            gap: 4px;
+            padding: 4px;
+            background: #0b0f19;
+        }
+        body.modo-doble-activo #player-2 { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="plataforma-tnt">
+        
+        <!-- BARRA SUPERIOR AJUSTADA -->
+        <nav class="barra-canales">
+            <div class="fila-botones">
+                <button class="btn-canal activo" onclick="mostrarAgenda()">🏠 PROGRAMACIÓN</button>
+                <!-- Tu señal real inyectada en el Canal 1 -->
+                <button class="btn-canal" onclick="cargarSeñal('https://dlive.sx/stream/stream-930.php')">CANAL 1 (EN VIVO)</button>
+                <button class="btn-canal" onclick="cargarSeñal('URL_OTRA_SEÑAL')">CANAL 2</button>
+                <button class="btn-canal" onclick="cargarSeñal('URL_OTRA_SEÑAL')">CANAL 3</button>
+            </div>
+            <button class="btn-doble" onclick="alternarMultipantalla()">🖥️ DOBLE PANTALLA</button>
+        </nav>
+
+        <!-- ESPACIO DE TRABAJO CALIBRADO -->
+        <main class="workspace">
+            
+            <!-- CHAT FLOTANTE IZQUIERDO (310px x 464px) -->
+            <div class="panel-bloque" id="panel-chat">
+                <iframe src="https://transmision.activo.mx/h22-chatango sandbox=" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+
+            <!-- CONTENEDOR INTERCAMBIABLE DERECHO (660px x 464px) -->
+            <div class="panel-bloque zona-contenido">
+                
+                <!-- LA AGENDA INTERNA -->
+                <div class="vista-agenda" id="bloque-agenda">
+                    <div class="cabecera-agenda">
+                        <div>HORA</div>
+                        <div>CARTELERA DE HOY</div>
+                        <div>ESTADO</div>
+                    </div>
+
+                    <div class="grid-eventos">
+                        
+                        <!-- Evento Interactivo: Al dar clic abre tu señal de DLive -->
+                        <div class="fila-evento" onclick="cargarSeñal('https://dlive.sx/stream/stream-930.php')">
+                            <div class="ev-hora">7:00 PM</div>
+                            <div class="ev-detalles">
+                                <img src="https://placeholder.com" alt="Logo" class="ev-logo">
+                                <div class="ev-titulo">TDC SHOW ESPECIAL EN DIRECTO</div>
+                            </div>
+                            <div class="ev-estado">
+                                <div class="badge badge-vivo">((•)) EN VIVO</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR DE SEÑALES (660px x 464px) -->
+                <div class="zona-videos" id="bloque-videos">
+                    <iframe src="" id="player-1" class="iframe-player" allowfullscreen></iframe>
+                    <!-- Pantalla 2 para el modo Doble Señal -->
+                    <iframe src="https://dlive.sx/stream/stream-930.php" id="player-2" class="iframe-player" allowfullscreen></iframe>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT DE CONTROL FLUIDO -->
+    <script>
+        const agenda = document.getElementById('bloque-agenda');
+        const videos = document.getElementById('bloque-videos');
