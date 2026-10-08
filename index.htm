@@ -239,14 +239,14 @@
 
     <div class="plataforma-tnt">
         
-        <!-- BARRA SUPERIOR AJUSTADA -->
+        <!-- BARRA SUPERIOR DE BOTONES INTERACTIVOS -->
         <nav class="barra-canales">
             <div class="fila-botones">
                 <button class="btn-canal activo" onclick="mostrarAgenda()">🏠 PROGRAMACIÓN</button>
-                <!-- Tu señal real inyectada en el Canal 1 -->
+                <!-- Tu señal real inyectada con la URL segura de DLive -->
                 <button class="btn-canal" onclick="cargarSeñal('https://dlive.tv')">CANAL 1 (EN VIVO)</button>
-                <button class="btn-canal" onclick="cargarSeñal('URL_OTRA_SEÑAL')">CANAL 2</button>
-                <button class="btn-canal" onclick="cargarSeñal('URL_OTRA_SEÑAL')">CANAL 3</button>
+                <button class="btn-canal" onclick="cargarSeñal('https://youtube.com')">CANAL 2</button>
+                <button class="btn-canal" onclick="cargarSeñal('URL_SEÑAL_3')">CANAL 3</button>
             </div>
             <button class="btn-doble" onclick="alternarMultipantalla()">🖥️ DOBLE PANTALLA</button>
         </nav>
@@ -256,13 +256,13 @@
             
             <!-- CHAT FLOTANTE IZQUIERDO (310px x 464px) -->
             <div class="panel-bloque" id="panel-chat">
-                <iframe src="https://transmision.activo.mx/h22-chatango sandbox=" width="100%" height="100%" frameborder="0"></iframe>
+                <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0"></iframe>
             </div>
 
             <!-- CONTENEDOR INTERCAMBIABLE DERECHO (660px x 464px) -->
             <div class="panel-bloque zona-contenido">
                 
-                <!-- LA AGENDA INTERNA -->
+                <!-- LA AGENDA INTERNA (VISTA INICIAL) -->
                 <div class="vista-agenda" id="bloque-agenda">
                     <div class="cabecera-agenda">
                         <div>HORA</div>
@@ -272,8 +272,8 @@
 
                     <div class="grid-eventos">
                         
-                        <!-- Evento Interactivo: Al dar clic abre tu señal de DLive -->
-                        <div class="fila-evento" onclick="cargarSeñal('https://dlive.sx/stream/stream-930.php')">
+                        <!-- Evento Interactivo: Al dar clic abre tu señal segura de DLive -->
+                        <div class="fila-evento" onclick="cargarSeñal('https://dlive.tv')">
                             <div class="ev-hora">7:00 PM</div>
                             <div class="ev-detalles">
                                 <img src="https://placeholder.com" alt="Logo" class="ev-logo">
@@ -290,8 +290,8 @@
                 <!-- CONTENEDOR DE SEÑALES (660px x 464px) -->
                 <div class="zona-videos" id="bloque-videos">
                     <iframe src="" id="player-1" class="iframe-player" allowfullscreen></iframe>
-                    <!-- Pantalla 2 para el modo Doble Señal -->
-                    <iframe src="https://dlive.sx/stream/stream-930.php" id="player-2" class="iframe-player" allowfullscreen></iframe>
+                    <!-- Pantalla 2 con señal fija para la Doble Señal -->
+                    <iframe src="https://dlive.tv" id="player-2" class="iframe-player" allowfullscreen></iframe>
                 </div>
 
             </div>
@@ -299,7 +299,5 @@
         </main>
     </div>
 
-    <!-- SCRIPT DE CONTROL FLUIDO -->
+    <!-- SCRIPT DE CONTROL FLUIDO INTERACTIVO -->
     <script>
-        const agenda = document.getElementById('bloque-agenda');
-        const videos = document.getElementById('bloque-videos');
