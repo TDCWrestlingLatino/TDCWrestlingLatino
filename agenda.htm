@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartelera Oficial - TDC</title>
+    
+    <!-- FUENTE OSWALD DE TU LOGICA ORIGINAL -->
+    <link href="https://googleapis.com" rel="stylesheet" type="text/css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0b0f19; /* Fondo oscuro de respaldo */
+            color: #ffffff;
+            font-family: 'Oswald', Arial, sans-serif;
+            padding: 10px;
+            width: 660px;  /* TU ANCHO EXACTO */
+            height: 464px; /* TU ALTURA EXACTA */
+            overflow-y: auto; /* Permite scroll si tienes muchos shows */
+        }
+
+        /* Contenedor principal con textura de acero oscuro */
+        .tabla-metalica {
+            width: 100%;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #475569; /* Borde gris acero */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+
+        /* FECHA / ENCABEZADO PRINCIPAL (GRIS ACERO CON NEÓN AZUL) */
+        .fecha-cabecera {
+            background: linear-gradient(90deg, #334155 0%, #475569 50%, #334155 100%);
+            border-bottom: 3px solid #2563eb; /* Línea neón azul */
+            color: #ffffff;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(37, 99, 235, 0.6);
+        }
+
+        /* TITULOS DE COLUMNAS */
+        .columnas-etiquetas {
+            display: grid;
+            grid-template-columns: 85px 1fr 100px;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .text-center { text-align: center; }
+
+        /* GRILLA DE FILAS */
+        .lista-shows {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+        }
+
+        /* FILA DE EVENTO ESTILO PANEL ARMADO (GRIS Y AZUL) */
+        .fila-show {
+            display: grid;
+            grid-template-columns: 85px 1fr 100px;
+            align-items: center;
+            background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+        }
+        .fila-show:hover {
+            border-color: #38bdf8; /* Brillo celeste neón al pasar el mouse */
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+            background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
+        }
+
+        /* CELDA 1: BLOQUE DE HORA CON CORTE DIAGONAL */
+        .celda-hora {
+            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%); /* Azul premium oscuro */
+            color: #38bdf8; /* Texto celeste neón */
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 12px 0;
+            border-right: 1px solid #334155;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%); /* Ángulo idéntico a tu referencia */
+        }
+        .fila-show:hover .celda-hora {
+            color: #ffffff;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        /* CELDA 2: CONTENIDO CENTRAL (LOGO + TEXTO) */
+        .celda-contenido {
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            gap: 15px;
+        }
+
+        .show-logo {
+            height: 28px;
+            width: 50px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+        }
+
+        .show-titulo {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            letter-spacing: 0.5px;
+        }
+
+        /* CELDA 3: ESTADO CON CORTE DIAGONAL INVERTIDO */
+        .celda-estado {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Etiquetas de estados estilizadas con tus textos reales */
+        .badge {
+            width: 100%;
+            padding: 5px 0;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .badge-vivo {
+            background: #ffffff;
+            color: #1e40af; /* Texto azul en fondo blanco brillante */
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            border: 1px solid #38bdf8;
+        }
+
+        .badge-repeticion {
+            background: linear-gradient(180deg, #475569 0%, #1e293b 100%);
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tabla-metalica">
+        <!-- CABECERA DE LA FECHA (Editable según el día) -->
+        <div class="fecha-cabecera">CARTELERA OFICIAL DE HOY</div>
+
+        <!-- ETIQUETAS DE COLUMNAS -->
+        <div class="columnas-etiquetas">
+            <div class="text-center">HORA</div>
+            <div>EVENTO EN TRANSMISIÓN</div>
+            <div class="text-center">ESTADO</div>
+        </div>
+
+        <!-- LISTA INFORMATIVA -->
+        <div class="lista-shows">
+
+            <!-- FILA 1: WWE RAW (EN VIVO) -->
+            <div class="fila-show">
+                <div class="celda-hora">8:00 PM</div>
+                <div class="celda-contenido">
+                    <!-- Placeholder de imagen: Reemplaza con la URL de tu logo real de RAW -->
+                    <img src="https://placeholder.com" alt="RAW" class="show-logo">
+                    <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
+                </div>
+                <div class="celda-estado">
+                    <span class="badge badge-vivo">EN VIVO</span>
+                </div>
+            </div>
+
+            <!-- FILA 2: WWE SMACKDOWN (REPETICIÓN) -->
+            <div class="fila-show">
+                <div class="celda-hora">24/7</div>
+                <div class="celda-contenido">
+                    <img src="https://placeholder.com" alt="Smackdown" class="show-logo">
+                    <div class="show-titulo">WWE SMACKDOWN ESPAÑOL - REPETICIÓN</div>
+                </div>
+                <div class="celda-estado">
+                    <span class="badge badge-repeticion">REPETICIÓN</span>
+                </div>
+            </div>
+
+            <!-- FILA 3: AEW DYNAMITE (REPETICIÓN) -->
+            <div class="fila-show">
+                <div class="celda-hora">24/7</div>
+                <div class="celda-contenido">
+                    <img src="https://placeholder.com" alt="AEW" class="show-logo">
+                    <div class="show-titulo">AEW DYNAMITE - REPETICIÓN COMPLETA</div>
+                </div>
+                <div class="celda-estado">
+                    <span class="badge badge-repeticion">REPETICIÓN</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
