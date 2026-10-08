@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma Premium - TDC Wrestling</title>
     
-    <style>
-        /* FUENTE DEPORTIVA E INFORMAL INYECTADA DE FORMA GLOBAL */
-        @import url('https://googleapis.com');
+    <!-- FUENTE OSWALD CON CARGA DE GROSORES FINOS (400 Y 500) -->
+    <link href="https://googleapis.com" rel="stylesheet">
 
+    <style>
+        /* RESET AMBIENTAL */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Forzamos la fuente Oswald estilizada en toda la armadura */
+            font-family: 'Oswald', 'Arial Narrow', sans-serif; 
         }
 
         body {
@@ -24,7 +27,7 @@
             padding-top: 5px;
         }
 
-        /* CONTENEDOR TOTAL FIJADO A TUS 970PX DE ANCHO */
+        /* CONTENEDOR TOTAL DE 970PX DE ANCHO */
         .plataforma-tnt {
             width: 970px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
@@ -36,7 +39,7 @@
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR: PARRILLA DE 3 FILAS COMPACTAS */
+        /* BARRA SUPERIOR DE 3 FILAS COMPACTAS */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
@@ -47,7 +50,6 @@
             gap: 6px;
         }
 
-        /* LA GRILLA MAGICA: 10 botones exactos por fila */
         .grid-botones-canales {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -55,18 +57,16 @@
             width: 100%;
         }
 
-        /* DISEÑO DE LOS BOTONES INFORMALES ESTILO C1, C2... */
+        /* DISEÑO DE BOTONES SEPARADOS, FINOS E INFORMALES */
         .btn-canal {
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
             border: 1px solid #334155;
-            padding: 3px 0;
-            /* Forzamos combinaciones de fuentes tipográficas de acción por si falla una */
-            font-family: 'Teko', 'Oswald', 'Impact', sans-serif; 
-            font-size: 1.2rem;
-            font-weight: 700;
+            padding: 4px 0;
+            font-size: 0.95rem;
+            font-weight: 400; /* LETRA REBAJADA A NIVEL DELGADO Y ESTILIZADO */
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px; /* SEPARACIÓN ESTÉTICA ENTRE LETRAS */
             cursor: pointer;
             text-decoration: none;
             transition: all 0.15s ease-in-out;
@@ -77,37 +77,29 @@
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #38bdf8;
             border-color: #38bdf8;
-            box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.6);
-            transform: scale(1.02);
+            font-weight: 500;
+            box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.4);
         }
 
-        /* FILA INFERIOR DEL BOTÓN DE DOBLE PANTALLA */
-        .fila-adicional {
-            width: 100%;
-            margin-top: 2px;
-        }
-
-        /* EL BOTÓN DE DOBLE PANTALLA DE ANCHO COMPLETO AL FINAL */
+        /* EL BOTÓN DE DOBLE PANTALLA FINO AL FINAL */
         .btn-doble {
             width: 100%;
-            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%);
+            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
             color: white;
             border: 1px solid #3b82f6;
             padding: 5px 0;
             cursor: pointer;
-            font-family: 'Oswald', 'Impact', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 500; /* TEXTO REBAJADA PARA EVITAR EL EFECTO GRUESO */
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px; /* Mayor separación elegante */
             transition: all 0.2s;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
         .btn-doble:hover {
-            background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #b91c1c 100%);
+            background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
             border-color: #f87171;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
         /* ESPACIO DE TRABAJO GEOMÉTRICO (310px + 660px) */
@@ -156,12 +148,12 @@
 
     <div class="plataforma-tnt">
         
-        <!-- BARRA SUPERIOR CONFIGURADA EN 3 FILAS DE 10 BOTONES -->
+        <!-- BARRA SUPERIOR DE 3 FILAS COMPACTAS -->
         <nav class="barra-canales">
             
             <div class="grid-botones-canales">
                 <!-- FILA 1 -->
-                <a href="agenda.htm" target="home" class="btn-canal" style="color: #38bdf8;">AGENDA</a>                               
+                <a href="agenda.htm" target="home" class="btn-canal" style="color: #38bdf8; font-weight: 500;">AGENDA</a>                               
                 <a href="https://dlive.sx" target="home" class="btn-canal">C1</a>                               
                 <a href="URL_CANAL_2" target="home" class="btn-canal">C2</a>                               
                 <a href="URL_CANAL_3" target="home" class="btn-canal">C3</a>                               
@@ -208,11 +200,10 @@
         <!-- ESPACIO DE TRABAJO -->
         <main class="workspace">
             <div class="panel-bloque" id="panel-chat">
-                <iframe src="https://chatango.com" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
+                <iframe src="https://transmision.activo.mx/h22-chatango sandbox=" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
             </div>
 
             <div class="panel-bloque zona-contenido">
-                <!-- Se conecta de forma nativa a tu archivo agenda.html -->
                 <iframe allowfullscreen="" name="home" class="iframe-player" src="agenda.htm"></iframe>
             </div>
         </main>
