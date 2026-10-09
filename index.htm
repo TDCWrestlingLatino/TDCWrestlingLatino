@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Premium - TDC Wrestling</title>
+    <title>Plataforma TDC Wrestling</title>
     
-    <!-- FUENTE OSWALD DESDE GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* RESET AMBIENTAL */
         * {
             margin: 0;
             padding: 0;
@@ -29,7 +27,6 @@
             padding-top: 5px;
         }
 
-        /* CONTENEDOR TOTAL DE 970PX DE ANCHO */
         .plataforma-tnt {
             width: 970px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
@@ -63,23 +60,27 @@
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
             border: 1px solid #334155;
-            padding: 4px 0;
-            font-size: 0.95rem;
-            font-weight: 400; 
+            padding: 5px 0;
+            font-size: 0.9rem;
+            font-weight: 500; 
             text-transform: uppercase;
-            letter-spacing: 1.5px; 
+            letter-spacing: 1px; 
             cursor: pointer;
-            text-decoration: none;
-            transition: all 0.15s ease-in-out;
             text-align: center;
-            display: block;
+            transition: all 0.15s ease-in-out;
         }
+
         .btn-canal:hover, .btn-canal.activo {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #38bdf8;
             border-color: #38bdf8;
-            font-weight: 500;
             box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-agenda {
+            color: #38bdf8;
+            border-color: #2563eb;
+            font-weight: 600;
         }
 
         .btn-doble {
@@ -94,15 +95,15 @@
             text-transform: uppercase;
             letter-spacing: 2px; 
             transition: all 0.2s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
+
         .btn-doble:hover {
             background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
             border-color: #f87171;
             box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
-        /* ESPACIO DE TRABAJO */
+        /* ESPACIO DE TRABAJO EN GRID */
         .workspace {
             display: grid;
             grid-template-columns: 310px 660px;
@@ -112,21 +113,18 @@
             transition: grid-template-columns 0.3s ease;
         }
 
-        .panel-bloque {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
         #panel-chat {
             border-right: 2px solid #4a5568;
             background: #0b0f19;
+            height: 100%;
+            width: 100%;
         }
 
         .zona-contenido {
             width: 100%;
             height: 100%;
             background: #000000;
+            position: relative;
         }
 
         .iframe-player {
@@ -136,7 +134,7 @@
             background: #000000;
         }
 
-        /* INTERFAZ MUTANTE: Al activar el modo, el chat se oculta y el video toma el 100% */
+        /* ACTIVAR PANTALLA COMPLETA SIN CHAT */
         body.modo-doble-activo .workspace {
             grid-template-columns: 0px 1fr;
         }
@@ -144,320 +142,71 @@
             display: none;
         }
 
-        /* RESPONSIVE AUTOMÁTICO */
+        /* RESPONSIVE PARA MÓVILES */
         @media (max-width: 980px) {
-            body { padding: 0; overflow-y: auto; }
+            body { padding: 0; }
             .plataforma-tnt { width: 100vw; border: none; border-radius: 0; }
             .grid-botones-canales { grid-template-columns: repeat(5, 1fr); }
             .workspace { display: flex; flex-direction: column; height: auto; }
             .zona-contenido { width: 100vw; height: 56.25vw; }
-            #panel-chat { width: 100vw; height: 400px; border-right: none; border-top: 2px solid #4a5568; }
+            #panel-chat { width: 100vw; height: 350px; border-right: none; border-top: 2px solid #4a5568; }
         }
     </style>
-
-    <script type="text/javascript">
-        document.oncontextmenu = function(){ return false; };
-        document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false);
-        
-        function KeyPress() { 
-            return false; 
-        }
-        document.onkeydown = KeyPress;
-
-        function alternarDoblePantalla() {
-            document.body.classList.toggle('modo-doble-activo');
-        }
-    </script>
 </head>
 <body>
 
     <div class="plataforma-tnt">
+        <!-- BARRA DE CANALES SUPERIOR -->
         <nav class="barra-canales">
             <div class="grid-botones-canales">
-                <a href="agenda.htm" target="home" class="btn-canal" style="color: #38bdf8; font-weight: 500;">AGENDA</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C1</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C2</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C3</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C4</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C5</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C6</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C7</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C8</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C9</a>
-
-                <a href="https://activo.mx" target="home" class="btn-canal">C10</a>                               
-                <a href="https://activo.mx" target="home" class="btn-canal">C11</a>                               
-                <a href="URL_CANAL_12" target="home" class="btn-canal">C12</a>                               
-                <a href="URL_CANAL_13" target="home" class="btn-canal">C13</a>                               
-                <a href="URL_CANAL_14" target="home" class="btn-canal">C14</a>                               
-                <a href="URL_CANAL_15" target="home" class="btn-canal">C15</a>                               
-                <a href="URL_CANAL_16" target="home" class="btn-canal">C16</a>                               
-                <a href="URL_CANAL_17" target="home" class="btn-canal">C17</a>                               
-                <a href="URL_CANAL_18" target="home" class="btn-canal">C18</a>                               
-                <a href="URL_CANAL_19" target="home" class="btn-canal">C19</a>
-
-                <a href="URL_CANAL_20" target="home" class="btn-canal">C20</a>                               
-                <a href="URL_CANAL_21" target="home" class="btn-canal">C21</a>                               
-                <a href="URL_CANAL_22" target="home" class="btn-canal">C22</a>                               
-                <a href="URL_CANAL_23" target="home" class="btn-canal">C23</a>                               
-                <a href="URL_CANAL_24" target="home" class="btn-canal">C24</a>                               
-                <a href="URL_CANAL_25" target="home" class="btn-canal">C25</a>                               
-                <a href="URL_CANAL_26" target="home" class="btn-canal">C26</a>                               
-                <a href="URL_CANAL_27" target="home" class="btn-canal">C27</a>                               
-                <a href="URL_CANAL_28" target="home" class="btn-canal">C28</a>                               
-                <a href="URL_CANAL_29" target="home" class="btn-canal">C29</a>
+                <button class="btn-canal btn-agenda activo" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal1', this)">C1</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal2', this)">C2</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal3', this)">C3</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal4', this)">C4</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal5', this)">C5</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal6', this)">C6</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal7', this)">C7</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal8', this)">C8</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal9', this)">C9</button>
             </div>
 
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 9fr;">
-                <a href="URL_CANAL_30" target="home" class="btn-canal">C30</a>
-                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR INTERFAZ MUTANTE DOBLE PANTALLA AL 100%</button>
+                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal10', this)">C10</button>
+                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR MODO CINE / PANTALLA COMPLETA</button>
             </div>
         </nav>
 
+        <!-- ESPACIO DE TRABAJO -->
         <main class="workspace">
-            <!-- PANEL DE CHAT (IZQUIERDA) -->
-            <div class="panel-bloque" id="panel-chat">
-                <!-- Inserta aquí el iframe o código del chat (ej. Chatango o Twitch Chat) -->
+            <!-- PANEL DE CHAT IZQUIERDO -->
+            <div id="panel-chat">
+                <!-- AQUÍ PEGAS EL EMBED/IFRAME DE TU CHAT EXTERNO -->
+                <iframe src="https://v2.chatango.com/group/TU_CHAT" width="100%" height="100%" frameborder="0"></iframe>
             </div>
 
-            <!-- REPRODUCTOR / PANTALLA PRINCIPAL (DERECHA) -->
+            <!-- PANEL DERECHO DE REPRODUCCIÓN / AGENDA -->
             <div class="zona-contenido">
-                <iframe name="home" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                <iframe id="reproductor" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
             </div>
         </main>
     </div>
 
-</body>
-</html>
+    <script>
+        // Función para cambiar de canal o volver a la agenda sin recargar la página
+        function cargarCanal(url, elemento) {
+            document.getElementById('reproductor').src = url;
 
-```
-
----
-
-#### 2. `agenda.htm`
-
-```html
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC</title>
-    
-    <!-- FUENTE OSWALD DESDE GOOGLE FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            // Marcar botón activo
+            let botones = document.querySelectorAll('.btn-canal');
+            botones.forEach(btn => btn.classList.remove('activo'));
+            elemento.classList.add('activo');
         }
 
-        body {
-            background-color: #0b0f19;
-            color: #ffffff;
-            font-family: 'Oswald', 'Arial Narrow', sans-serif;
-            padding: 10px;
-            width: 100%;
-            height: 100vh;
-            overflow-y: auto;
+        // Alternar el modo pantalla completa quitando el chat
+        function alternarDoblePantalla() {
+            document.body.classList.toggle('modo-doble-activo');
         }
-
-        .tabla-metalica {
-            width: 100%;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #475569;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
-        }
-
-        .fecha-cabecera {
-            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
-            border-bottom: 3px solid #38bdf8;
-            color: #ffffff;
-            text-align: center;
-            padding: 8px 0;
-            font-size: 1.15rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
-        }
-
-        .columnas-etiquetas {
-            display: grid;
-            grid-template-columns: 85px 1fr 100px;
-            padding: 6px 10px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .text-center { text-align: center; }
-
-        .lista-shows {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 8px;
-        }
-
-        .fila-show {
-            display: grid;
-            grid-template-columns: 85px 1fr 100px;
-            align-items: center;
-            background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
-            border: 1px solid #334155;
-            transition: all 0.2s ease;
-        }
-        .fila-show:hover {
-            border-color: #38bdf8;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-            background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
-        }
-
-        .celda-hora {
-            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
-            color: #38bdf8;
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: center;
-            padding: 10px 0;
-            border-right: 1px solid #334155;
-            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
-            letter-spacing: 1px;
-        }
-        .fila-show:hover .celda-hora {
-            color: #ffffff;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-        }
-
-        .celda-contenido {
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-            gap: 15px;
-        }
-
-        .l {
-            height: 28px;
-            width: 50px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .logo-aew { background-image: url('https://2img.net/i.imgur.com/XWTv5yO.png'); }
-        .logo-roh { background-image: url('https://2img.net/i.imgur.com/9hVv9Wn.png'); }
-        .logo-raw { background-image: url('https://2img.net/i.imgur.com/mVpXNF9.png'); }
-        .logo-smackdown { background-image: url('https://2img.net/i.imgur.com/oijCtZh.png'); }
-
-        .show-titulo {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #e2e8f0;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-        }
-        .fila-show:hover .show-titulo {
-            color: #38bdf8;
-        }
-
-        .celda-estado {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5px;
-            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .badge {
-            width: 100%;
-            padding: 5px 0;
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-radius: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .badge-vivo {
-            background: #ffffff;
-            color: #1e40af;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-            border: 1px solid #38bdf8;
-        }
-
-        .badge-repeticion {
-            background: linear-gradient(180deg, #475569 0%, #1e293b 100%);
-            color: #94a3b8;
-            border: 1px solid #334155;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="tabla-metalica">
-        <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
-
-        <div class="columnas-etiquetas">
-            <div class="text-center">HORA</div>
-            <div>EVENTO EN TRANSMISIÓN</div>
-            <div class="text-center">ESTADO</div>
-        </div>
-
-        <div class="lista-shows">
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <span class="l logo-raw"></span>
-                    <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-vivo">EN VIVO</span>
-                </div>
-            </div>
-
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <span class="l logo-smackdown"></span>
-                    <div class="show-titulo">WWE SMACKDOWN - COBERTURA LATINA</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-vivo">EN VIVO</span>
-                </div>
-            </div>
-
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <span class="l logo-aew"></span>
-                    <div class="show-titulo">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-repeticion">REPETICIÓN</span>
-                </div>
-            </div>
-
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <span class="l logo-roh"></span>
-                    <div class="show-titulo">RING OF HONOR - EVENTO COMPLETO</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-repeticion">REPETICIÓN</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    </script>
 </body>
 </html>
