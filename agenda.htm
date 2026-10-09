@@ -140,17 +140,22 @@
             text-transform: uppercase;
         }
 
-        .badge-vivo {
-            background: #ffffff;
-            color: #1e40af;
-            border: 1px solid #38bdf8;
-        }
-
-        .badge-repeticion {
-            background: linear-gradient(180deg, #475569 0%, #1e293b 100%);
-            color: #94a3b8;
-            border: 1px solid #334155;
-        }
+       .badge-vivo {
+    background: #e11d48;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
+}
+.badge-repetir {
+    background: #334155;
+    color: #94a3b8;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
       * {
             margin: 0;
             padding: 0;
@@ -164,6 +169,20 @@
             background-color: #0b0f19;
             color: #ffffff;
         }
+
+          .btn-agenda {
+    transform: skewX(-15deg); /* Le da la inclinación deportiva */
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-agenda span {
+    transform: skewX(15deg); /* Endereza el texto interno para que no se deforme */
+    display: inline-block;
+}
     </style>
 </head>
 <body>
@@ -171,58 +190,44 @@
     <div class="tabla-metalica">
         <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
 
-        <div class="columnas-etiquetas">
-            <div class="text-center">HORA</div>
-            <div>EVENTO EN TRANSMISIÓN</div>
-            <div class="text-center">ESTADO</div>
-        </div>
+<!-- FILA DE EJEMPLO 1: RAW EN VIVO -> MANDA AL CANAL 1 (h3-senal-1) -->
+<tr>
+    <td class="hora">8:00 PM</td>
+    <td class="evento">
+        <img src="logo-raw.png" alt="RAW"> WWE RAW ESPAÑOL - SHOW EN VIVO
+    </td>
+    <td>
+        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
+            CANAL 1
+        </button>
+    </td>
+</tr>
 
-        <div class="lista-shows">
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <span class="l logo-raw"></span>
-                    <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-vivo">EN VIVO</span>
-                </div>
-            </div>
+<!-- FILA DE EJEMPLO 2: SMACKDOWN EN VIVO -> MANDA AL CANAL 2 (h4-senal-2) -->
+<tr>
+    <td class="hora">8:00 PM</td>
+    <td class="evento">
+        <img src="logo-smackdown.png" alt="SD"> WWE SMACKDOWN - COBERTURA LATINA
+    </td>
+    <td>
+        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
+            CANAL 2
+        </button>
+    </td>
+</tr>
 
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <span class="l logo-smackdown"></span>
-                    <div class="show-titulo">WWE SMACKDOWN - COBERTURA LATINA</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-vivo">EN VIVO</span>
-                </div>
-            </div>
-
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <span class="l logo-aew"></span>
-                    <div class="show-titulo">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-repeticion">REPETICIÓN</span>
-                </div>
-            </div>
-
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <span class="l logo-roh"></span>
-                    <div class="show-titulo">RING OF HONOR - EVENTO COMPLETO</div>
-                </div>
-                <div class="celda-estado">
-                    <span class="badge badge-repeticion">REPETICIÓN</span>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- FILA DE EJEMPLO 3: REPETICIÓN -> MANDA AL CANAL 3 O A LA SEÑAL QUE DÉ LA REPETICIÓN -->
+<tr>
+    <td class="hora">24/7</td>
+    <td class="evento">
+        <img src="logo-aaa.png" alt="AAA"> LUCHA LIBRE AAA - REPETICIÓN ESPECIAL
+    </td>
+    <td>
+        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
+            VER REPETICIÓN
+        </button>
+    </td>
+</tr>
 
 </body>
 </html>
