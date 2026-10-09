@@ -38,6 +38,7 @@
             overflow: hidden;
         }
 
+        /* BARRA SUPERIOR DE CANALES */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
@@ -60,7 +61,7 @@
             color: #ffffff;
             border: 1px solid #334155;
             padding: 4px 0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             text-align: center;
             transition: all 0.15s ease-in-out;
@@ -81,6 +82,11 @@
             font-weight: 500; 
             font-size: 0.85rem;
             text-transform: uppercase;
+        }
+        .btn-doble:hover {
+            background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
+            border-color: #f87171;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
         .workspace {
@@ -136,8 +142,9 @@
 
     <div class="plataforma-tnt">
         <nav class="barra-canales">
+            <!-- FILA 1: AGENDA Y CANALES 1 A 9 -->
             <div class="grid-botones-canales">
-                <button class="btn-canal activo" style="color: #38bdf8;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
+                <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C1</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C2</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C3</button>                               
@@ -149,13 +156,42 @@
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C9</button>
             </div>
 
+            <!-- FILA 2: CANALES 10 A 19 -->
+            <div class="grid-botones-canales">
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C10</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C11</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C12</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C13</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C14</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C15</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C16</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C17</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C18</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C19</button>
+            </div>
+
+            <!-- FILA 3: CANALES 20 A 29 -->
+            <div class="grid-botones-canales">
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C20</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C21</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C22</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C23</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C24</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C25</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C26</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C27</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C28</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C29</button>
+            </div>
+
+            <!-- FILA 4: CANAL 30 Y BOTÓN DE PANTALLA COMPLETA -->
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 9fr;">
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C10</button>
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C30</button>
                 <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR INTERFAZ MUTANTE DOBLE PANTALLA AL 100%</button>
             </div>
         </nav>
 
-   <main class="workspace">
+        <main class="workspace">
             <!-- PANEL CHAT IZQUIERDO -->
             <div id="panel-chat">
                 <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
@@ -163,7 +199,7 @@
 
             <!-- ZONA DE REPRODUCCIÓN / AGENDA (DERECHA) -->
             <div class="zona-contenido">
-                <iframe id="reproductor" src="agenda.htm" class="iframe-player" allowfullscreen scrolling="no"></iframe>
+                <iframe id="reproductor" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
             </div>
         </main>
     </div>
