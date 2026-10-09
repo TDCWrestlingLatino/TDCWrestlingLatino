@@ -106,7 +106,7 @@
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
         }
 
-        /* BARRA DE REDES Y LOGO CENTRAL */
+        /* BARRA DE REDES SOCIALES LIMPIA */
         .barra-redes-brand {
             display: flex;
             justify-content: space-between;
@@ -118,21 +118,12 @@
         }
 
         .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .logo-img {
-            height: 22px;
-            width: auto;
-            object-fit: contain;
-        }
-        .logo-texto {
             font-size: 1rem;
             font-weight: 700;
             color: #38bdf8;
             letter-spacing: 1.5px;
             text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+            text-transform: uppercase;
         }
 
         .redes-grupo {
@@ -141,15 +132,14 @@
         }
 
         .btn-red {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
+            display: inline-block;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: #ffffff;
             text-decoration: none;
+            text-transform: uppercase;
             transition: all 0.2s ease;
         }
         .btn-red.fb { background: #1877f2; }
@@ -227,7 +217,7 @@
             border-left: 2px solid #2563eb;
         }
 
-        /* CUANDO EL MODO MUTANTE ESTÁ ACTIVO */
+        /* MODO MUTANTE ACTIVO */
         body.modo-doble-activo #panel-chat {
             display: none !important;
         }
@@ -261,9 +251,6 @@
             .barra-redes-brand {
                 flex-direction: column;
                 gap: 8px;
-            }
-            .brand-logo {
-                order: -1;
             }
 
             .workspace { 
@@ -332,11 +319,14 @@
     </style>
 
     <script>
-        let pantallaObjetivo = 'reproductor1';
+        var pantallaObjetivo = 'reproductor1';
 
         function seleccionarPantalla(idTarget, btn) {
             pantallaObjetivo = idTarget;
-            document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+            var targets = document.querySelectorAll('.btn-target');
+            for (var i = 0; i < targets.length; i++) {
+                targets[i].classList.remove('seleccionado');
+            }
             btn.classList.add('seleccionado');
         }
 
@@ -347,9 +337,9 @@
             }
 
             var botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
-            botones.forEach(function(btn) {
-                btn.classList.remove('activo');
-            });
+            for (var i = 0; i < botones.length; i++) {
+                botones[i].classList.remove('activo');
+            }
 
             if (elemento) {
                 elemento.classList.add('activo');
@@ -359,18 +349,21 @@
         function alternarDoblePantalla() {
             document.body.classList.toggle('modo-doble-activo');
 
-            let rep2 = document.getElementById('reproductor2');
+            var rep2 = document.getElementById('reproductor2');
 
             if (document.body.classList.contains('modo-doble-activo')) {
-                if (rep2.src === "" || rep2.src.includes('about:blank')) {
-                    rep2.src = './agenda.htm';
+                if (rep2.src === "" || rep2.src.indexOf('about:blank') !== -1) {
+                    rep2.src = 'agenda.htm';
                 }
             } else {
                 pantallaObjetivo = 'reproductor1';
 
-                let btnIzq = document.querySelector('.btn-target');
+                var btnIzq = document.querySelector('.btn-target');
                 if (btnIzq) {
-                    document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+                    var targets = document.querySelectorAll('.btn-target');
+                    for (var i = 0; i < targets.length; i++) {
+                        targets[i].classList.remove('seleccionado');
+                    }
                     btnIzq.classList.add('seleccionado');
                 }
             }
@@ -383,7 +376,7 @@
         <nav class="barra-canales">
             <!-- FILA 1: AGENDA Y CANALES 1 A 9 -->
             <div class="grid-botones-canales">
-                <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('./agenda.htm', this)">AGENDA</button>                               
+                <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h3-senal-1', this)">C1</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h4-senal-2', this)">C2</button>                               
                 <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h5-senal-3', this)">C3</button>                               
@@ -430,33 +423,18 @@
                 <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES / PPV</button>
             </div>
 
-            <!-- FILA 5: REDES SOCIALES + LOGO CENTRAL -->
+            <!-- FILA 5: REDES SOCIALES Y MARCA -->
             <div class="barra-redes-brand">
                 <div class="redes-grupo">
-                    <a href="https://facebook.com/tu-pagina" target="_blank" class="btn-red fb">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                        Facebook
-                    </a>
-                    <a href="https://t.me/tu-grupo" target="_blank" class="btn-red tg">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.331.016.115.034.37.018.575z"/></svg>
-                        Telegram
-                    </a>
+                    <a href="https://facebook.com/tu-pagina" target="_blank" class="btn-red fb">Facebook</a>
+                    <a href="https://t.me/tu-grupo" target="_blank" class="btn-red tg">Telegram</a>
                 </div>
 
-                <div class="brand-logo">
-                    <img src="https://2img.net/i.imgur.com/XWTv5yO.png" alt="TDC Wrestling" class="logo-img">
-                    <span class="logo-texto">TDC WRESTLING</span>
-                </div>
+                <div class="brand-logo">TDC WRESTLING</div>
 
                 <div class="redes-grupo">
-                    <a href="https://whatsapp.com/channel/tu-canal" target="_blank" class="btn-red wa">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                        WhatsApp
-                    </a>
-                    <a href="https://kick.com/tu-canal" target="_blank" class="btn-red kick">
-                        <span style="font-weight: 900; font-size: 0.75rem;">K</span>
-                        Kick
-                    </a>
+                    <a href="https://whatsapp.com/channel/tu-canal" target="_blank" class="btn-red wa">WhatsApp</a>
+                    <a href="https://kick.com/tu-canal" target="_blank" class="btn-red kick">Kick</a>
                 </div>
             </div>
         </nav>
@@ -471,4 +449,16 @@
         <main class="workspace">
             <!-- PANEL CHAT IZQUIERDO -->
             <div id="panel-chat">
-                <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen
+                <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
+            </div>
+
+            <!-- ZONA DE REPRODUCCIÓN -->
+            <div class="zona-contenido">
+                <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
