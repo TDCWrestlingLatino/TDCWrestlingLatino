@@ -198,8 +198,20 @@
             document.body.classList.toggle('modo-doble-activo');
 
             let rep2 = document.getElementById('reproductor2');
-            if (rep2.src === "" || rep2.src.includes('about:blank')) {
-                rep2.src = 'agenda.htm';
+
+            if (document.body.classList.contains('modo-doble-activo')) {
+                if (rep2.src === "" || rep2.src.includes('about:blank')) {
+                    rep2.src = 'agenda.htm';
+                }
+            } else {
+                // Al salir de la Doble Pantalla, redirigimos el foco de nuevo al Reproductor 1
+                pantallaObjetivo = 'reproductor1';
+
+                let btnIzq = document.querySelector('.btn-target');
+                if (btnIzq) {
+                    document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+                    btnIzq.classList.add('seleccionado');
+                }
             }
         }
     </script>
