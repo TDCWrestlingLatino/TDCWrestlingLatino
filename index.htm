@@ -330,44 +330,51 @@
             }
         }
     </style>
+<script>
+    let pantallaObjetivo = 'reproductor1';
 
-    <script>
-        let pantallaObjetivo = 'reproductor1';
+    function seleccionarPantalla(idTarget, btn) {
+        pantallaObjetivo = idTarget;
+        document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+        btn.classList.add('seleccionado');
+    }
 
-        function seleccionarPantalla(idTarget, btn) {
-            pantallaObjetivo = idTarget;
-            document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
-            btn.classList.add('seleccionado');
+    function cargarCanal(url, elemento) {
+        // Carga la URL de la agenda o canal en el iframe seleccionado
+        document.getElementById(pantallaObjetivo).src = url;
+
+        // Quita la clase 'activo' de todos los botones de canales y repeticiones
+        let botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
+        botones.forEach(btn => btn.classList.remove('activo'));
+
+        // Si se hizo clic desde un botón superior, lo resalta
+        if (elemento) {
+            elemento.classList.add('activo');
         }
+    }
 
-        function cargarCanal(url, elemento) {
-            document.getElementById(pantallaObjetivo).src = url;
+    function alternarDoblePantalla() {
+        document.body.classList.toggle('modo-doble-activo');
 
-            let botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
-            botones.forEach(btn => btn.classList.remove('activo'));
-            if(elemento) elemento.classList.add('activo');
-        }
+        let rep2 = document.getElementById('reproductor2');
 
-        function alternarDoblePantalla() {
-            document.body.classList.toggle('modo-doble-activo');
+        if (document.body.classList.contains('modo-doble-activo')) {
+            if (rep2.src === "" || rep2.src.includes('about:blank')) {
+                rep2.src = 'agenda.htm';
+            }
+        } else {
+            pantallaObjetivo = 'reproductor1';
 
-            let rep2 = document.getElementById('reproductor2');
-
-            if (document.body.classList.contains('modo-doble-activo')) {
-                if (rep2.src === "" || rep2.src.includes('about:blank')) {
-                    rep2.src = 'agenda.htm';
-                }
-            } else {
-                pantallaObjetivo = 'reproductor1';
-
-                let btnIzq = document.querySelector('.btn-target');
-                if (btnIzq) {
-                    document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
-                    btnIzq.classList.add('seleccionado');
-                }
+            let btnIzq = document.querySelector('.btn-target');
+            if (btnIzq) {
+                document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+                btnIzq.classList.add('seleccionado');
             }
         }
-    </script>
+    }
+</script>
+    
+    
 </head>
 <body>
 
