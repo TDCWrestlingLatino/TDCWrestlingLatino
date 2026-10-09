@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartelera Oficial - TDC</title>
     
-    <!-- FUENTE OSWALD DELGADA Y ELEGANTE -->
+    <!-- ENLACE DE FUENTE CORREGIDO -->
     <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
@@ -20,7 +20,8 @@
             color: #ffffff;
             font-family: 'Oswald', 'Arial Narrow', sans-serif;
             padding: 10px;
-            width: 660px;
+            width: 100%;
+            max-width: 660px;
             height: 464px;
             overflow-y: auto;
         }
@@ -32,7 +33,6 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.7);
         }
 
-        /* BARRA SUPERIOR REBAJADA Y DELGADA REFINADA */
         .fecha-cabecera {
             background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
             border-bottom: 3px solid #38bdf8;
@@ -40,7 +40,7 @@
             text-align: center;
             padding: 8px 0;
             font-size: 1.15rem;
-            font-weight: 500; /* REBAJADO PARA EVITAR QUE SE VEA TOCHO */
+            font-weight: 500; 
             letter-spacing: 2px;
             text-transform: uppercase;
             text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
@@ -102,26 +102,26 @@
             gap: 15px;
         }
 
+        /* TU CLASE MADRE DE TAMAÑO ORIGINAL FIJA */
         .l {
             height: 28px;
             width: 50px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            display: inline-block; /* Fuerza al navegador a darle dimensiones */
         }
         
+        /* Tus carpetas de enlaces directos configuradas en minúsculas */
+        .aew { background-image: url('https://2img.net'); }
+        .aaa { background-image: url('https://2img.net'); }
+        .raw { background-image: url('https://2img.net'); }
+        .smackdown { background-image: url('https://2img.net'); }
+        .roh { background-image: url('https://2img.net'); }
 
-        .logo-aew { background-image: url('https://2img.net/i.imgur.com/XWTv5yO.png'); }
-        .logo-roh { background-image: url('https://2img.net/i.imgur.com/9hVv9Wn.png'); }
-        .logo-raw { background-image: url('https://2img.net/i.imgur.com/mVpXNF9.png'); }
-        .logo-smackdown { background-image: url('https://2img.net/i.imgur.com/oijCtZh.png'); }
-        .logo-njpw { background-image: url('https://2img.net'); }
-        .logo-roh { background-image: url('https://2img.net'); }
-
-        /* TÍTULO REBAJADO TOTALMENTE LIMPIO */
         .show-titulo {
             font-size: 0.9rem;
-            font-weight: 400; /* REBAJADO PARA QUITAR EL EFECTO GRUESO TOCHO */
+            font-weight: 400; 
             color: #e2e8f0;
             letter-spacing: 1.2px;
             text-transform: uppercase;
@@ -177,10 +177,11 @@
         </div>
 
         <div class="lista-shows">
+            <!-- LLAMADO DE CLASES CORREGIDO SIN EL PUNTO INTERNO -->
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
-                    <span class="logo-raw"></span>
+                    <span class="l raw"></span>
                     <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
                 </div>
                 <div class="celda-estado">
@@ -191,7 +192,7 @@
             <div class="fila-show">
                 <div class="celda-hora">8:00 PM</div>
                 <div class="celda-contenido">
-                    <span class="logo-smackdown"></span>
+                    <span class="l smackdown"></span>
                     <div class="show-titulo">WWE SMACKDOWN - COBERTURA LATINA</div>
                 </div>
                 <div class="celda-estado">
@@ -202,7 +203,7 @@
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
-                    <span class="logo-aaa"></span>
+                    <span class="l aaa"></span>
                     <div class="show-titulo">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</div>
                 </div>
                 <div class="celda-estado">
@@ -213,7 +214,7 @@
             <div class="fila-show">
                 <div class="celda-hora">24/7</div>
                 <div class="celda-contenido">
-                    <span class="logo-roh"></span>
+                    <span class="l roh"></span>
                     <div class="show-titulo">RING OF HONOR - EVENTO COMPLETO</div>
                 </div>
                 <div class="celda-estado">
