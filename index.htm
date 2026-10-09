@@ -89,7 +89,7 @@
             box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
-        /* BARRA DE CONTROL DE PANTALLA SELECCIONADA */
+        /* SELECTOR DE PANTALLA DE CONTROL */
         .control-pantallas {
             display: none;
             background: #0f172a;
@@ -117,7 +117,7 @@
             font-weight: 600;
         }
 
-        /* WORKSPACE Y MODO PANTALLA DIVIDIDA */
+        /* WORKSPACE */
         .workspace {
             display: flex;
             width: 100%;
@@ -141,18 +141,26 @@
             overflow: hidden;
         }
 
+        /* CONTENEDOR INDIVIDUAL PARA CADA REPRODUCTOR */
+        .wrapper-player {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background: #000000;
+        }
+
         .iframe-player {
             width: 100%;
             height: 100%;
             border: 0;
             background: #000000;
-            object-fit: contain;
+            transform-origin: 0 0;
         }
 
-        /* SEGUNDA PANTALLA */
-        #reproductor2 {
+        /* SEGUNDA PANTALLA EN MODO NORMAL (Oculta) */
+        #wrapper-rep2 {
             display: none;
-            width: 50%;
             border-left: 2px solid #2563eb;
         }
 
@@ -160,27 +168,32 @@
         body.modo-doble-activo #panel-chat {
             display: none !important;
         }
-        body.modo-doble-activo #reproductor1 {
-            width: 50%;
-        }
-        body.modo-doble-activo #reproductor2 {
+        body.modo-doble-activo #wrapper-rep1,
+        body.modo-doble-activo #wrapper-rep2 {
             display: block;
+            width: 50%;
+            height: 100%;
         }
 
-        /* OPTIMIZACIÓN EN MÓVILES */
+        /* ESCALADO INTELIGENTE: Si las señales son anchas, se ajusta la escala automáticamente */
+        body.modo-doble-activo .iframe-player {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* OPTIMIZACIÓN MÓVILES */
         @media (max-width: 980px) {
             body { padding: 0; }
             .plataforma-tnt { width: 100vw; border: none; border-radius: 0; }
             .grid-botones-canales { grid-template-columns: repeat(5, 1fr); }
             .workspace { flex-direction: column; height: auto; }
             .zona-contenido { width: 100vw; flex-direction: column; height: auto; }
-            .iframe-player { height: 56.25vw; width: 100% !important; }
+            .wrapper-player { height: 56.25vw; width: 100% !important; }
             #panel-chat { width: 100vw; height: 350px; border-right: none; border-top: 2px solid #4a5568; }
         }
     </style>
 
     <script>
-        // Por defecto, las señales se cargan en la Pantalla 1 (Izquierda)
         let pantallaObjetivo = 'reproductor1';
 
         function seleccionarPantalla(idTarget, btn) {
@@ -260,7 +273,7 @@
             </div>
         </nav>
 
-        <!-- SELECTOR DE PANTALLA EN MODO MUTANTE -->
+        <!-- BARRA DE CONTROL DE PANTALLA -->
         <div class="control-pantallas">
             <span style="color: #94a3b8; font-size: 0.8rem; line-height: 22px;">ENVIAR CANAL A:</span>
             <button class="btn-target seleccionado" onclick="seleccionarPantalla('reproductor1', this)">👈 PANTALLA IZQUIERDA</button>
@@ -275,8 +288,12 @@
 
             <!-- ZONA DE REPRODUCCIÓN -->
             <div class="zona-contenido">
-                <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
-                <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                <div class="wrapper-player" id="wrapper-rep1">
+                    <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                </div>
+                <div class="wrapper-player" id="wrapper-rep2">
+                    <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                </div>
             </div>
         </main>
     </div>
