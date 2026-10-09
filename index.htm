@@ -89,13 +89,14 @@
             box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
+        /* WORKSPACE Y MODO DOBLE PANTALLA */
         .workspace {
             display: grid;
             grid-template-columns: 310px 660px;
             width: 100%;
             height: 464px;
             background: #111827;
-            transition: grid-template-columns 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         #panel-chat {
@@ -108,6 +109,9 @@
             width: 100%;
             height: 100%;
             background: #000000;
+            display: grid;
+            grid-template-columns: 1fr; /* Por defecto 1 solo reproductor */
+            gap: 2px;
         }
 
         .iframe-player {
@@ -117,17 +121,48 @@
             background: #000000;
         }
 
+        /* SEGUNDA PANTALLA (Oculta por defecto) */
+        #reproductor2 {
+            display: none;
+            border-left: 2px solid #2563eb;
+        }
+
+        /* --- CUANDO SE ACTIVA EL MODO DOBLE PANTALLA --- */
         body.modo-doble-activo .workspace {
-            grid-template-columns: 0px 1fr;
+            grid-template-columns: 0px 1fr; /* Oculta el chat */
         }
         body.modo-doble-activo #panel-chat {
             display: none;
         }
+        body.modo-doble-activo .zona-contenido {
+            grid-template-columns: 1fr 1fr; /* Divide el espacio en 2 pantallas de igual tamaño */
+        }
+        body.modo-doble-activo #reproductor2 {
+            display: block; /* Muestra el segundo reproductor */
+        }
+
+        /* OPTIMIZACIÓN RESPONSIVA PARA MOVILES */
+        @media (max-width: 980px) {
+            body { padding: 0; }
+            .plataforma-tnt { width: 100vw; border: none; border-radius: 0; }
+            .grid-botones-canales { grid-template-columns: repeat(5, 1fr); }
+            .btn-canal { font-size: 0.8rem; padding: 6px 0; }
+            .workspace { display: flex; flex-direction: column; height: auto; }
+            .zona-contenido { width: 100vw; height: 56.25vw; }
+            body.modo-doble-activo .zona-contenido { flex-direction: column; height: auto; }
+            body.modo-doble-activo .iframe-player { height: 56.25vw; }
+            #panel-chat { width: 100vw; height: 350px; border-right: none; border-top: 2px solid #4a5568; }
+        }
     </style>
 
     <script>
+        // Control de qué pantalla recibe la señal cuando das clic a un canal
+        let pantallaObjetivo = 'reproductor1';
+
         function cargarCanal(url, elemento) {
-            document.getElementById('reproductor').src = url;
+            // Carga la señal en la pantalla que esté seleccionada
+            document.getElementById(pantallaObjetivo).src = url;
+
             let botones = document.querySelectorAll('.btn-canal');
             botones.forEach(btn => btn.classList.remove('activo'));
             elemento.classList.add('activo');
@@ -135,6 +170,17 @@
 
         function alternarDoblePantalla() {
             document.body.classList.toggle('modo-doble-activo');
+            
+            // Si activa doble pantalla y el reproductor 2 no tiene nada cargado, le ponemos la agenda
+            let rep2 = document.getElementById('reproductor2');
+            if (document.body.classList.contains('modo-doble-activo') && rep2.src.includes('about:blank')) {
+                rep2.src = 'agenda.htm';
+            }
+        }
+
+        // Función opcional para alternar a qué pantalla enviar la señal (Pantalla Izq o Der)
+        function cambiarObjetivoPantalla(pantalla) {
+            pantallaObjetivo = pantalla;
         }
     </script>
 </head>
@@ -145,29 +191,29 @@
             <!-- FILA 1: AGENDA Y CANALES 1 A 9 -->
             <div class="grid-botones-canales">
                 <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C1</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C2</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C3</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C4</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C5</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C6</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C7</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C8</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C9</button>
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h3-senal-1', this)">C1</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h4-senal-2', this)">C2</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h5-senal-3', this)">C3</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h6-senal-4', this)">C4</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h7-senal-5, this)">C5</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h8-senal-6', this)">C6</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h9-senal-7', this)">C7</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h10-senal-8', this)">C8</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h2-senal-9', this)">C9</button>
             </div>
 
             <!-- FILA 2: CANALES 10 A 19 -->
             <div class="grid-botones-canales">
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C10</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C11</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C12</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C13</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C14</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C15</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C16</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C17</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C18</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C19</button>
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h11-senal-10', this)">C10</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h13-senal-11', this)">C11</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h15-senal-12', this)">C12</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h17-senal-13', this)">C13</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h1-senal-14', this)">C14</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h12-senal-15', this)">C15</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h26-senal-16', this)">C16</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h27-senal-17', this)">C17</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h28-senal-18', this)">C18</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h29-senal-19', this)">C19</button>
             </div>
 
             <!-- FILA 3: CANALES 20 A 29 -->
@@ -184,10 +230,10 @@
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C29</button>
             </div>
 
-            <!-- FILA 4: CANAL 30 Y BOTÓN DE PANTALLA COMPLETA -->
+            <!-- FILA 4: CANAL 30 Y BOTÓN DE INTERFAZ MUTANTE DOBLE PANTALLA -->
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 9fr;">
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C30</button>
-                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR INTERFAZ MUTANTE DOBLE PANTALLA AL 100%</button>
+                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR INTERFAZ MUTANTE DOBLE PANTALLA (2 SEÑALES EN VIVO)</button>
             </div>
         </nav>
 
@@ -197,9 +243,13 @@
                 <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
             </div>
 
-            <!-- ZONA DE REPRODUCCIÓN / AGENDA (DERECHA) -->
+            <!-- ZONA DE REPRODUCCIÓN (SE DIVIDE EN 2 EN MODO MUTANTE) -->
             <div class="zona-contenido">
-                <iframe id="reproductor" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                <!-- PANTALLA 1 (IZQUIERDA / PRINCIPAL) -->
+                <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+                
+                <!-- PANTALLA 2 (DERECHA / SECUNDARIA) -->
+                <iframe id="reproductor2" src="about:blank" class="iframe-player" allowfullscreen></iframe>
             </div>
         </main>
     </div>
