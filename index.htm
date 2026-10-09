@@ -19,7 +19,7 @@
 
         body {
             background: #0b0f19;
-            overf,low-x: hidden;
+            overflow-x: hidden;
             overflow-y: auto;
             display: flex;
             justify-content: center;
@@ -330,51 +330,52 @@
             }
         }
     </style>
-<script>
-    let pantallaObjetivo = 'reproductor1';
 
-    function seleccionarPantalla(idTarget, btn) {
-        pantallaObjetivo = idTarget;
-        document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
-        btn.classList.add('seleccionado');
-    }
+    <script>
+        let pantallaObjetivo = 'reproductor1';
 
-    function cargarCanal(url, elemento) {
-        // Carga la URL de la agenda o canal en el iframe seleccionado
-        document.getElementById(pantallaObjetivo).src = url;
-
-        // Quita la clase 'activo' de todos los botones de canales y repeticiones
-        let botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
-        botones.forEach(btn => btn.classList.remove('activo'));
-
-        // Si se hizo clic desde un botón superior, lo resalta
-        if (elemento) {
-            elemento.classList.add('activo');
+        function seleccionarPantalla(idTarget, btn) {
+            pantallaObjetivo = idTarget;
+            document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+            btn.classList.add('seleccionado');
         }
-    }
 
-    function alternarDoblePantalla() {
-        document.body.classList.toggle('modo-doble-activo');
-
-        let rep2 = document.getElementById('reproductor2');
-
-        if (document.body.classList.contains('modo-doble-activo')) {
-            if (rep2.src === "" || rep2.src.includes('about:blank')) {
-                rep2.src = 'agenda.htm';
+        function cargarCanal(url, elemento) {
+            var targetIframe = document.getElementById(pantallaObjetivo);
+            if (targetIframe) {
+                targetIframe.src = url;
             }
-        } else {
-            pantallaObjetivo = 'reproductor1';
 
-            let btnIzq = document.querySelector('.btn-target');
-            if (btnIzq) {
-                document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
-                btnIzq.classList.add('seleccionado');
+            var botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
+            botones.forEach(function(btn) {
+                btn.classList.remove('activo');
+            });
+
+            if (elemento) {
+                elemento.classList.add('activo');
             }
         }
-    }
-</script>
-    
-    
+
+        function alternarDoblePantalla() {
+            document.body.classList.toggle('modo-doble-activo');
+
+            let rep2 = document.getElementById('reproductor2');
+
+            if (document.body.classList.contains('modo-doble-activo')) {
+                if (rep2.src === "" || rep2.src.includes('about:blank')) {
+                    rep2.src = './agenda.htm';
+                }
+            } else {
+                pantallaObjetivo = 'reproductor1';
+
+                let btnIzq = document.querySelector('.btn-target');
+                if (btnIzq) {
+                    document.querySelectorAll('.btn-target').forEach(b => b.classList.remove('seleccionado'));
+                    btnIzq.classList.add('seleccionado');
+                }
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -470,9 +471,4 @@
         <main class="workspace">
             <!-- PANEL CHAT IZQUIERDO -->
             <div id="panel-chat">
-                <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
-            </div>
-
-            <!-- ZONA DE REPRODUCCIÓN -->
-            <div class="zona-contenido">
-                <iframe id="reproductor1" src="./agenda.htm" 
+                <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen
