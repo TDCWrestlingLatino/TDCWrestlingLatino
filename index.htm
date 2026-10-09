@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma TDC Wrestling</title>
+    <title>Plataforma Premium - TDC Wrestling</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,6 @@
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR DE CANALES */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
@@ -60,27 +59,16 @@
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
             border: 1px solid #334155;
-            padding: 5px 0;
-            font-size: 0.9rem;
-            font-weight: 500; 
-            text-transform: uppercase;
-            letter-spacing: 1px; 
+            padding: 4px 0;
+            font-size: 0.95rem;
             cursor: pointer;
             text-align: center;
             transition: all 0.15s ease-in-out;
         }
-
         .btn-canal:hover, .btn-canal.activo {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #38bdf8;
             border-color: #38bdf8;
-            box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.4);
-        }
-
-        .btn-agenda {
-            color: #38bdf8;
-            border-color: #2563eb;
-            font-weight: 600;
         }
 
         .btn-doble {
@@ -93,17 +81,8 @@
             font-weight: 500; 
             font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 2px; 
-            transition: all 0.2s;
         }
 
-        .btn-doble:hover {
-            background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
-            border-color: #f87171;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
-
-        /* ESPACIO DE TRABAJO EN GRID */
         .workspace {
             display: grid;
             grid-template-columns: 310px 660px;
@@ -117,14 +96,12 @@
             border-right: 2px solid #4a5568;
             background: #0b0f19;
             height: 100%;
-            width: 100%;
         }
 
         .zona-contenido {
             width: 100%;
             height: 100%;
             background: #000000;
-            position: relative;
         }
 
         .iframe-player {
@@ -134,79 +111,62 @@
             background: #000000;
         }
 
-        /* ACTIVAR PANTALLA COMPLETA SIN CHAT */
         body.modo-doble-activo .workspace {
             grid-template-columns: 0px 1fr;
         }
         body.modo-doble-activo #panel-chat {
             display: none;
         }
-
-        /* RESPONSIVE PARA MÓVILES */
-        @media (max-width: 980px) {
-            body { padding: 0; }
-            .plataforma-tnt { width: 100vw; border: none; border-radius: 0; }
-            .grid-botones-canales { grid-template-columns: repeat(5, 1fr); }
-            .workspace { display: flex; flex-direction: column; height: auto; }
-            .zona-contenido { width: 100vw; height: 56.25vw; }
-            #panel-chat { width: 100vw; height: 350px; border-right: none; border-top: 2px solid #4a5568; }
-        }
     </style>
+
+    <script>
+        function cargarCanal(url, elemento) {
+            document.getElementById('reproductor').src = url;
+            let botones = document.querySelectorAll('.btn-canal');
+            botones.forEach(btn => btn.classList.remove('activo'));
+            elemento.classList.add('activo');
+        }
+
+        function alternarDoblePantalla() {
+            document.body.classList.toggle('modo-doble-activo');
+        }
+    </script>
 </head>
 <body>
 
     <div class="plataforma-tnt">
-        <!-- BARRA DE CANALES SUPERIOR -->
         <nav class="barra-canales">
             <div class="grid-botones-canales">
-                <button class="btn-canal btn-agenda activo" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal1', this)">C1</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal2', this)">C2</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal3', this)">C3</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal4', this)">C4</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal5', this)">C5</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal6', this)">C6</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal7', this)">C7</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal8', this)">C8</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal9', this)">C9</button>
+                <button class="btn-canal activo" style="color: #38bdf8;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C1</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C2</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C3</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C4</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C5</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C6</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C7</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C8</button>                               
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C9</button>
             </div>
 
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 9fr;">
-                <button class="btn-canal" onclick="cargarCanal('https://ejemplo.com/embed/canal10', this)">C10</button>
-                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR MODO CINE / PANTALLA COMPLETA</button>
+                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">C10</button>
+                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ ACTIVAR INTERFAZ MUTANTE DOBLE PANTALLA AL 100%</button>
             </div>
         </nav>
 
-        <!-- ESPACIO DE TRABAJO -->
         <main class="workspace">
-            <!-- PANEL DE CHAT IZQUIERDO -->
+            <!-- PANEL CHAT IZQUIERDO -->
             <div id="panel-chat">
-                <!-- AQUÍ PEGAS EL EMBED/IFRAME DE TU CHAT EXTERNO -->
-                <iframe src="https://v2.chatango.com/group/TU_CHAT" width="100%" height="100%" frameborder="0"></iframe>
+                <iframe id="reproductor" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" allowfullscreen></iframe>
             </div>
 
-            <!-- PANEL DERECHO DE REPRODUCCIÓN / AGENDA -->
+            <!-- ZONA DE REPRODUCCIÓN / AGENDA (DERECHA) -->
             <div class="zona-contenido">
                 <iframe id="reproductor" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
             </div>
         </main>
     </div>
 
-    <script>
-        // Función para cambiar de canal o volver a la agenda sin recargar la página
-        function cargarCanal(url, elemento) {
-            document.getElementById('reproductor').src = url;
-
-            // Marcar botón activo
-            let botones = document.querySelectorAll('.btn-canal');
-            botones.forEach(btn => btn.classList.remove('activo'));
-            elemento.classList.add('activo');
-        }
-
-        // Alternar el modo pantalla completa quitando el chat
-        function alternarDoblePantalla() {
-            document.body.classList.toggle('modo-doble-activo');
-        }
-    </script>
 </body>
 </html>
