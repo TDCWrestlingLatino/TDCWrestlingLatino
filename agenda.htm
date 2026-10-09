@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC</title>
+    <title>Cartelera Oficial - TDC Wrestling</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,21 +17,24 @@
         }
 
         html, body {
-            width: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
             height: 100%;
             background-color: #0b0f19;
             color: #ffffff;
             font-family: 'Oswald', 'Arial Narrow', sans-serif;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-            padding: 5px;
+            overflow-x: hidden !important; /* QUITA EL SCROLL HORIZONTAL */
+            overflow-y: auto !important;   /* MANTIENE SCROLL VERTICAL */
+            padding: 6px;
         }
 
-        .tabla-metalica {
+        .contenedor-agenda {
             width: 100%;
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             border: 2px solid #475569;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .fecha-cabecera {
@@ -41,134 +44,118 @@
             text-align: center;
             padding: 8px 0;
             font-size: 1.1rem;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
         }
 
-        .columnas-etiquetas {
-            display: grid;
-            grid-template-columns: 80px 1fr 110px;
-            padding: 6px 10px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .text-center { text-align: center; }
-
-        .lista-shows {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+        /* TABLA PRINCIPAL DE LA CARTELERA */
+        .tabla-cartelera {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
             padding: 8px;
         }
 
+        .tabla-cartelera th {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
         .fila-show {
-            display: grid;
-            grid-template-columns: 80px 1fr 110px;
-            align-items: center;
             background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
-            border: 1px solid #334155;
             transition: all 0.2s ease;
         }
         .fila-show:hover {
-            border-color: #38bdf8;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
+        /* CELDAS */
         .celda-hora {
+            width: 85px;
             background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
             color: #38bdf8;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             text-align: center;
-            padding: 10px 0;
-            border-right: 1px solid #334155;
-            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+            padding: 10px 4px;
+            border: 1px solid #334155;
+            border-right: none;
             letter-spacing: 1px;
         }
 
-        .celda-contenido {
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-            gap: 12px;
-        }
-
-        .l {
-            height: 24px;
-            width: 40px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            flex-shrink: 0;
-        }
-
-        .logo-aew { background-image: url('https://2img.net/i.imgur.com/XWTv5yO.png'); }
-        .logo-roh { background-image: url('https://2img.net/i.imgur.com/9hVv9Wn.png'); }
-        .logo-raw { background-image: url('https://2img.net/i.imgur.com/mVpXNF9.png'); }
-        .logo-smackdown { background-image: url('https://2img.net/i.imgur.com/oijCtZh.png'); }
-
-        .show-titulo {
+        .celda-evento {
+            padding: 8px 12px;
+            color: #e2e8f0;
             font-size: 0.85rem;
             font-weight: 400;
-            color: #e2e8f0;
             letter-spacing: 1px;
             text-transform: uppercase;
+            border-top: 1px solid #334155;
+            border-bottom: 1px solid #334155;
         }
 
-        .celda-estado {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5px;
+        .celda-boton {
+            width: 110px;
+            text-align: center;
+            padding: 8px 6px;
+            border: 1px solid #334155;
+            border-left: none;
         }
 
+        /* ESTILOS DE BOTONES EN VIVO Y REPETICIÓN */
         .badge-vivo {
+            display: block;
+            width: 100%;
             background: #e11d48;
             color: #ffffff;
-            padding: 5px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.75rem;
-            box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
-            cursor: pointer !important;
+            padding: 6px 0;
             border: none;
-            width: 100%;
-            text-align: center;
+            border-radius: 3px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer !important;
+            box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
             transform: skewX(-12deg);
             transition: all 0.2s ease;
         }
         .badge-vivo:hover {
             background: #2563eb !important;
             box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-            transform: skewX(-12deg) scale(1.03);
+            transform: skewX(-12deg) scale(1.04);
         }
 
         .badge-repetir {
+            display: block;
+            width: 100%;
             background: #334155;
             color: #94a3b8;
-            padding: 5px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer !important;
+            padding: 6px 0;
             border: 1px solid #475569;
-            width: 100%;
-            text-align: center;
+            border-radius: 3px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer !important;
             transform: skewX(-12deg);
             transition: all 0.2s ease;
         }
         .badge-repetir:hover {
             border-color: #38bdf8 !important;
             color: #ffffff !important;
-            transform: skewX(-12deg) scale(1.03);
+            background: #1e293b;
+            transform: skewX(-12deg) scale(1.04);
         }
-        
+
         .badge-vivo span, .badge-repetir span {
             display: inline-block;
             transform: skewX(12deg);
@@ -177,72 +164,63 @@
 </head>
 <body>
 
-    <div class="tabla-metalica">
+    <div class="contenedor-agenda">
         <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
 
-        <div class="columnas-etiquetas">
-            <div class="text-center">HORA</div>
-            <div>EVENTO EN TRANSMISIÓN</div>
-            <div class="text-center">ESTADO</div>
-        </div>
+        <table class="tabla-cartelera">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">HORA</th>
+                    <th style="text-align: left; padding-left: 12px;">EVENTO EN TRANSMISIÓN</th>
+                    <th style="text-align: center;">ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- FILA 1: RAW EN VIVO (Manda a Canal 1) -->
+                <tr class="fila-show">
+                    <td class="celda-hora">8:00 PM</td>
+                    <td class="celda-evento">WWE RAW ESPAÑOL - SHOW EN VIVO</td>
+                    <td class="celda-boton">
+                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
+                            <span>CANAL 1</span>
+                        </button>
+                    </td>
+                </tr>
 
-        <div class="lista-shows">
-            <!-- SHOW 1: RAW EN VIVO (Manda al Canal 1) -->
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <div class="l logo-raw"></div>
-                    <div class="show-titulo">WWE RAW ESPAÑOL - SHOW EN VIVO</div>
-                </div>
-                <div class="celda-estado">
-                    <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
-                        <span>CANAL 1</span>
-                    </button>
-                </div>
-            </div>
+                <!-- FILA 2: SMACKDOWN EN VIVO (Manda a Canal 2) -->
+                <tr class="fila-show">
+                    <td class="celda-hora">8:00 PM</td>
+                    <td class="celda-evento">WWE SMACKDOWN - COBERTURA LATINA</td>
+                    <td class="celda-boton">
+                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
+                            <span>CANAL 2</span>
+                        </button>
+                    </td>
+                </tr>
 
-            <!-- SHOW 2: SMACKDOWN EN VIVO (Manda al Canal 2) -->
-            <div class="fila-show">
-                <div class="celda-hora">8:00 PM</div>
-                <div class="celda-contenido">
-                    <div class="l logo-smackdown"></div>
-                    <div class="show-titulo">WWE SMACKDOWN - COBERTURA LATINA</div>
-                </div>
-                <div class="celda-estado">
-                    <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
-                        <span>CANAL 2</span>
-                    </button>
-                </div>
-            </div>
+                <!-- FILA 3: LUCHA LIBRE AAA REPETICIÓN (Manda a Canal 3) -->
+                <tr class="fila-show">
+                    <td class="celda-hora">24/7</td>
+                    <td class="celda-evento">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</td>
+                    <td class="celda-boton">
+                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
+                            <span>REPETICIÓN</span>
+                        </button>
+                    </td>
+                </tr>
 
-            <!-- SHOW 3: LUCHA LIBRE AAA REPETICIÓN (Manda al Canal 3) -->
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <div class="l logo-aew"></div>
-                    <div class="show-titulo">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</div>
-                </div>
-                <div class="celda-estado">
-                    <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
-                        <span>REPETICIÓN</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- SHOW 4: RING OF HONOR REPETICIÓN (Manda al Canal 4) -->
-            <div class="fila-show">
-                <div class="celda-hora">24/7</div>
-                <div class="celda-contenido">
-                    <div class="l logo-roh"></div>
-                    <div class="show-titulo">RING OF HONOR - EVENTO COMPLETO</div>
-                </div>
-                <div class="celda-estado">
-                    <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h6-senal-4', parent.document.querySelectorAll('.btn-canal')[4])">
-                        <span>REPETICIÓN</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+                <!-- FILA 4: RING OF HONOR REPETICIÓN (Manda a Canal 4) -->
+                <tr class="fila-show">
+                    <td class="celda-hora">24/7</td>
+                    <td class="celda-evento">RING OF HONOR - EVENTO COMPLETO</td>
+                    <td class="celda-boton">
+                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h6-senal-4', parent.document.querySelectorAll('.btn-canal')[4])">
+                            <span>REPETICIÓN</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </body>
