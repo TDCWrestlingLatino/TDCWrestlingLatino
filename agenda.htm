@@ -102,15 +102,18 @@
             gap: 15px;
         }
 
-        /* TU CLASE MADRE DE TAMAÑO ORIGINAL FIJA */
-        .l {
-            height: 28px;
-            width: 50px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            display: inline-block; /* Fuerza al navegador a darle dimensiones */
-        }
+      /* TU CLASE MADRE CORREGIDA (Con el interruptor de renderizado físico) */
+.l {
+    display: inline-block; /* <-- ESTE ES EL INTERRUPTOR MÁGICO: Obliga al navegador a pintar el cuadro en la pantalla */
+    height: 28px;
+    width: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle; /* Alinea el logo perfectamente al centro del texto del show */
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.3)); /* Le da un ligero brillo premium de fondo */
+}
+
         
         /* Tus carpetas de enlaces directos configuradas en minúsculas */
         .aew { background-image: url('https://2img.net'); }
