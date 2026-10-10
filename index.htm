@@ -60,28 +60,27 @@
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             color: #e2e8f0;
             border: 1px solid #334155;
-            padding: 6px 0; /* Un poquito más de altura para que respiren mejor */
+            padding: 6px 0;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            border-radius: 3px; /* Esquinas ligeramente redondeadas y modernas */
-            transition: all 0.2s ease-in-out;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05); /* Brillo interno de acero */
+            border-radius: 3px;
+            transition: all 0.15s ease-in-out;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
-        
         .btn-canal:hover {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
             color: #ffffff;
             border-color: #60a5fa;
-            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6); /* Destello azul al pasar el mouse */
-            transform: translateY(-1px); /* Efecto sutil de relieve */
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+            transform: translateY(-1px);
         }
         .btn-canal.activo {
             background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
             color: #ffffff !important;
             border-color: #38bdf8 !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8); /* Canal activo bien iluminado */
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
             font-weight: 700;
         }
 
@@ -90,11 +89,12 @@
             background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
             color: white;
             border: 1px solid #3b82f6;
-            padding: 5px 0;
+            padding: 6px 0;
             cursor: pointer;
-            font-weight: 500; 
+            font-weight: 600; 
             font-size: 0.85rem;
             text-transform: uppercase;
+            border-radius: 3px;
         }
         .btn-doble:hover {
             background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
@@ -107,11 +107,12 @@
             background: linear-gradient(90deg, #059669 0%, #10b981 50%, #059669 100%);
             color: white;
             border: 1px solid #34d399;
-            padding: 5px 0;
+            padding: 6px 0;
             cursor: pointer;
-            font-weight: 500; 
+            font-weight: 600; 
             font-size: 0.85rem;
             text-transform: uppercase;
+            border-radius: 3px;
             transition: all 0.2s ease;
         }
         .btn-repetir-nav:hover {
@@ -242,7 +243,7 @@
         }
 
         /* OPTIMIZACIÓN MÓVIL BASE 660PX / CHAT 310PX */
-       @media (max-width: 980px) and (orientation: portrait) {
+        @media (max-width: 980px) and (orientation: portrait) {
             body { 
                 padding: 5px 0;
                 display: flex;
@@ -279,16 +280,17 @@
                 height: auto; 
             }
 
-            /* AQUÍ ESTÁ EL CAMBIO CLAVE PARA QUE NO QUEDE APLASTADO */
+            /* Reproductor con altura generosa para que la agenda respire */
             .iframe-player { 
                 width: 100% !important;
-                height: 520px !important; /* Le damos más espacio vertical para que la agenda respire */
+                height: 520px !important; 
                 max-height: none !important;
             }
 
+            /* Panel de chat con altura propia de 480px libre de máscaras negras */
             #panel-chat { 
-                width: 360px !important; 
-                height: 100%px; 
+                width: 310px !important; 
+                height: 480px !important; 
                 border-right: none; 
                 border-top: 2px solid #4a5568; 
                 margin: 10px auto 5px auto; 
@@ -296,7 +298,13 @@
                 overflow: hidden;
                 flex-shrink: 0;
             }
+
+            /* Obliga al iframe del chat a llenar exactamente su contenedor de 480px */
+            #panel-chat .iframe-player {
+                height: 100% !important;
+            }
         }
+
         @media (max-width: 980px) and (orientation: landscape) {
             body { 
                 padding: 2px; 
@@ -433,21 +441,21 @@
             <div class="grid-botones-canales" style="grid-template-columns: 1fr 4.5fr 4.5fr; gap: 4px;">
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 30</button>
                 <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ DOBLE PANTALLA</button>
-                <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES</button>
+                <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES / PPV</button>
             </div>
 
             <!-- FILA 5: REDES SOCIALES Y MARCA -->
             <div class="barra-redes-brand">
                 <div class="redes-grupo">
-                    <a href="https://www.facebook.com/TDCWrestlingLatino/" target="_blank" class="btn-red fb">Facebook</a>
-                    <a href="https://t.me/TDCWrestlingLatino" target="_blank" class="btn-red tg">Telegram</a>
+                    <a href="https://facebook.com/tu-pagina" target="_blank" class="btn-red fb">Facebook</a>
+                    <a href="https://t.me/tu-grupo" target="_blank" class="btn-red tg">Telegram</a>
                 </div>
 
-                <div class="brand-logo">TDC WRESTLING LATINO </div>
+                <div class="brand-logo">TDC WRESTLING LATINO</div>
 
                 <div class="redes-grupo">
-                    <a href="https://www.facebook.com/AEWLatinoTDC/" target="_blank" class="btn-red fb">Facebook 2</a>
-                    <a href="http://youtube.com/@TDCWrestlingLatino" target="_blank" class="btn-red kick">Youtube</a>
+                    <a href="https://whatsapp.com/channel/tu-canal" target="_blank" class="btn-red wa">WhatsApp</a>
+                    <a href="https://kick.com/tu-canal" target="_blank" class="btn-red kick">Kick</a>
                 </div>
             </div>
         </nav>
