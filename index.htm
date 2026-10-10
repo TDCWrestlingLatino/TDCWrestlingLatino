@@ -242,7 +242,7 @@
         }
 
         /* OPTIMIZACIÓN MÓVIL BASE 660PX / CHAT 310PX */
-        @media (max-width: 980px) and (orientation: portrait) {
+       @media (max-width: 980px) and (orientation: portrait) {
             body { 
                 padding: 5px 0;
                 display: flex;
@@ -279,10 +279,11 @@
                 height: auto; 
             }
 
+            /* AQUÍ ESTÁ EL CAMBIO CLAVE PARA QUE NO QUEDE APLASTADO */
             .iframe-player { 
                 width: 100% !important;
-                height: 371px; 
-                max-height: 56.25vw;
+                height: 520px !important; /* Le damos más espacio vertical para que la agenda respire */
+                max-height: none !important;
             }
 
             #panel-chat { 
@@ -296,7 +297,6 @@
                 flex-shrink: 0;
             }
         }
-
         @media (max-width: 980px) and (orientation: landscape) {
             body { 
                 padding: 2px; 
