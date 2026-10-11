@@ -265,35 +265,29 @@
                 gap: 8px;
             }
 
-           .workspace {
+           .workspace { 
+           flex-direction: column !important; 
            height: auto !important;
             }
-           }
+           
 
             .zona-contenido { 
-                width: 100%; 
-                max-width: 660px;
-                flex-direction: column; 
-                height: auto; 
+            width: 100% !important;
+            height: auto !important; 
             }
 
             /* ALTURA DE PANTALLA/AGENDA EN CELULAR */
             .iframe-player { 
-                width: 100% !important;
-                height: 480px !important; /* Altura perfecta para que la agenda fluya completa */
+            width: 100% !important;
+            height: 480px !important;
             }
 
             /* CHAT EN CELULAR */
             #panel-chat { 
-                width: 100% !important; 
-                max-width: 320px !important;
-                height: 450px !important; 
-                border-right: none; 
-                border-top: 2px solid #4a5568; 
-                margin: 10px auto 5px auto; 
-                border-radius: 4px;
-                overflow: hidden;
-                flex-shrink: 0;
+            width: 100% !important; 
+            max-width: 100% !important;
+            height: 450px !important; 
+            margin: 10px 0 !important;
             }
 
             #panel-chat .iframe-player {
