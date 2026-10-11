@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC Wrestling Latino </title>
+    <title>Cartelera Oficial - TDC Wrestling</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,17 +75,30 @@
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
-        .celda-hora {
-            width: 85px;
-            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
-            color: #38bdf8;
-            font-size: 0.95rem;
-            font-weight: 600;
+        /* CELDA DE HORA CON ESTILO INCLINADO EN AZUL DEPORTIVO */
+        .celda-contenedor-hora {
+            width: 95px;
             text-align: center;
-            padding: 10px 4px;
-            border: 1px solid #334155;
-            border-right: none;
+            padding: 4px;
+        }
+
+        .celda-hora {
+            display: inline-block;
+            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); /* Azul eléctrico deportivo */
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 8px 10px;
+            border: 2px solid #000000; /* Borde negro exterior estilo insignia */
             letter-spacing: 1px;
+            transform: skewX(-15deg); /* Inclinación exacta que te gustó */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .celda-hora span {
+            display: inline-block;
+            transform: skewX(15deg); /* Endereza el texto para que se lea perfecto */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         .celda-evento {
@@ -174,7 +187,9 @@
             </thead>
             <tbody>
                 <tr class="fila-show">
-                    <td class="celda-hora">8:00 PM</td>
+                    <td class="celda-contenedor-hora">
+                        <div class="celda-hora"><span>7:00 PM</span></div>
+                    </td>
                     <td class="celda-evento">WWE RAW ESPAÑOL - SHOW EN VIVO</td>
                     <td class="celda-boton">
                         <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
@@ -184,30 +199,24 @@
                 </tr>
 
                 <tr class="fila-show">
-                    <td class="celda-hora">8:00 PM</td>
+                    <td class="celda-contenedor-hora">
+                        <div class="celda-hora"><span>8:00 PM</span></div>
+                    </td>
                     <td class="celda-evento">WWE SMACKDOWN - COBERTURA LATINA</td>
                     <td class="celda-boton">
-                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
+                        <button class="badge-vivo" onclick="parent.cargarConal ? null : parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
                             <span>CANAL 2</span>
                         </button>
                     </td>
                 </tr>
 
                 <tr class="fila-show">
-                    <td class="celda-hora">24/7</td>
+                    <td class="celda-contenedor-hora">
+                        <div class="celda-hora"><span>24/7</span></div>
+                    </td>
                     <td class="celda-evento">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</td>
                     <td class="celda-boton">
                         <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
-                            <span>REPETICIÓN</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr class="fila-show">
-                    <td class="celda-hora">24/7</td>
-                    <td class="celda-evento">RING OF HONOR - EVENTO COMPLETO</td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h6-senal-4', parent.document.querySelectorAll('.btn-canal')[4])">
                             <span>REPETICIÓN</span>
                         </button>
                     </td>
