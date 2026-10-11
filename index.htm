@@ -248,6 +248,7 @@
                 padding: 5px 0;
                 display: flex;
                 justify-content: center;
+                background: #0b0f19;
             }
 
             .plataforma-tnt { 
@@ -280,17 +281,17 @@
                 height: auto; 
             }
 
-            /* Reproductor con altura generosa para que la agenda respire */
+            /* ALTURA DE PANTALLA/AGENDA EN CELULAR */
             .iframe-player { 
                 width: 100% !important;
-                height: 520px !important; 
-                max-height: none !important;
+                height: 480px !important; /* Altura perfecta para que la agenda fluya completa */
             }
 
-            /* Panel de chat con altura propia de 480px libre de máscaras negras */
+            /* CHAT EN CELULAR */
             #panel-chat { 
-                width: 310px !important; 
-                height: 480px !important; 
+                width: 100% !important; 
+                max-width: 320px !important;
+                height: 450px !important; 
                 border-right: none; 
                 border-top: 2px solid #4a5568; 
                 margin: 10px auto 5px auto; 
@@ -299,7 +300,6 @@
                 flex-shrink: 0;
             }
 
-            /* Obliga al iframe del chat a llenar exactamente su contenedor de 480px */
             #panel-chat .iframe-player {
                 height: 100% !important;
             }
