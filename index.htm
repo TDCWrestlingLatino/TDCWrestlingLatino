@@ -17,16 +17,15 @@
             font-family: 'Oswald', 'Arial Narrow', sans-serif; 
         }
 
-        body {
-            background: #0b0f19;
-            overflow-x: hidden;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 5px;
+        .body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden !important; /* Adiós barras de desplazamiento en PC */
+        background: #0b0f19;
         }
-
+        
         .plataforma-tnt {
             width: 970px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
