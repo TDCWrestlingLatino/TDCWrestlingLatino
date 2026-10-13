@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDC Wrestling Latino - Móvil</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 12px;
+            /* Scroll vertical nativo y fluido en celulares */
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .contenedor-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Estilo base para cada bloque */
+        .bloque-seccion {
+            background: #141a29;
+            border: 1px solid #2a344d;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .titulo-seccion {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #e11d48; /* Color destacado TDC */
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #2a344d;
+            padding-bottom: 6px;
+            text-align: center;
+        }
+
+        /* 1. CANALES / TRANSMISIÓN */
+        .grid-canales {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 8px;
+        }
+
+        .btn-canal {
+            background: #1f293d;
+            color: #fff;
+            border: 1px solid #3b82f6;
+            padding: 10px 6px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-canal:active {
+            background: #2563eb;
+        }
+
+        /* 2. AGENDA DE 10 EVENTOS */
+        .lista-agenda {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item-evento {
+            background: #1e2638;
+            border-left: 4px solid #e11d48;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+        }
+
+        .info-evento {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .titulo-evento {
+            font-weight: bold;
+            color: #f3f4f6;
+        }
+
+        .fecha-evento {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .estado-evento {
+            background: #2563eb;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* 3. REPETICIONES (SIMPLIFICADO: SOLO NÚMERO DE REPETICIÓN) */
+        .grid-repeticiones {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .btn-repeticion {
+            background: #2a344d;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 1px solid #475569;
+        }
+
+        .btn-repeticion:active {
+            background: #e11d48;
+            border-color: #e11d48;
+        }
+
+        /* 4. CHATANGO (ESPACIO CÓMODO Y COMPLETO EN MÓVIL) */
+        .contenedor-chat {
+            width: 100%;
+            height: 520px; /* Altura perfecta para ver el chat sin recortes */
+            border-radius: 6px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* ADAPTACIÓN AUTOMÁTICA SI GIRAN EL CELULAR A HORIZONTAL */
+        @media (min-width: 600px) and (orientation: landscape) {
+            .contenedor-mobile {
+                max-width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+            .bloque-chat {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-mobile">
+
+        <!-- BLOQUE 1: CANALES / TRANSMISIONES -->
+        <div class="bloque-seccion">
+            <div class="titulo-seccion">Transmisiones En Vivo</div>
+            <div class="grid-canales">
+                <a class="btn-canal" href="#">Canal 1</a>
+                <a class="btn-canal" href="#">Canal 2</a>
+                <a class="btn-canal" href="#">Canal 3</a>
+                <a class="btn-canal" href="#">Canal 4</a>
+                <a class="btn-canal" href="#">Canal 5</a>
+                <a class="btn-canal" href="#">Canal 6</a>
+            </div>
+        </div>
+
+        <!-- BLOQUE 2: AGENDA (10 EVENTOS) -->
+        <div class="bloque-seccion">
+            <div class="titulo-seccion">Agenda de Eventos</div>
+            <div class="lista-agenda">
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">WWE Raw</span>
+                        <span class="fecha-evento">Hoy - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">En Vivo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">NXT</span>
+                        <span class="fecha-evento">Mañana - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">AEW Dynamite</span>
+                        <span class="fecha-evento">Miércoles - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">TNA Impact</span>
+                        <span class="fecha-evento">Jueves - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">WWE SmackDown</span>
+                        <span class="fecha-evento">Viernes - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">AEW Rampage</span>
+                        <span class="fecha-evento">Viernes - 9:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">WWE PPV / PLE</span>
+                        <span class="fecha-evento">Sábado - 6:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Especial</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">AEW Collision</span>
+                        <span class="fecha-evento">Sábado - 7:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">CMLL Domingos</span>
+                        <span class="fecha-evento">Domingo - 5:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+                <div class="item-evento">
+                    <div class="info-evento">
+                        <span class="titulo-evento">NJPW Weekly</span>
+                        <span class="fecha-evento">Domingo - 8:00 PM</span>
+                    </div>
+                    <span class="estado-evento">Próximo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BLOQUE 3: REPETICIONES (SOLO NÚMEROS LIMPIOS) -->
+        <div class="bloque-seccion">
+            <div class="titulo-seccion">Repeticiones</div>
+            <div class="grid-repeticiones">
+                <a href="URL_AQUI" class="btn-repeticion">#1</a>
+                <a href="URL_AQUI" class="btn-repeticion">#2</a>
+                <a href="URL_AQUI" class="btn-repeticion">#3</a>
+                <a href="URL_AQUI" class="btn-repeticion">#4</a>
+                <a href="URL_AQUI" class="btn-repeticion">#5</a>
+                <a href="URL_AQUI" class="btn-repeticion">#6</a>
+            </div>
+        </div>
+
+        <!-- BLOQUE 4: CHATANGO COMPLETO SIN CORTES -->
+        <div class="bloque-seccion bloque-chat">
+            <div class="titulo-seccion">Chat de la Comunidad</div>
+            <div class="contenedor-chat">
+                <!-- PEGA AQUÍ TU CÓDIGO EMBEBIDO DE CHATANGO -->
+                <iframe src="https://TU-CHATANGO-URL.chatango.com" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
