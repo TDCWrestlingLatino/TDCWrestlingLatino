@@ -18,19 +18,17 @@
         }
 
         body, html {
-            width: 725px !important;
-            min-width: 725px !important;
-            max-width: 725px !important;
+            width: 100% !important;
             margin: 0 auto;
             padding: 0;
             background-color: #0b0f19;
-            overflow: hidden;
+            overflow-x: auto;
         }
 
         .plataforma-tnt {
-            width: 725px !important;
-            min-width: 725px !important;
-            max-width: 725px !important;
+            width: 970px !important;
+            min-width: 970px !important;
+            margin: 0 auto;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
             border: 3px solid #4a5568;
             border-radius: 8px;
@@ -63,7 +61,7 @@
             color: #e2e8f0;
             border: 1px solid #334155;
             padding: 6px 0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
@@ -94,7 +92,7 @@
             padding: 6px 0;
             cursor: pointer;
             font-weight: 600; 
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             border-radius: 3px;
         }
@@ -112,7 +110,7 @@
             padding: 6px 0;
             cursor: pointer;
             font-weight: 600; 
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             border-radius: 3px;
             transition: all 0.2s ease;
@@ -134,7 +132,7 @@
         }
 
         .brand-logo {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #38bdf8;
             letter-spacing: 1.5px;
@@ -149,9 +147,9 @@
 
         .btn-red {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #ffffff;
             text-decoration: none;
@@ -196,10 +194,10 @@
             font-weight: 600;
         }
 
-        /* WORKSPACE Y PANTALLAS (Suma exactos 725px: Chat 310px + Zona Contenido 415px) */
+        /* WORKSPACE Y PANTALLAS (ANCHO TOTAL 970PX) */
         .workspace {
             display: flex;
-            width: 725px;
+            width: 100%;
             height: 464px;
             background: #111827;
         }
@@ -213,11 +211,11 @@
         }
 
         .zona-contenido {
-            width: 415px;
+            width: 660px;
             height: 100%;
             background: #000000;
             display: flex;
-            flex-shrink: 0;
+            flex-grow: 1;
         }
 
         .iframe-player {
@@ -239,7 +237,7 @@
             display: none !important;
         }
         body.modo-doble-activo .zona-contenido {
-            width: 725px !important;
+            width: 970px !important;
         }
         body.modo-doble-activo #reproductor1 {
             width: 50%;
