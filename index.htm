@@ -1,365 +1,398 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Premium - TDC Wrestling</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plataforma Premium - TDC Wrestling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+}
+html, body {
+  background-color: #0b0f19;
+  margin: 0;
+  padding: 0;
+}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Oswald', 'Arial Narrow', sans-serif; 
-        }
-
-    body, html {
-    width: 100% !important;
-    margin: 0 auto;
-    padding: 0;
-    background-color: #0b0f19;
-    overflow-x: auto;
-    overflow-y: hidden !important; /* Oculta la barra vertical en PC */
+/* WRAPPER QUE ESCALA EN MÓVIL */
+.escaler-wrapper {
+  width: 725px;
+  margin: 0 auto;
+  transform-origin: top center;
 }
 
 .plataforma-tnt {
-    width: 970px !important;
-    min-width: 970px !important;
-    display: flex;
-    flex-direction: column;
+  width: 725px;
+  background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+  border: 3px solid #4a5568;
+  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-        /* BARRA SUPERIOR DE CANALES FLUIDA */
-        .barra-canales {
-            width: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            border-bottom: 3px solid #2563eb;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .grid-botones-canales {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 6px;
-            width: 100%;
-        }
-
-        .btn-canal {
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            color: #e2e8f0;
-            border: 1px solid #334155;
-            padding: 10px 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            border-radius: 3px;
-            transition: all 0.15s ease-in-out;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-        .btn-canal:hover {
-            background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
-            color: #ffffff;
-            border-color: #60a5fa;
-            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
-            transform: translateY(-1px);
-        }
-        .btn-canal.activo {
-            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
-            color: #ffffff !important;
-            border-color: #38bdf8 !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-            font-weight: 700;
-        }
-
-        .btn-doble {
-            width: 100%;
-            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
-            color: white;
-            border: 1px solid #3b82f6;
-            padding: 10px 0;
-            cursor: pointer;
-            font-weight: 600; 
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            border-radius: 3px;
-        }
-        .btn-doble:hover {
-            background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
-            border-color: #f87171;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
-
-        .btn-repetir-nav {
-            width: 100%;
-            background: linear-gradient(90deg, #059669 0%, #10b981 50%, #059669 100%);
-            color: white;
-            border: 1px solid #34d399;
-            padding: 10px 0;
-            cursor: pointer;
-            font-weight: 600; 
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            border-radius: 3px;
-            transition: all 0.2s ease;
-        }
-        .btn-repetir-nav:hover {
-            background: linear-gradient(90deg, #047857 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-        }
-
-        /* BARRA DE REDES SOCIALES */
-        .barra-redes-brand {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(15, 23, 42, 0.98);
-            border-top: 1px solid #334155;
-            padding: 8px 15px;
-            gap: 10px;
-        }
-
-        .brand-logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #38bdf8;
-            letter-spacing: 2px;
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
-            text-transform: uppercase;
-        }
-
-        .redes-grupo {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-red {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-        }
-        .btn-red.fb { background: #1877f2; }
-        .btn-red.tg { background: #229ed9; }
-        .btn-red.wa { background: #25d366; color: #000; }
-        .btn-red.kick { background: #53fc18; color: #000; }
-
-        .btn-red:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.15);
-        }
-
-        /* WORKSPACE Y PANTALLAS (OCUPAN TODO EL ESPACIO RESTANTE) */
-      .workspace {
-    display: flex;
-    width: 100%;
-    flex-grow: 1;
+/* BARRA SUPERIOR DE CANALES */
+.barra-canales {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 3px solid #2563eb;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.grid-botones-canales {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+.btn-canal {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 3px;
+  transition: all 0.15s ease-in-out;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.btn-canal:hover {
+  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+  color: #ffffff;
+  border-color: #60a5fa;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+  transform: translateY(-1px);
+}
+.btn-canal.activo {
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+  font-weight: 700;
+}
+.btn-doble {
+  width: 100%;
+  background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
+  color: white;
+  border: 1px solid #3b82f6;
+  padding: 6px 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+.btn-doble:hover {
+  background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
+  border-color: #f87171;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+.btn-repetir-nav {
+  width: 100%;
+  background: linear-gradient(90deg, #059669 0%, #10b981 50%, #059669 100%);
+  color: white;
+  border: 1px solid #34d399;
+  padding: 6px 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+.btn-repetir-nav:hover {
+  background: linear-gradient(90deg, #047857 0%, #059669 50%, #047857 100%);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
 }
 
-        #panel-chat {
-            width: 320px;
-            height: 100%;
-            border-right: 2px solid #4a5568;
-            background: #0b0f19;
-            flex-shrink: 0;
-        }
+/* BARRA DE REDES SOCIALES */
+.barra-redes-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.98);
+  border-top: 1px solid #334155;
+  padding: 6px 12px;
+  gap: 10px;
+}
+.brand-logo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+  text-transform: uppercase;
+}
+.redes-grupo {
+  display: flex;
+  gap: 6px;
+}
+.btn-red {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn-red.fb { background: #1877f2; }
+.btn-red.tg { background: #229ed9; }
+.btn-red.wa { background: #25d366; color: #000; }
+.btn-red.kick { background: #53fc18; color: #000; }
+.btn-red:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+}
 
+/* CONTROL DE PANTALLAS */
+.control-pantallas {
+  display: none;
+  background: #0f172a;
+  padding: 4px;
+  border-bottom: 1px solid #334155;
+  justify-content: center;
+  gap: 10px;
+}
+body.modo-doble-activo .control-pantallas {
+  display: flex;
+}
+.btn-target {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  padding: 2px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.btn-target.seleccionado {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #38bdf8;
+  font-weight: 600;
+}
+
+/* WORKSPACE Y PANTALLAS */
+.workspace {
+  display: flex;
+  width: 100%;
+  height: 464px;
+  background: #111827;
+}
+#panel-chat {
+  width: 310px;
+  height: 100%;
+  border-right: 2px solid #4a5568;
+  background: #0b0f19;
+  flex-shrink: 0;
+}
 .zona-contenido {
-    flex-grow: 1;
-    height: 100%;
-    display: flex;
+  flex-grow: 1;
+  height: 100%;
+  background: #000000;
+  display: flex;
+}
+.iframe-player {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000000;
 }
 
-        .iframe-player {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            background: #000000;
-        }
-
-        /* SEGUNDA PANTALLA */
-        #reproductor2 {
-            display: none;
-            width: 50%;
-            border-left: 2px solid #2563eb;
-        }
-
-        /* MODO DOBLE PANTALLA ACTIVO */
-        body.modo-doble-activo #panel-chat {
-            display: none !important;
-        }
-        body.modo-doble-activo #reproductor1 {
-            width: 50%;
-        }
-        body.modo-doble-activo #reproductor2 {
-            display: block;
-            width: 50%;
-        }
-
-@media (max-width: 768px) {
-    body, html {
-        overflow-x: hidden !important;
-    }
-    .plataforma-tnt {
-        width: 100% !important;
-        min-width: 100% !important;
-    }
-    .workspace {
-        flex-direction: column !important;
-        height: auto !important;
-    }
-    #panel-chat {
-        width: 100% !important;
-        height: 350px !important;
-    }
-    .zona-contenido {
-        width: 100% !important;
-        height: 450px !important;
-    }
-    .grid-botones-canales {
-        grid-template-columns: repeat(5, 1fr) !important;
-    }
+/* SEGUNDA PANTALLA */
+#reproductor2 {
+  display: none;
+  width: 50%;
+  border-left: 2px solid #2563eb;
 }
 
+/* MODO DOBLE PANTALLA */
+body.modo-doble-activo #panel-chat {
+  display: none !important;
+}
+body.modo-doble-activo #reproductor1 {
+  width: 50%;
+}
+body.modo-doble-activo #reproductor2 {
+  display: block;
+}
+</style>
 
+<script>
+// ============ ESCALADO PROPORCIONAL MÓVIL ============
+var ANCHO_BASE = 725;
 
-        
-    </style>
+function aplicarEscala() {
+  var wrapper = document.querySelector('.escaler-wrapper');
+  if (!wrapper) return;
+  
+  var anchoVentana = window.innerWidth;
+  
+  if (anchoVentana < ANCHO_BASE) {
+    var escala = anchoVentana / ANCHO_BASE;
+    wrapper.style.transform = 'scale(' + escala + ')';
+    wrapper.style.transformOrigin = 'top center';
+    // Ajustar el alto real del wrapper para que el iframe de Blogger sepa el espacio
+    var altoReal = wrapper.offsetHeight * escala;
+    wrapper.style.marginBottom = '-' + (wrapper.offsetHeight - altoReal) + 'px';
+  } else {
+    wrapper.style.transform = 'none';
+    wrapper.style.marginBottom = '0';
+  }
+}
 
-    <script>
-        var pantallaObjetivo = 'reproductor1';
+window.addEventListener('load', aplicarEscala);
+window.addEventListener('resize', aplicarEscala);
+window.addEventListener('orientationchange', function() {
+  setTimeout(aplicarEscala, 200);
+});
 
-        function seleccionarPantalla(idTarget, btn) {
-            pantallaObjetivo = idTarget;
-            var targets = document.querySelectorAll('.btn-target');
-            for (var i = 0; i < targets.length; i++) {
-                targets[i].classList.remove('seleccionado');
-            }
-            btn.classList.add('seleccionado');
-        }
+// ============ LÓGICA DE CANALES ============
+var pantallaObjetivo = 'reproductor1';
 
-        function cargarCanal(url, elemento) {
-            var targetIframe = document.getElementById(pantallaObjetivo);
-            if (targetIframe) {
-                targetIframe.src = url;
-            }
+function seleccionarPantalla(idTarget, btn) {
+  pantallaObjetivo = idTarget;
+  var targets = document.querySelectorAll('.btn-target');
+  for (var i = 0; i < targets.length; i++) {
+    targets[i].classList.remove('seleccionado');
+  }
+  btn.classList.add('seleccionado');
+}
 
-            var botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
-            for (var i = 0; i < botones.length; i++) {
-                botones[i].classList.remove('activo');
-            }
+function cargarCanal(url, elemento) {
+  var targetIframe = document.getElementById(pantallaObjetivo);
+  if (targetIframe) {
+    targetIframe.src = url;
+  }
+  var botones = document.querySelectorAll('.btn-canal, .btn-repetir-nav');
+  for (var i = 0; i < botones.length; i++) {
+    botones[i].classList.remove('activo');
+  }
+  if (elemento) {
+    elemento.classList.add('activo');
+  }
+}
 
-            if (elemento) {
-                elemento.classList.add('activo');
-            }
-        }
-
-        function alternarDoblePantalla() {
-            document.body.classList.toggle('modo-doble-activo');
-            var rep2 = document.getElementById('reproductor2');
-
-            if (document.body.classList.contains('modo-doble-activo')) {
-                if (rep2.src === "" || rep2.src.indexOf('about:blank') !== -1) {
-                    rep2.src = 'agenda.htm';
-                }
-            } else {
-                pantallaObjetivo = 'reproductor1';
-            }
-        }
-    </script>
+function alternarDoblePantalla() {
+  document.body.classList.toggle('modo-doble-activo');
+  var rep2 = document.getElementById('reproductor2');
+  if (document.body.classList.contains('modo-doble-activo')) {
+    if (rep2.src === "" || rep2.src.indexOf('about:blank') !== -1) {
+      rep2.src = 'agenda.htm';
+    }
+  } else {
+    pantallaObjetivo = 'reproductor1';
+    var btnIzq = document.querySelector('.btn-target');
+    if (btnIzq) {
+      var targets = document.querySelectorAll('.btn-target');
+      for (var i = 0; i < targets.length; i++) {
+        targets[i].classList.remove('seleccionado');
+      }
+      btnIzq.classList.add('seleccionado');
+    }
+  }
+}
+</script>
 </head>
 <body>
 
-    <div class="plataforma-tnt">
-        <nav class="barra-canales">
-            <!-- FILA 1 -->
-            <div class="grid-botones-canales">
-                <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h3-senal-1', this)">CANAL 1</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h4-senal-2', this)">CANAL 2</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h5-senal-3', this)">CANAL 3</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h6-senal-4', this)">CANAL 4</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h7-senal-5', this)">CANAL 5</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h8-senal-6', this)">CANAL 6</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h9-senal-7', this)">CANAL 7</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h10-senal-8', this)">CANAL 8</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h2-senal-9', this)">CANAL 9</button>
-            </div>
+<!-- WRAPPER QUE SE ESCALA -->
+<div class="escaler-wrapper">
+<div class="plataforma-tnt">
 
-            <!-- FILA 2 -->
-            <div class="grid-botones-canales">
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h11-senal-10', this)">CANAL 10</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h13-senal-11', this)">CANAL 11</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h15-senal-12', this)">CANAL 12</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h17-senal-13', this)">CANAL 13</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h1-senal-14', this)">CANAL 14</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h12-senal-15', this)">CANAL 15</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h26-senal-16', this)">CANAL 16</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h27-senal-17', this)">CANAL 17</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h28-senal-18', this)">CANAL 18</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h29-senal-19', this)">CANAL 19</button>
-            </div>
-
-            <!-- FILA 3 -->
-            <div class="grid-botones-canales">
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 20</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 21</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 22</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 23</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 24</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 25</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 26</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 27</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 28</button>                               
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 29</button>
-            </div>
-
-            <!-- FILA 4 -->
-            <div class="grid-botones-canales" style="grid-template-columns: 1fr 4.5fr 4.5fr; gap: 6px;">
-                <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 30</button>
-                <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ DOBLE PANTALLA</button>
-                <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES / PPV</button>
-            </div>
-
-            <!-- FILA 5 -->
-            <div class="barra-redes-brand">
-                <div class="redes-grupo">
-                    <a href="https://facebook.com/tu-pagina" target="_blank" class="btn-red fb">Facebook</a>
-                    <a href="https://t.me/tu-grupo" target="_blank" class="btn-red tg">Telegram</a>
-                </div>
-
-                <div class="brand-logo">TDC WRESTLING LATINO</div>
-
-                <div class="redes-grupo">
-                    <a href="https://whatsapp.com/channel/tu-canal" target="_blank" class="btn-red wa">WhatsApp</a>
-                    <a href="https://kick.com/tu-canal" target="_blank" class="btn-red kick">Kick</a>
-                </div>
-            </div>
-        </nav>
-
-        <main class="workspace">
-            <div id="panel-chat">
-                <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
-            </div>
-
-            <div class="zona-contenido">
-                <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
-                <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
-            </div>
-        </main>
+<nav class="barra-canales">
+  <!-- FILA 1 -->
+  <div class="grid-botones-canales">
+    <button class="btn-canal activo" style="color: #38bdf8; font-weight: 600;" onclick="cargarCanal('agenda.htm', this)">AGENDA</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h3-senal-1', this)">CANAL 1</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h4-senal-2', this)">CANAL 2</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h5-senal-3', this)">CANAL 3</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h6-senal-4', this)">CANAL 4</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h7-senal-5', this)">CANAL 5</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h8-senal-6', this)">CANAL 6</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h9-senal-7', this)">CANAL 7</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h10-senal-8', this)">CANAL 8</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h2-senal-9', this)">CANAL 9</button>
+  </div>
+  <!-- FILA 2 -->
+  <div class="grid-botones-canales">
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h11-senal-10', this)">CANAL 10</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h13-senal-11', this)">CANAL 11</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h15-senal-12', this)">CANAL 12</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h17-senal-13', this)">CANAL 13</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h1-senal-14', this)">CANAL 14</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h12-senal-15', this)">CANAL 15</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h26-senal-16', this)">CANAL 16</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h27-senal-17', this)">CANAL 17</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h28-senal-18', this)">CANAL 18</button>
+    <button class="btn-canal" onclick="cargarCanal('https://transmision.activo.mx/h29-senal-19', this)">CANAL 19</button>
+  </div>
+  <!-- FILA 3 -->
+  <div class="grid-botones-canales">
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 20</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 21</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 22</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 23</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 24</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 25</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 26</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 27</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 28</button>
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 29</button>
+  </div>
+  <!-- FILA 4 -->
+  <div class="grid-botones-canales" style="grid-template-columns: 1fr 4.5fr 4.5fr; gap: 4px;">
+    <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 30</button>
+    <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ DOBLE PANTALLA</button>
+    <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES / PPV</button>
+  </div>
+  <!-- FILA 5: REDES -->
+  <div class="barra-redes-brand">
+    <div class="redes-grupo">
+      <a href="https://facebook.com/tu-pagina" target="_blank" class="btn-red fb">Facebook</a>
+      <a href="https://t.me/tu-grupo" target="_blank" class="btn-red tg">Telegram</a>
     </div>
+    <div class="brand-logo">TDC WRESTLING LATINO</div>
+    <div class="redes-grupo">
+      <a href="https://whatsapp.com/channel/tu-canal" target="_blank" class="btn-red wa">WhatsApp</a>
+      <a href="https://kick.com/tu-canal" target="_blank" class="btn-red kick">Kick</a>
+    </div>
+  </div>
+</nav>
+
+<!-- SELECTOR DE PANTALLA -->
+<div class="control-pantallas">
+  <span style="color: #94a3b8; font-size: 0.8rem; line-height: 22px;">ENVIAR CANAL A:</span>
+  <button class="btn-target seleccionado" onclick="seleccionarPantalla('reproductor1', this)">👈 IZQUIERDA</button>
+  <button class="btn-target" onclick="seleccionarPantalla('reproductor2', this)">👉 DERECHA</button>
+</div>
+
+<main class="workspace">
+  <div id="panel-chat">
+    <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
+  </div>
+  <div class="zona-contenido">
+    <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+    <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
+  </div>
+</main>
+
+</div>
+</div> <!-- fin wrapper -->
 
 </body>
 </html>
