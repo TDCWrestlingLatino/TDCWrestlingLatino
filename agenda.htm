@@ -1,228 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC Wrestling</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100% !important;
-            height: 100%;
-            background-color: #0b0f19;
-            color: #ffffff;
-            font-family: 'Oswald', 'Arial Narrow', sans-serif;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-            padding: 4px;
-        }
-
-        .contenedor-agenda {
-            width: 100%;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #475569;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .fecha-cabecera {
-            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
-            border-bottom: 3px solid #38bdf8;
-            color: #ffffff;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
-        }
-
-        .tabla-cartelera {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 5px;
-            padding: 6px;
-        }
-
-        .tabla-cartelera th {
-            color: #94a3b8;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .fila-show {
-            background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
-            transition: all 0.2s ease;
-        }
-        .fila-show:hover {
-            background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
-        }
-
-        /* CELDA DE HORA */
-        .celda-contenedor-hora {
-            width: 80px;
-            text-align: center;
-            padding: 4px;
-        }
-
-        .celda-hora {
-            display: inline-block;
-            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 6px 8px;
-            border: 2px solid #000000;
-            letter-spacing: 1px;
-            transform: skewX(-15deg);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .celda-hora span {
-            display: inline-block;
-            transform: skewX(15deg);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .celda-evento {
-            padding: 6px 8px;
-            color: #e2e8f0;
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            border-top: 1px solid #334155;
-            border-bottom: 1px solid #334155;
-        }
-
-        .celda-boton {
-            width: 95px;
-            text-align: center;
-            padding: 6px 4px;
-            border: 1px solid #334155;
-            border-left: none;
-        }
-
-        .badge-vivo {
-            display: block;
-            width: 100%;
-            background: #e11d48;
-            color: #ffffff;
-            padding: 5px 0;
-            border: none;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-vivo:hover {
-            background: #2563eb !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-            transform: skewX(-12deg) scale(1.04);
-        }
-
-        .badge-repetir {
-            display: block;
-            width: 100%;
-            background: #334155;
-            color: #94a3b8;
-            padding: 5px 0;
-            border: 1px solid #475569;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-repetir:hover {
-            border-color: #38bdf8 !important;
-            color: #ffffff !important;
-            background: #1e293b;
-            transform: skewX(-12deg) scale(1.04);
-        }
-
-        .badge-vivo span, .badge-repetir span {
-            display: inline-block;
-            transform: skewX(12deg);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartelera Oficial - TDC Wrestling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  background-color: #0b0f19;
+  color: #ffffff;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 6px;
+}
+.contenedor-agenda {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #475569;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.fecha-cabecera {
+  background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
+  border-bottom: 3px solid #38bdf8;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+.tabla-cartelera {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  padding: 8px;
+}
+.tabla-cartelera th {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.fila-show {
+  background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
+  transition: all 0.2s ease;
+}
+.fila-show:hover {
+  background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
+}
+.celda-contenedor-hora {
+  width: 95px;
+  text-align: center;
+  padding: 4px;
+}
+.celda-hora {
+  display: inline-block;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border: 2px solid #000000;
+  letter-spacing: 1px;
+  transform: skewX(-15deg);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+.celda-hora span {
+  display: inline-block;
+  transform: skewX(15deg);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+.celda-evento {
+  padding: 8px 12px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-top: 1px solid #334155;
+  border-bottom: 1px solid #334155;
+}
+.celda-boton {
+  width: 110px;
+  text-align: center;
+  padding: 8px 6px;
+  border: 1px solid #334155;
+  border-left: none;
+}
+.badge-vivo {
+  display: block;
+  width: 100%;
+  background: #e11d48;
+  color: #ffffff;
+  padding: 6px 0;
+  border: none;
+  border-radius: 3px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer !important;
+  box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
+  transform: skewX(-12deg);
+  transition: all 0.2s ease;
+}
+.badge-vivo:hover {
+  background: #2563eb !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+  transform: skewX(-12deg) scale(1.04);
+}
+.badge-repetir {
+  display: block;
+  width: 100%;
+  background: #334155;
+  color: #94a3b8;
+  padding: 6px 0;
+  border: 1px solid #475569;
+  border-radius: 3px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer !important;
+  transform: skewX(-12deg);
+  transition: all 0.2s ease;
+}
+.badge-repetir:hover {
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  background: #1e293b;
+  transform: skewX(-12deg) scale(1.04);
+}
+.badge-vivo span, .badge-repetir span {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+</style>
 </head>
 <body>
-
-    <div class="contenedor-agenda">
-        <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
-
-        <table class="tabla-cartelera">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">HORA</th>
-                    <th style="text-align: left; padding-left: 8px;">EVENTO EN TRANSMISIÓN</th>
-                    <th style="text-align: center;">ESTADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>7:00 PM</span></div>
-                    </td>
-                    <td class="celda-evento">WWE RAW ESPAÑOL - SHOW EN VIVO</td>
-                    <td class="celda-boton">
-                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
-                            <span>CANAL 1</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>8:00 PM</span></div>
-                    </td>
-                    <td class="celda-evento">WWE SMACKDOWN - COBERTURA LATINA</td>
-                    <td class="celda-boton">
-                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
-                            <span>CANAL 2</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
-                            <span>REPETICIÓN</span>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
+<div class="contenedor-agenda">
+  <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
+  <table class="tabla-cartelera">
+    <thead>
+      <tr>
+        <th style="text-align: center;">HORA</th>
+        <th style="text-align: left; padding-left: 12px;">EVENTO EN TRANSMISIÓN</th>
+        <th style="text-align: center;">ESTADO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="fila-show">
+        <td class="celda-contenedor-hora">
+          <div class="celda-hora"><span>7:00 PM</span></div>
+        </td>
+        <td class="celda-evento">WWE RAW ESPAÑOL - SHOW EN VIVO</td>
+        <td class="celda-boton">
+          <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
+            <span>CANAL 1</span>
+          </button>
+        </td>
+      </tr>
+      <tr class="fila-show">
+        <td class="celda-contenedor-hora">
+          <div class="celda-hora"><span>8:00 PM</span></div>
+        </td>
+        <td class="celda-evento">WWE SMACKDOWN - COBERTURA LATINA</td>
+        <td class="celda-boton">
+          <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
+            <span>CANAL 2</span>
+          </button>
+        </td>
+      </tr>
+      <tr class="fila-show">
+        <td class="celda-contenedor-hora">
+          <div class="celda-hora"><span>24/7</span></div>
+        </td>
+        <td class="celda-evento">LUCHA LIBRE AAA - REPETICIÓN ESPECIAL</td>
+        <td class="celda-boton">
+          <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h5-senal-3', parent.document.querySelectorAll('.btn-canal')[3])">
+            <span>REPETICIÓN</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>
