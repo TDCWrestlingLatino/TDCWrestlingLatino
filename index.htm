@@ -19,26 +19,26 @@
 
         body, html {
             width: 100% !important;
-            margin: 0 auto;
+            height: 100% !important;
+            margin: 0;
             padding: 0;
             background-color: #0b0f19;
-            overflow-x: auto;
+            overflow-x: hidden;
         }
 
         .plataforma-tnt {
-            width: 1150px !important;
-            min-width: 1150px !important;
-            margin: 0 auto;
+            width: 100% !important;
+            height: 100% !important;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
-            border: 3px solid #4a5568;
-            border-radius: 8px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR DE CANALES */
+        /* BARRA SUPERIOR DE CANALES FLUIDA */
         .barra-canales {
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
@@ -52,7 +52,7 @@
         .grid-botones-canales {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
+            gap: 6px;
             width: 100%;
         }
 
@@ -60,8 +60,8 @@
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             color: #e2e8f0;
             border: 1px solid #334155;
-            padding: 8px 0;
-            font-size: 0.9rem;
+            padding: 10px 0;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
@@ -89,10 +89,10 @@
             background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
             color: white;
             border: 1px solid #3b82f6;
-            padding: 8px 0;
+            padding: 10px 0;
             cursor: pointer;
             font-weight: 600; 
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             border-radius: 3px;
         }
@@ -107,10 +107,10 @@
             background: linear-gradient(90deg, #059669 0%, #10b981 50%, #059669 100%);
             color: white;
             border: 1px solid #34d399;
-            padding: 8px 0;
+            padding: 10px 0;
             cursor: pointer;
             font-weight: 600; 
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             border-radius: 3px;
             transition: all 0.2s ease;
@@ -166,16 +166,16 @@
             filter: brightness(1.15);
         }
 
-        /* WORKSPACE Y PANTALLAS (ANCHO TOTAL 1150PX: Chat 360px + Contenido 790px) */
+        /* WORKSPACE Y PANTALLAS (OCUPAN TODO EL ESPACIO RESTANTE) */
         .workspace {
             display: flex;
             width: 100%;
-            height: 520px;
+            flex-grow: 1;
             background: #111827;
         }
 
         #panel-chat {
-            width: 360px;
+            width: 320px;
             height: 100%;
             border-right: 2px solid #4a5568;
             background: #0b0f19;
@@ -183,11 +183,10 @@
         }
 
         .zona-contenido {
-            width: 790px;
+            flex-grow: 1;
             height: 100%;
             background: #000000;
             display: flex;
-            flex-grow: 1;
         }
 
         .iframe-player {
@@ -207,9 +206,6 @@
         /* MODO DOBLE PANTALLA ACTIVO */
         body.modo-doble-activo #panel-chat {
             display: none !important;
-        }
-        body.modo-doble-activo .zona-contenido {
-            width: 1150px !important;
         }
         body.modo-doble-activo #reproductor1 {
             width: 50%;
@@ -309,7 +305,7 @@
             </div>
 
             <!-- FILA 4 -->
-            <div class="grid-botones-canales" style="grid-template-columns: 1fr 4.5fr 4.5fr; gap: 5px;">
+            <div class="grid-botones-canales" style="grid-template-columns: 1fr 4.5fr 4.5fr; gap: 6px;">
                 <button class="btn-canal" onclick="cargarCanal('https://activo.mx', this)">CANAL 30</button>
                 <button class="btn-doble" onclick="alternarDoblePantalla()">🖥️ DOBLE PANTALLA</button>
                 <button class="btn-repetir-nav" onclick="cargarCanal('https://transmision.activo.mx/h23-repeticiones', this)">🎬 REPETICIONES / PPV</button>
