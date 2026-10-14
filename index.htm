@@ -207,6 +207,35 @@
             display: block;
             width: 50%;
         }
+
+@media (max-width: 768px) {
+    body, html {
+        overflow-x: hidden !important;
+    }
+    .plataforma-tnt {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+    .workspace {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+    #panel-chat {
+        width: 100% !important;
+        height: 350px !important;
+    }
+    .zona-contenido {
+        width: 100% !important;
+        height: 450px !important;
+    }
+    .grid-botones-canales {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+}
+
+
+
+        
     </style>
 
     <script>
