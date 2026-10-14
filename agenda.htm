@@ -18,14 +18,13 @@
 
         html, body {
             width: 100% !important;
-            max-width: 100% !important;
             height: 100%;
             background-color: #0b0f19;
             color: #ffffff;
             font-family: 'Oswald', 'Arial Narrow', sans-serif;
             overflow-x: hidden !important;
             overflow-y: auto !important;
-            padding: 6px;
+            padding: 4px;
         }
 
         .contenedor-agenda {
@@ -42,10 +41,10 @@
             border-bottom: 3px solid #38bdf8;
             color: #ffffff;
             text-align: center;
-            padding: 8px 0;
-            font-size: 1.1rem;
+            padding: 6px 0;
+            font-size: 1rem;
             font-weight: 600;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
         }
@@ -53,17 +52,17 @@
         .tabla-cartelera {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 6px;
-            padding: 8px;
+            border-spacing: 0 5px;
+            padding: 6px;
         }
 
         .tabla-cartelera th {
             color: #94a3b8;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -75,47 +74,47 @@
             background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
         }
 
-        /* CELDA DE HORA CON ESTILO INCLINADO EN AZUL DEPORTIVO */
+        /* CELDA DE HORA */
         .celda-contenedor-hora {
-            width: 95px;
+            width: 80px;
             text-align: center;
             padding: 4px;
         }
 
         .celda-hora {
             display: inline-block;
-            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); /* Azul eléctrico deportivo */
+            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            padding: 8px 10px;
-            border: 2px solid #000000; /* Borde negro exterior estilo insignia */
+            padding: 6px 8px;
+            border: 2px solid #000000;
             letter-spacing: 1px;
-            transform: skewX(-15deg); /* Inclinación exacta que te gustó */
+            transform: skewX(-15deg);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
         }
 
         .celda-hora span {
             display: inline-block;
-            transform: skewX(15deg); /* Endereza el texto para que se lea perfecto */
+            transform: skewX(15deg);
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         .celda-evento {
-            padding: 8px 12px;
+            padding: 6px 8px;
             color: #e2e8f0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 400;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             border-top: 1px solid #334155;
             border-bottom: 1px solid #334155;
         }
 
         .celda-boton {
-            width: 110px;
+            width: 95px;
             text-align: center;
-            padding: 8px 6px;
+            padding: 6px 4px;
             border: 1px solid #334155;
             border-left: none;
         }
@@ -125,12 +124,12 @@
             width: 100%;
             background: #e11d48;
             color: #ffffff;
-            padding: 6px 0;
+            padding: 5px 0;
             border: none;
             border-radius: 3px;
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             cursor: pointer !important;
             box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
@@ -148,12 +147,12 @@
             width: 100%;
             background: #334155;
             color: #94a3b8;
-            padding: 6px 0;
+            padding: 5px 0;
             border: 1px solid #475569;
             border-radius: 3px;
             font-family: 'Oswald', sans-serif;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             cursor: pointer !important;
             transform: skewX(-12deg);
@@ -181,7 +180,7 @@
             <thead>
                 <tr>
                     <th style="text-align: center;">HORA</th>
-                    <th style="text-align: left; padding-left: 12px;">EVENTO EN TRANSMISIÓN</th>
+                    <th style="text-align: left; padding-left: 8px;">EVENTO EN TRANSMISIÓN</th>
                     <th style="text-align: center;">ESTADO</th>
                 </tr>
             </thead>
@@ -204,7 +203,7 @@
                     </td>
                     <td class="celda-evento">WWE SMACKDOWN - COBERTURA LATINA</td>
                     <td class="celda-boton">
-                        <button class="badge-vivo" onclick="parent.cargarConal ? null : parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
+                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h4-senal-2', parent.document.querySelectorAll('.btn-canal')[2])">
                             <span>CANAL 2</span>
                         </button>
                     </td>
