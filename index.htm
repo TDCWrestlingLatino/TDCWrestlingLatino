@@ -386,11 +386,11 @@ function alternarDoblePantalla() {
 <main class="workspace">
   
     <div id="panel-chat" style="display: flex; flex-direction: column; height: 100%;">
-    <!-- BARRA DE ESCAPE / LOGIN PARA CELULARES -->
-    <a href="https://tdchddeporte4life.chatango.com/" target="_blank" 
-       style="background: #1e3a8a; color: #38bdf8; text-align: center; padding: 6px; font-size: 0.7rem; text-decoration: none; border-bottom: 1px solid #3b82f6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-       📱 ¿Celular / Modo Escritorio? Toca aquí para Loguearte
-    </a>
+    <!-- BOTÓN DE LOGIN POPUP PARA CELULARES -->
+    <button onclick="abrirLoginChat()" 
+            style="background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%); color: #ffffff; text-align: center; padding: 7px; font-size: 0.75rem; border: none; border-bottom: 1px solid #3b82f6; font-weight: 700; text-transform: uppercase; cursor: pointer; letter-spacing: 0.5px;">
+       🔓 Toca aquí para Iniciar Sesión / Activar Chat
+    </button>
     
     <iframe id="chat-frame" 
             src="https://transmision.activo.mx/h22-chatango" 
@@ -399,10 +399,34 @@ function alternarDoblePantalla() {
             style="overflow: hidden; flex-grow: 1; width: 100%; border: 0;" 
             allowfullscreen>
     </iframe>
-    </div>
+</div>
+
+<script>
+function abrirLoginChat() {
+    // Abre la página de Chatango en una ventana tipo Popup pequeña
+    var loginWindow = window.open('https://chatango.com/login', 'ChatangoLogin', 'width=450,height=550');
+    
+    // Al volver a enfocar la ventana principal o pasar 15 segundos, recarga el iframe del chat con la sesión activa
+    var checkFocus = setInterval(function() {
+        if (loginWindow.closed) {
+            clearInterval(checkFocus);
+            recargarChat();
+        }
+    }, 1000);
+}
+
+function recargarChat() {
+    var iframe = document.getElementById('chat-frame');
+    if (iframe) {
+        // Refresca el iframe para que absorba la cookie de sesión recién iniciada
+        iframe.src = iframe.src;
+    }
+}
+</script>
+  
     
     
-  </div>
+
   <div class="zona-contenido">
     <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
     <iframe id="reproductor2" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
