@@ -385,7 +385,15 @@ function alternarDoblePantalla() {
 
 <main class="workspace">
   <div id="panel-chat">
-    <iframe id="chat-frame" src="https://transmision.activo.mx/h22-chatango" class="iframe-player" scrolling="no" style="overflow: hidden;" allowfullscreen></iframe>
+    <iframe id="chat-frame" 
+        src="https://transmision.activo.mx/h22-chatango" 
+        class="iframe-player" 
+        scrolling="no" 
+        style="overflow: hidden; width: 100%; height: 100%; border: 0;" 
+        allow="autoplay; fullscreen; popups" 
+        sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation">
+    </iframe>
+    
   </div>
   <div class="zona-contenido">
     <iframe id="reproductor1" src="agenda.htm" class="iframe-player" allowfullscreen></iframe>
