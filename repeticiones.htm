@@ -3,297 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC Wrestling</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <title>Agenda de Repeticiones - TDC Wrestling Latino</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        html, body {
-            width: 100% !important;
-            height: 100%;
-            background-color: #0b0f19;
-            color: #ffffff;
-            font-family: 'Oswald', 'Arial Narrow', sans-serif;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-            padding: 4px;
-        }
-
-        /* Ocultar barra vertical manteniendo el scroll limpio */
-        body::-webkit-scrollbar {
-            display: none;
-        }
         body {
-            scrollbar-width: none;
-        }
-
-        .contenedor-agenda {
-            width: 100%;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #475569;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .fecha-cabecera {
-            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
-            border-bottom: 3px solid #38bdf8;
+            background-color: #2b0000; /* Fondo rojo oscuro característico */
             color: #ffffff;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
+            font-family: 'Arial Black', Arial, sans-serif;
+            padding: 10px;
+        }
+
+        .agenda-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 970px;
+            margin: 0 auto;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(180deg, #4a0000 0%, #200000 100%);
+            border: 1px solid #660000;
+            border-radius: 8px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+
+        .info-col {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .show-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 50%;
+            background-color: #1a0000;
+            padding: 2px;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #ffffff;
             text-transform: uppercase;
-            text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
         }
 
-        .tabla-cartelera {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 5px;
-            padding: 6px;
-        }
-
-        .tabla-cartelera th {
-            color: #94a3b8;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
+        .channel {
+            font-size: 0.8rem;
+            color: #ff9999;
             text-transform: uppercase;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: bold;
         }
 
-        .fila-show {
-            background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
-            transition: all 0.2s ease;
-        }
-        .fila-show:hover {
-            background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
-        }
-
-        /* CELDA DE HORA */
-        .celda-contenedor-hora {
-            width: 80px;
-            text-align: center;
-            padding: 4px;
-        }
-
-        .celda-hora {
-            display: inline-block;
-            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+        .tag-247 {
+            background-color: #000000;
             color: #ffffff;
             font-size: 0.85rem;
-            font-weight: 700;
-            padding: 6px 8px;
-            border: 2px solid #000000;
+            font-weight: 900;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #333333;
             letter-spacing: 1px;
-            transform: skewX(-15deg);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .celda-hora span {
-            display: inline-block;
-            transform: skewX(15deg);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .celda-evento {
-            padding: 6px 8px;
-            color: #e2e8f0;
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            border-top: 1px solid #334155;
-            border-bottom: 1px solid #334155;
-        }
-
-        .celda-boton {
-            width: 100px;
-            text-align: center;
-            padding: 6px 4px;
-            border: 1px solid #334155;
-            border-left: none;
-        }
-
-        .badge-vivo {
-            display: block;
-            width: 100%;
-            background: #e11d48;
-            color: #ffffff;
-            padding: 5px 0;
-            border: none;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-vivo:hover {
-            background: #2563eb !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-            transform: skewX(-12deg) scale(1.04);
-        }
-
-        .badge-repetir {
-            display: block;
-            width: 100%;
-            background: #334155;
-            color: #94a3b8;
-            padding: 5px 0;
-            border: 1px solid #475569;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-repetir:hover {
-            border-color: #38bdf8 !important;
-            color: #ffffff !important;
-            background: #1e293b;
-            transform: skewX(-12deg) scale(1.04);
-        }
-
-        .badge-vivo span, .badge-repetir span {
-            display: inline-block;
-            transform: skewX(12deg);
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-    <div class="contenedor-agenda">
-        <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
+<div class="agenda-container">
 
-        <table class="tabla-cartelera">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">HORA</th>
-                    <th style="text-align: left; padding-left: 8px;">EVENTO EN TRANSMISIÓN</th>
-                    <th style="text-align: center;">ESTADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <tr class="fila-show">
-                    
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE X AAA WORLDS COLLIDE 2026<br>
-                        <small style="color: #94a3b8;">CANAL 9</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h2-senal-9', parent.document.querySelectorAll('.btn-canal')[9])">
-                            <span>CANAL 9</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 3. REPETICION WWE MONEY IN THE BANK (Canal 10) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE MONEY IN THE BANK 2026<br>
-                        <small style="color: #94a3b8;">CANAL 10</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h11-senal-10', parent.document.querySelectorAll('.btn-canal')[10])">
-                            <span>CANAL 10</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 4. REPETICION WWE NXT HEATWAVE (Canal 11) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE NXT HEATWAVE 2026<br>
-                        <small style="color: #94a3b8;">CANAL 11</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h13-senal-11', parent.document.querySelectorAll('.btn-canal')[11])">
-                            <span>CANAL 11</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 5. REPETICION AEW ALL OUT (Canal 12) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION AEW ALL OUT 2026<br>
-                        <small style="color: #94a3b8;">CANAL 12</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h15-senal-12', parent.document.querySelectorAll('.btn-canal')[12])">
-                            <span>CANAL 12</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 6. REPETICION ROH DEATH BEFORE DISHONOR (Canal 13) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION ROH DEATH BEFORE DISHONOR 2026<br>
-                        <small style="color: #94a3b8;">CANAL 13</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h17-senal-13', parent.document.querySelectorAll('.btn-canal')[13])">
-                            <span>CANAL 13</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 7. REPETICION TNA BOUND FOR GLORY (Canal 14) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION TNA BOUND FOR GLORY 2026<br>
-                        <small style="color: #94a3b8;">CANAL 14</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h1-senal-14', parent.document.querySelectorAll('.btn-canal')[14])">
-                            <span>CANAL 14</span>
-                        </button>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
+    <!-- REPETICIONES SHOW SEMANALES -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/vHqL3Zt.png" alt="WWE" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICIONES SHOW SEMANALES 2026</span>
+                <span class="channel">CANAL 15 AL CANAL 22</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
     </div>
+
+    <!-- WWE X AAA WORLDS COLLIDE -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/39F3uU0.png" alt="AAA" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION WWE X AAA WORLDS COLLIDE 2026</span>
+                <span class="channel">CANAL 9</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+    <!-- WWE MONEY IN THE BANK -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/vHqL3Zt.png" alt="WWE" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION WWE MONEY IN THE BANK 2026</span>
+                <span class="channel">CANAL 10</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+    <!-- WWE NXT HEATWAVE -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/E85iY3u.png" alt="NXT" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION WWE NXT HEATWAVE 2026</span>
+                <span class="channel">CANAL 11</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+    <!-- AEW WRESTLEDREAM -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/9nJk0L1.png" alt="AEW" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION AEW WRESTLEDREAM 2026</span>
+                <span class="channel">CANAL 12</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+    <!-- ROH DEATH BEFORE DISHONOR -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/5uD14Rz.png" alt="ROH" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION ROH DEATH BEFORE DISHONOR 2026</span>
+                <span class="channel">CANAL 13</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+    <!-- TNA BOUND FOR GLORY -->
+    <div class="agenda-item">
+        <div class="info-col">
+            <img src="https://i.imgur.com/TNAlogo.png" alt="TNA" class="show-logo">
+            <div class="details">
+                <span class="title">REPETICION TNA BOUND FOR GLORY 2026</span>
+                <span class="channel">CANAL 14</span>
+            </div>
+        </div>
+        <div class="tag-247">24/7</div>
+    </div>
+
+</div>
 
 </body>
 </html>
-
