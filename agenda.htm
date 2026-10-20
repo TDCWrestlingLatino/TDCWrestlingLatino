@@ -3,311 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartelera Oficial - TDC Wrestling</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <title>Agenda Principal - TDC Wrestling Latino</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Arial Narrow', 'Roboto Condensed', sans-serif;
         }
 
-        html, body {
-            width: 100% !important;
-            height: 100%;
+        body {
             background-color: #0b0f19;
             color: #ffffff;
-            font-family: 'Oswald', 'Arial Narrow', sans-serif;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-            padding: 4px;
+            padding: 10px;
         }
 
-        /* Ocultar barra vertical manteniendo el scroll limpio */
-        body::-webkit-scrollbar {
-            display: none;
-        }
-        body {
-            scrollbar-width: none;
-        }
-
-        .contenedor-agenda {
-            width: 100%;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #475569;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+        .cartelera-card {
+            background-color: #0d1322;
+            border: 1px solid #1e3a8a;
             border-radius: 4px;
             overflow: hidden;
+            max-width: 970px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
         }
 
-        .fecha-cabecera {
-            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #1e3a8a 100%);
-            border-bottom: 3px solid #38bdf8;
-            color: #ffffff;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
-        }
-
-        .tabla-cartelera {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 5px;
-            padding: 6px;
-        }
-
-        .tabla-cartelera th {
-            color: #94a3b8;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .fila-show {
-            background: linear-gradient(90deg, #1e293b 0%, #111827 100%);
-            transition: all 0.2s ease;
-        }
-        .fila-show:hover {
-            background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
-        }
-
-        /* CELDA DE HORA */
-        .celda-contenedor-hora {
-            width: 80px;
-            text-align: center;
-            padding: 4px;
-        }
-
-        .celda-hora {
-            display: inline-block;
+        /* HEADER SUPERIOR */
+        .header-title {
             background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 6px 8px;
-            border: 2px solid #000000;
-            letter-spacing: 1px;
-            transform: skewX(-15deg);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .celda-hora span {
-            display: inline-block;
-            transform: skewX(15deg);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .celda-evento {
-            padding: 6px 8px;
-            color: #e2e8f0;
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            border-top: 1px solid #334155;
-            border-bottom: 1px solid #334155;
-        }
-
-        .celda-boton {
-            width: 100px;
             text-align: center;
-            padding: 6px 4px;
-            border: 1px solid #334155;
-            border-left: none;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #38bdf8;
         }
 
-        .badge-vivo {
-            display: block;
-            width: 100%;
-            background: #e11d48;
+        /* ENCABEZADOS DE COLUMNA */
+        .table-header {
+            display: grid;
+            grid-template-columns: 110px 1fr 140px;
+            padding: 8px 15px;
+            background-color: #0b0f19;
+            border-bottom: 1px solid #1e293b;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .table-header .col-estado {
+            text-align: right;
+        }
+
+        /* FILAS DE LA TABLA */
+        .table-row {
+            display: grid;
+            grid-template-columns: 110px 1fr 140px;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #1e293b;
+            background-color: #0f172a;
+            transition: background 0.2s ease;
+        }
+
+        .table-row:hover {
+            background-color: #1a233a;
+        }
+
+        /* ETIQUETA HORA (SESGADA) */
+        .tag-hora {
+            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
-            padding: 5px 0;
-            border: none;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            box-shadow: 0 0 8px rgba(225, 29, 72, 0.6);
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-vivo:hover {
-            background: #2563eb !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-            transform: skewX(-12deg) scale(1.04);
+            font-weight: 900;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 6px 10px;
+            transform: skew(-12deg);
+            border: 1px solid #38bdf8;
+            box-shadow: 0 0 8px rgba(37, 244, 238, 0.2);
+            width: fit-content;
         }
 
-        .badge-repetir {
-            display: block;
-            width: 100%;
-            background: #334155;
-            color: #94a3b8;
-            padding: 5px 0;
-            border: 1px solid #475569;
-            border-radius: 3px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer !important;
-            transform: skewX(-12deg);
-            transition: all 0.2s ease;
-        }
-        .badge-repetir:hover {
-            border-color: #38bdf8 !important;
-            color: #ffffff !important;
-            background: #1e293b;
-            transform: skewX(-12deg) scale(1.04);
-        }
-
-        .badge-vivo span, .badge-repetir span {
+        .tag-hora span {
             display: inline-block;
-            transform: skewX(12deg);
+            transform: skew(12deg); /* Des-sesgar texto */
+        }
+
+        /* DETALLES DEL EVENTO */
+        .event-details {
+            padding-left: 10px;
+        }
+
+        .event-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .event-channels {
+            font-size: 0.75rem;
+            color: #38bdf8;
+            text-transform: uppercase;
+            margin-top: 3px;
+            font-weight: 600;
+        }
+
+        /* BOTÓN DEL CANAL (DERECHA) */
+        .col-btn {
+            text-align: right;
+        }
+
+        .btn-canal {
+            display: inline-block;
+            background-color: #1e293b;
+            color: #94a3b8;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            transform: skew(-12deg);
+            border: 1px solid #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-canal span {
+            display: inline-block;
+            transform: skew(12deg);
+        }
+
+        .btn-canal:hover {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #38bdf8;
+        }
+
+        /* CANAL DESTACADO / PPV / EN VIVO */
+        .btn-canal.ppv {
+            background: linear-gradient(180deg, #e11d48 0%, #be123c 100%);
+            color: #ffffff;
+            border-color: #fda4af;
+            box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="contenedor-agenda">
-        <div class="fecha-cabecera">CARTELERA OFICIAL DE LA SEMANA</div>
-
-        <table class="tabla-cartelera">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">HORA</th>
-                    <th style="text-align: left; padding-left: 8px;">EVENTO EN TRANSMISIÓN</th>
-                    <th style="text-align: center;">ESTADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 1. AEW DYNAMITE & COLLISION (Canal 1) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>7:00 PM</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        AEW DYNAMITE & AEW COLLISION 14/10/2026<br>
-                        <small style="color: #38bdf8;">CANAL 1 / CANAL 2 / CANAL 3</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-vivo" onclick="parent.cargarCanal('https://transmision.activo.mx/h3-senal-1', parent.document.querySelectorAll('.btn-canal')[1])">
-                            <span>CANAL 1</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 2. REPETICION WWE X AAA WORLDS COLLIDE (Canal 9) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE X AAA WORLDS COLLIDE 2026<br>
-                        <small style="color: #94a3b8;">CANAL 9</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h2-senal-9', parent.document.querySelectorAll('.btn-canal')[9])">
-                            <span>CANAL 9</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 3. REPETICION WWE MONEY IN THE BANK (Canal 10) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE MONEY IN THE BANK 2026<br>
-                        <small style="color: #94a3b8;">CANAL 10</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h11-senal-10', parent.document.querySelectorAll('.btn-canal')[10])">
-                            <span>CANAL 10</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 4. REPETICION WWE NXT HEATWAVE (Canal 11) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION WWE NXT HEATWAVE 2026<br>
-                        <small style="color: #94a3b8;">CANAL 11</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h13-senal-11', parent.document.querySelectorAll('.btn-canal')[11])">
-                            <span>CANAL 11</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 5. REPETICION AEW ALL OUT (Canal 12) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION AEW ALL OUT 2026<br>
-                        <small style="color: #94a3b8;">CANAL 12</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h15-senal-12', parent.document.querySelectorAll('.btn-canal')[12])">
-                            <span>CANAL 12</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 6. REPETICION ROH DEATH BEFORE DISHONOR (Canal 13) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION ROH DEATH BEFORE DISHONOR 2026<br>
-                        <small style="color: #94a3b8;">CANAL 13</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h17-senal-13', parent.document.querySelectorAll('.btn-canal')[13])">
-                            <span>CANAL 13</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- 7. REPETICION TNA BOUND FOR GLORY (Canal 14) -->
-                <tr class="fila-show">
-                    <td class="celda-contenedor-hora">
-                        <div class="celda-hora"><span>24/7</span></div>
-                    </td>
-                    <td class="celda-evento">
-                        REPETICION TNA BOUND FOR GLORY 2026<br>
-                        <small style="color: #94a3b8;">CANAL 14</small>
-                    </td>
-                    <td class="celda-boton">
-                        <button class="badge-repetir" onclick="parent.cargarCanal('https://transmision.activo.mx/h1-senal-14', parent.document.querySelectorAll('.btn-canal')[14])">
-                            <span>CANAL 14</span>
-                        </button>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
+<div class="cartelera-card">
+    
+    <!-- ENCABEZADO -->
+    <div class="header-title">
+        Cartelera Oficial de la Semana
     </div>
+
+    <!-- CABECERA DE TABLA -->
+    <div class="table-header">
+        <div>Hora</div>
+        <div>Evento en Transmisión</div>
+        <div class="col-estado">Estado</div>
+    </div>
+
+    <!-- WWE MONDAY NIGHT RAW -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">WWE MONDAY NIGHT RAW</div>
+            <div class="event-channels">LUNES | CANAL 1 / CANAL 2</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>
+        </div>
+    </div>
+
+    <!-- WWE NXT EN VIVO -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">WWE NXT EN VIVO</div>
+            <div class="event-channels">MARTES | CANAL 3 / CANAL 4</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 3 - 4</span></a>
+        </div>
+    </div>
+
+    <!-- AEW DYNAMITE -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">AEW DYNAMITE</div>
+            <div class="event-channels">MIÉRCOLES | CANAL 5 / CANAL 6</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 5 - 6</span></a>
+        </div>
+    </div>
+
+    <!-- AEW RING OF HONOR -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">AEW RING OF HONOR</div>
+            <div class="event-channels">JUEVES | CANAL 7 / CANAL 8</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 7 - 8</span></a>
+        </div>
+    </div>
+
+    <!-- WWE FRIDAY NIGHT SMACKDOWN -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">WWE FRIDAY NIGHT SMACKDOWN</div>
+            <div class="event-channels">VIERNES | CANAL 1 / CANAL 2</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>
+        </div>
+    </div>
+
+    <!-- AEW COLLISION -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>7:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">AEW COLLISION</div>
+            <div class="event-channels">SÁBADO | CANAL 9 / CANAL 10</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 9 - 10</span></a>
+        </div>
+    </div>
+
+    <!-- AAA TRIPLE A -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>10:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">AAA TRIPLE A</div>
+            <div class="event-channels">SÁBADO | CANAL 11</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal"><span>CANAL 11</span></a>
+        </div>
+    </div>
+
+    <!-- WWE PPV CROWN JEWEL -->
+    <div class="table-row">
+        <div>
+            <div class="tag-hora"><span>12:00 PM</span></div>
+        </div>
+        <div class="event-details">
+            <div class="event-title">WWE PPV CROWN JEWEL</div>
+            <div class="event-channels">SÁBADO | CANAL 1 / CANAL 2</div>
+        </div>
+        <div class="col-btn">
+            <a href="#" class="btn-canal ppv"><span>CANAL 1 - 2</span></a>
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>
