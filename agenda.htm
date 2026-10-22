@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agenda Principal - TDC Wrestling Latino</title>
-
-
-
-    
     <style>
         * {
             box-sizing: border-box;
@@ -97,9 +93,24 @@
             transform: skew(12deg); /* Des-sesgar texto */
         }
 
-        /* DETALLES DEL EVENTO */
+        /* DETALLES DEL EVENTO + LOGO */
         .event-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding-left: 10px;
+        }
+
+        .event-logo {
+            width: 44px;
+            height: 44px;
+            object-fit: contain; /* 'contain' asegura que el logo se vea entero sin recortar bordes */
+            flex-shrink: 0;
+        }
+
+        .event-text-container {
+            display: flex;
+            flex-direction: column;
         }
 
         .event-title {
@@ -157,155 +168,195 @@
             border-color: #fda4af;
             box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
         }
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #334155 #0f172a;
-}
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-        
     </style>
 </head>
 <body>
 
 <div class="cartelera-card">
-    
-    <!-- ENCABEZADO -->
-    <div class="header-title">
-        Cartelera Oficial de la Semana
-    </div>
-
-    <!-- CABECERA DE TABLA -->
-    <div class="table-header">
-        <div>Hora</div>
-        <div>Evento en Transmisión</div>
-        <div class="col-estado">Estado</div>
-    </div>
-
-    <!-- WWE MONDAY NIGHT RAW -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">WWE MONDAY NIGHT RAW</div>
-            <div class="event-channels">LUNES | CANAL 1 / CANAL 2</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>
-        </div>
-    </div>
-
-    <!-- WWE NXT EN VIVO -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">WWE NXT EN VIVO</div>
-            <div class="event-channels">MARTES | CANAL 3 / CANAL 4</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 3 - 4</span></a>
-        </div>
-    </div>
-
-    <!-- AEW DYNAMITE -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">AEW DYNAMITE</div>
-            <div class="event-channels">MIÉRCOLES | CANAL 5 / CANAL 6</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 5 - 6</span></a>
-        </div>
-    </div>
-
-    <!-- AEW RING OF HONOR -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">AEW RING OF HONOR</div>
-            <div class="event-channels">JUEVES | CANAL 7 / CANAL 8</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 7 - 8</span></a>
-        </div>
-    </div>
-
-    <!-- WWE FRIDAY NIGHT SMACKDOWN -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">WWE FRIDAY NIGHT SMACKDOWN</div>
-            <div class="event-channels">VIERNES | CANAL 1 / CANAL 2</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>
-        </div>
-    </div>
-
-    <!-- AEW COLLISION -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>7:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">AEW COLLISION</div>
-            <div class="event-channels">SÁBADO | CANAL 9 / CANAL 10</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 9 - 10</span></a>
-        </div>
-    </div>
-
-    <!-- AAA TRIPLE A -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>10:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">AAA TRIPLE A</div>
-            <div class="event-channels">SÁBADO | CANAL 11</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal"><span>CANAL 11</span></a>
-        </div>
-    </div>
-
-    <!-- WWE PPV CROWN JEWEL -->
-    <div class="table-row">
-        <div>
-            <div class="tag-hora"><span>12:00 PM</span></div>
-        </div>
-        <div class="event-details">
-            <div class="event-title">WWE PPV CROWN JEWEL</div>
-            <div class="event-channels">SÁBADO | CANAL 1 / CANAL 2</div>
-        </div>
-        <div class="col-btn">
-            <a href="#" class="btn-canal ppv"><span>CANAL 1 - 2</span></a>
-        </div>
-    </div>
-
+	                   
+	<!--       ENCABEZADO       -->         
+	<div class="header-title">
+		PROGRAMACION         
+	</div>
+	               
+	<!--       CABECERA DE TABLA       -->         
+	<div class="table-header">
+		<div>Hora</div>
+		<div>Evento en Transmisión</div>
+		<div class="col-estado">Estado</div>
+	</div>
+	               
+	<!--       WWE MONDAY NIGHT RAW       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_RAW.png" alt="RAW" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">WWE MONDAY NIGHT RAW</div>
+				<div class="event-channels">LUNES | CANAL 1 / CANAL 2</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>             
+		</div>
+	</div>
+	               
+	<!--       WWE NXT EN VIVO       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_NXT.png" alt="NXT" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">WWE NXT EN VIVO</div>
+				<div class="event-channels">MARTES | CANAL 3 / CANAL 4</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 3 - 4</span></a>             
+		</div>
+	</div>
+	               
+	<!--       AEW DYNAMITE       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_AEW.png" alt="AEW" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">AEW DYNAMITE</div>
+				<div class="event-channels">MIÉRCOLES | CANAL 5 / CANAL 6</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 5 - 6</span></a>             
+		</div>
+	</div>
+	               
+	<!--       AEW RING OF HONOR       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>6:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_ROH.png" alt="ROH" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">ROH RING OF HONOR</div>
+				<div class="event-channels">JUEVES | CANAL 7</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 7</span></a>             
+		</div>
+	</div>
+	 
+	<!--       TNA IMPACT WRESTLING       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_TNA.png" alt="TNA" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">TNA IMPACT WRESTLING</div>
+				<div class="event-channels">JUEVES | CANAL 8</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 8</span></a>             
+		</div>
+	</div>
+	               
+	<!--       WWE FRIDAY NIGHT SMACKDOWN       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_SMACKDOWN.png" alt="SmackDown" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">WWE FRIDAY NIGHT SMACKDOWN</div>
+				<div class="event-channels">VIERNES | CANAL 1 / CANAL 2</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 1 - 2</span></a>             
+		</div>
+	</div>
+	               
+	<!--       AEW COLLISION       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>7:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_COLLISION.png" alt="Collision" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">AEW COLLISION</div>
+				<div class="event-channels">SÁBADO | CANAL 9 / CANAL 10</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 9 - 10</span></a>             
+		</div>
+	</div>
+	               
+	<!--       AAA TRIPLE A       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>9:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_AAA.png" alt="AAA" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">AAA LUCHA LIBRE TRIPLE A</div>
+				<div class="event-channels">SÁBADO | CANAL 11</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal"><span>CANAL 11</span></a>             
+		</div>
+	</div>
+	               
+	<!--       WWE PPV CROWN JEWEL       -->         
+	<div class="table-row">
+		<div>
+			<div class="tag-hora">
+				<span>12:00 PM</span>     
+			</div>
+		</div>
+		<div class="event-details">
+			<img src="URL_LOGO_PPV.png" alt="PPV" class="event-logo" />
+			<div class="event-text-container">
+				<div class="event-title">WWE PPV CROWN JEWEL</div>
+				<div class="event-channels">SÁBADO | CANAL 1 / CANAL 2</div>
+			</div>
+		</div>
+		<div class="col-btn">
+			<a href="#" class="btn-canal ppv"><span>CANAL 1 - 2</span></a>             
+		</div>
+	</div>
+           
 </div>
 
 </body>
