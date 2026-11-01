@@ -23,20 +23,20 @@
     <!-- Google Fonts combinadas -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
     <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans transition-all duration-300" id="bodyTheme">
+<body class="bg-slate-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
 
     <!-- MODAL DE INGRESO -->
     <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-2xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
+                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
                 <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.</p>
             </div>
             
@@ -69,177 +69,154 @@
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header id="headerTheme" class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-md transition-all">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white shadow-lg">TDC</div>
-            <div>
-                <h1 id="appTitle" class="text-base font-black tracking-wider text-white">TDC Wrestling Latino Chat Oficial</h1>
-                <p id="appSubtitle" class="text-[10px] text-slate-400">Unetenos en los shows en vivo</p>
+    <!-- HEADER RESPONSIVO Y COMPACTO -->
+    <header id="headerTheme" class="bg-slate-900 border-b border-slate-800 px-3 py-2.5 flex items-center justify-between shadow-md shrink-0 transition-all">
+        <div class="flex items-center space-x-2 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs shadow-md shrink-0">TDC</div>
+            <div class="min-w-0">
+                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino</h1>
+                <p id="appSubtitle" class="text-[9px] text-slate-400 truncate">Chat Oficial en Vivo</p>
             </div>
         </div>
-        <div class="flex items-center space-x-2">
-            <!-- BOTÓN EXCLUSIVO DE ADMIN: ABRIR/CERRAR SALA -->
-            <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Abrir o Cerrar Sala">
+        <div class="flex items-center space-x-1.5 shrink-0">
+            <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Abrir/Cerrar Sala">
                 <span id="roomStatusIcon">🔒</span>
-                <span id="roomStatusText" class="hidden sm:inline">Cerrar Chat</span>
             </button>
-            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Borrar todo el chat">
+            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Limpiar Chat">
                 <span>🗑️</span>
-                <span class="hidden sm:inline">Limpiar</span>
             </button>
-            <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
+            <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Skins">
                 <span>🎨</span>
-                <span class="hidden sm:inline">Skins</span>
             </button>
-            <button onclick="togglePanel('configPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
+            <button onclick="togglePanel('configPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Ajustes">
                 <span>⚙️</span>
-                <span class="hidden sm:inline">Ajustes</span>
             </button>
-            <button onclick="logoutUser()" class="bg-rose-950 hover:bg-rose-900 px-2.5 py-1.5 rounded-xl text-xs font-bold border border-rose-700 text-rose-200 transition-all cursor-pointer" title="Cambiar Perfil">
+            <button onclick="logoutUser()" class="bg-rose-950 hover:bg-rose-900 p-1.5 rounded-lg text-xs border border-rose-700 text-rose-200 transition-all cursor-pointer" title="Salir">
                 <span>🚪</span>
             </button>
         </div>
     </header>
 
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full h-full">
         
         <!-- PANEL DE SKINS -->
-        <div id="skinsPanel" class="hidden absolute md:relative z-20 w-full md:w-80 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-4 space-y-4 custom-scrollbar overflow-y-auto">
+        <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-black text-cyan-400">⚡ Skins & Estilos</h3>
-                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs">✕</button>
+                <h3 class="text-xs font-black text-cyan-400">⚡ Skins & Estilos</h3>
+                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
             </div>
-            <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-300">Selecciona tu Skin:</label>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="setSkin('cyberpunk')" class="text-left px-3 py-2 rounded-xl bg-cyan-950/85 hover:bg-cyan-900 border border-cyan-400 text-xs font-bold text-cyan-200 transition-all cursor-pointer">🌆 Cyberpunk Neon</button>
-                    <button onclick="setSkin('crimson')" class="text-left px-3 py-2 rounded-xl bg-rose-950/85 hover:bg-rose-900 border border-rose-500 text-xs font-bold text-rose-200 transition-all cursor-pointer">🐉 TDC Crimson Dragon</button>
-                    <button onclick="setSkin('matrix')" class="text-left px-3 py-2 rounded-xl bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-500 text-xs font-bold text-emerald-200 transition-all cursor-pointer">💻 Matrix Terminal</button>
-                    <button onclick="setSkin('glass')" class="text-left px-3 py-2 rounded-xl bg-blue-950/85 hover:bg-blue-900 border border-blue-400 text-xs font-bold text-blue-200 transition-all cursor-pointer">🔮 Glassmorphism</button>
-                    <button onclick="setSkin('minimal')" class="text-left px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 text-xs font-bold text-zinc-100 transition-all cursor-pointer">🌙 Minimal Dark</button>
+            <div class="space-y-1.5">
+                <div class="grid grid-cols-1 gap-1.5 text-xs">
+                    <button onclick="setSkin('cyberpunk')" class="text-left px-2.5 py-1.5 rounded-lg bg-cyan-950/85 hover:bg-cyan-900 border border-cyan-400 font-bold text-cyan-200 cursor-pointer">🌆 Cyberpunk Neon</button>
+                    <button onclick="setSkin('crimson')" class="text-left px-2.5 py-1.5 rounded-lg bg-rose-950/85 hover:bg-rose-900 border border-rose-500 font-bold text-rose-200 cursor-pointer">🐉 TDC Crimson Dragon</button>
+                    <button onclick="setSkin('matrix')" class="text-left px-2.5 py-1.5 rounded-lg bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-500 font-bold text-emerald-200 cursor-pointer">💻 Matrix Terminal</button>
+                    <button onclick="setSkin('glass')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-950/85 hover:bg-blue-900 border border-blue-400 font-bold text-blue-200 cursor-pointer">🔮 Glassmorphism</button>
+                    <button onclick="setSkin('minimal')" class="text-left px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 font-bold text-zinc-100 cursor-pointer">🌙 Minimal Dark</button>
                 </div>
             </div>
         </div>
 
         <!-- PANEL DE AJUSTES -->
-        <div id="configPanel" class="hidden absolute md:relative z-20 w-full md:w-80 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-4 space-y-4 custom-scrollbar overflow-y-auto">
+        <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-black text-cyan-400">⚙️ Ajustes Personales</h3>
-                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs">✕</button>
+                <h3 class="text-xs font-black text-cyan-400">⚙️ Ajustes Personales</h3>
+                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
             </div>
-            <div class="space-y-3 text-xs">
+            <div class="space-y-2.5 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Color de tu Texto:</label>
-                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-9 bg-slate-800 rounded-xl cursor-pointer border border-slate-700 p-1">
+                    <label class="block font-bold text-slate-300 mb-1">Color de Texto:</label>
+                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
-                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
+                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
                         <option value="Inter">Inter (Predeterminada)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
                         <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Permanent Marker">Permanent Marker (Plumón)</option>
+                        <option value="Permanent Marker">Permanent Marker</option>
                         <option value="Impact">Impact (Pesada)</option>
-                        <option value="Russo One">Russo One (Deportiva)</option>
-                        <option value="Bangers">Bangers (Cómic)</option>
-                        <option value="Bungee">Bungee (Bloque)</option>
-                        <option value="VT323">VT323 (Retro Arcade)</option>
-                        <option value="Dancing Script">Dancing Script (Cursiva)</option>
-                        <option value="Fredoka One">Fredoka One (Amigable)</option>
-                        <option value="Rock Salt">Rock Salt (Graffiti)</option>
-                        <option value="Monoton">Monoton (Disco)</option>
-                        <option value="Eater">Eater (Terror)</option>
-                        <option value="Wallpoet">Wallpoet (Minimal)</option>
-                        <option value="Zilla Slab Highlight">Zilla Slab Highlight</option>
-                        <option value="Creepster">Creepster (Horror)</option>
-                        <option value="Press Start 2P">Press Start 2P (8-Bit)</option>
+                        <option value="Russo One">Russo One</option>
+                        <option value="Bangers">Bangers</option>
+                        <option value="VT323">VT323 (Retro)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Tamaño de Letra:</label>
-                    <select id="selectFontSize" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
-                        <option value="text-xs">Pequeño</option>
-                        <option value="text-sm" selected>Normal</option>
-                        <option value="text-base">Mediano</option>
-                        <option value="text-lg">Grande</option>
-                        <option value="text-xl">Gigante</option>
+                    <label class="block font-bold text-slate-300 mb-1">Tamaño:</label>
+                    <select id="selectFontSize" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <option value="text-[11px]">Pequeño</option>
+                        <option value="text-xs" selected>Normal</option>
+                        <option value="text-sm">Mediano</option>
+                        <option value="text-base">Grande</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- ÁREA PRINCIPAL DEL CHAT -->
-        <div class="flex-1 flex flex-col h-[calc(100vh-65px)]" id="chatMainArea">
+        <!-- ÁREA PRINCIPAL DEL CHAT (CONTENEDOR FLEX CONTROLADO) -->
+        <div class="flex-1 flex flex-col h-full w-full min-w-0 overflow-hidden" id="chatMainArea">
             
             <!-- SUBBAR -->
-            <div id="subBarTheme" class="bg-slate-900/80 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs transition-all">
-                <div class="flex items-center space-x-2">
-                    <span id="roomStatusIndicator" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos!</span>
+            <div id="subBarTheme" class="bg-slate-900/80 border-b border-slate-800 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0 transition-all">
+                <div class="flex items-center space-x-1.5 truncate">
+                    <span id="roomStatusIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <span class="font-bold text-slate-300 truncate" id="roomTitle">Chat en vivo TDC</span>
                 </div>
-                <div class="flex items-center space-x-3">
+                <div class="shrink-0">
                     <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
                 </div>
             </div>
 
-            <!-- CONTENEDOR DE MENSAJES -->
-            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
+            <!-- CONTENEDOR DE MENSAJES (SCROLL INTERNO) -->
+            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-2.5 custom-scrollbar min-h-0">
             </div>
 
-            <!-- AVISO DE SALA CERRADA (Se oculta cuando el chat está abierto) -->
-            <div id="chatClosedNotice" class="hidden bg-rose-950/90 border-t border-rose-600/50 p-4 text-center text-rose-200 text-xs font-bold">
-                🔒 El chat se encuentra cerrado temporalmente por el Administrador. ¡Volveremos en el próximo show en vivo!
+            <!-- AVISO DE SALA CERRADA -->
+            <div id="chatClosedNotice" class="hidden bg-rose-950/90 border-t border-rose-600/50 p-2.5 text-center text-rose-200 text-[11px] font-bold shrink-0">
+                🔒 Chat cerrado temporalmente por el Administrador.
             </div>
 
-            <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO -->
-            <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
-                <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Negrita"><b>B</b></button>
-                <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Cursiva"><i>I</i></button>
-                <span class="text-slate-600">|</span>
-                <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer">🔥</button>
-                <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer">👍</button>
-                <button onclick="insertEmoji('😂')" class="text-base hover:scale-125 transition-transform cursor-pointer">😂</button>
-                <button onclick="insertEmoji('❤️')" class="text-base hover:scale-125 transition-transform cursor-pointer">❤️</button>
-                <button onclick="insertEmoji('🤬')" class="text-base hover:scale-125 transition-transform cursor-pointer">🤬</button>
-                <button onclick="insertEmoji('🤔')" class="text-base hover:scale-125 transition-transform cursor-pointer">🤔</button>
-                <button onclick="insertEmoji('🥳')" class="text-base hover:scale-125 transition-transform cursor-pointer">🥳</button>
-                <button onclick="insertEmoji('👏')" class="text-base hover:scale-125 transition-transform cursor-pointer">👏</button>
-                <button onclick="insertEmoji('😎')" class="text-base hover:scale-125 transition-transform cursor-pointer">😎</button>
-                <button onclick="insertEmoji('🏆')" class="text-base hover:scale-125 transition-transform cursor-pointer">🏆</button>
-                <button onclick="insertEmoji('⭐')" class="text-base hover:scale-125 transition-transform cursor-pointer">⭐</button>
-                <button onclick="insertEmoji('💪')" class="text-base hover:scale-125 transition-transform cursor-pointer">💪</button>
-                <button onclick="insertEmoji('🚀')" class="text-base hover:scale-125 transition-transform cursor-pointer">🚀</button>
+            <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO (COMPACTOS) -->
+            <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0 transition-all">
+                <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Negrita"><b>B</b></button>
+                <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Cursiva"><i>I</i></button>
+                <span class="text-slate-600 text-xs">|</span>
+                <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
+                <button onclick="insertEmoji('👍')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">👍</button>
+                <button onclick="insertEmoji('😂')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😂</button>
+                <button onclick="insertEmoji('❤️')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">❤️</button>
+                <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
+                <button onclick="insertEmoji('🤔')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤔</button>
+                <button onclick="insertEmoji('🚀')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🚀</button>
             </div>
 
-            <!-- INPUT BAR (Se bloquea si el chat está cerrado para los usuarios normales) -->
-            <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-3 flex items-center space-x-2 transition-all">
-                <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
-                    <span>📷</span>
+            <!-- INPUT BAR (DISEÑO FLEXIBLE QUE NO SE CORTA) -->
+            <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-2 flex items-center space-x-1.5 shrink-0 transition-all">
+                <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center shrink-0">
+                    <span class="text-xs">📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe tu mensaje..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
+                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe tu mensaje..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL DE INBOX PRIVADO -->
-    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl flex flex-col h-[80vh]">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 id="inboxTitle" class="text-base font-black text-cyan-400">📬 Chat Privado</h3>
-                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
+    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-4 shadow-2xl flex flex-col h-[75vh]">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 shrink-0">
+                <h3 id="inboxTitle" class="text-xs font-black text-cyan-400 truncate">📬 Chat Privado</h3>
+                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
             </div>
-            <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse">
+            <div id="inboxContent" class="flex-1 overflow-y-auto p-2.5 space-y-2.5 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
             </div>
-            <div class="pt-3 border-t border-slate-800 flex items-center space-x-2">
-                <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
-                    <span>📷</span>
+            <div class="pt-2.5 border-t border-slate-800 flex items-center space-x-1.5 shrink-0">
+                <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
+                    <span class="text-xs">📷</span>
                     <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                 </label>
-                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe tu mensaje privado..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Enviar</button>
+                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shrink-0 cursor-pointer">Enviar</button>
             </div>
         </div>
     </div>
@@ -247,7 +224,7 @@
     <!-- FIREBASE & LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBfHf7to54O5jnozK26dJG6an74n2R5tHY",
@@ -269,14 +246,14 @@
             isAdmin: false,
             textColor: '#ffffff',
             font: 'Inter',
-            fontSize: 'text-sm'
+            fontSize: 'text-xs'
         };
 
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
         let activeUsersKey = null;
-        let isChatOpen = true; // Estado global del chat
+        let isChatOpen = true;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
@@ -286,7 +263,7 @@
                     document.getElementById('loginModal').classList.add('hidden');
                     document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
-                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
+                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
                     
                     checkAdminUIs();
                     initFirebaseListeners();
@@ -329,20 +306,20 @@
             const adminCode = document.getElementById('inputAdminCode').value.trim();
 
             if(!nickInput) {
-                alert('Por favor ingresa un apodo (nick) válido.');
+                alert('Por favor ingresa un apodo válido.');
                 return;
             }
 
             currentUser.nick = nickInput;
             currentUser.textColor = '#00ffcc';
             currentUser.font = 'Inter';
-            currentUser.fontSize = 'text-sm';
+            currentUser.fontSize = 'text-xs';
 
             if(wantsAdmin) {
                 if(adminCode === 'tdc2026') {
                     currentUser.isAdmin = true;
                 } else {
-                    alert('Código de administrador incorrecto. Ingresarás como usuario estándar.');
+                    alert('Código incorrecto. Ingresarás como usuario estándar.');
                     currentUser.isAdmin = false;
                 }
             } else {
@@ -375,14 +352,13 @@
         }
 
         window.logoutUser = function() {
-            if(confirm('¿Deseas cerrar sesión y cambiar tu apodo/foto de perfil?')) {
+            if(confirm('¿Deseas cambiar tu perfil?')) {
                 localStorage.removeItem('tdc_chat_user');
                 location.reload();
             }
         }
 
         function initFirebaseListeners() {
-            // 1. Chat General
             const messagesRef = ref(db, 'chat_messages');
             onValue(messagesRef, (snapshot) => {
                 const data = snapshot.val();
@@ -396,16 +372,13 @@
                 renderMessages();
             });
 
-            // 2. Escuchar el Estado de la Sala (Abierto / Cerrado)
             const chatStatusRef = ref(db, 'chat_room_status');
             onValue(chatStatusRef, (snapshot) => {
                 const status = snapshot.val();
-                // Si nunca se ha creado, por defecto está abierto (true)
                 isChatOpen = (status !== null) ? status.isOpen : true;
                 updateRoomVisualStatus();
             });
 
-            // 3. Presencia Online
             const myPresenceRef = push(ref(db, 'online_users'));
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
@@ -415,12 +388,9 @@
                 const data = snapshot.val();
                 const activeCount = data ? Object.keys(data).length : 1;
                 const counterElement = document.getElementById('onlineCount');
-                if (counterElement) {
-                    counterElement.textContent = activeCount;
-                }
+                if (counterElement) counterElement.textContent = activeCount;
             });
 
-            // 4. Notificaciones Privadas
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
@@ -442,7 +412,7 @@
                             if (!window.notifiedMessages[notifId]) {
                                 window.notifiedMessages[notifId] = true;
                                 if (currentTargetUser !== lastMsg.sender) {
-                                    if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Deseas abrir el chat con él/ella?`)) {
+                                    if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Abrir chat?`)) {
                                         openInboxWith(lastMsg.sender);
                                     }
                                 }
@@ -453,13 +423,10 @@
             });
         }
 
-        // --- FUNCIÓN DE ADMIN PARA ABRIR O CERRAR EL CHAT EN TIEMPO REAL ---
         window.toggleChatRoomStatus = function() {
             if (!currentUser.isAdmin) return;
             const newStatus = !isChatOpen;
-            const actionText = newStatus ? "abrir el chat para todos" : "CERRAR el chat para evitar spam";
-            
-            if (confirm(`⚠️ ¿Estás seguro de ${actionText}?`)) {
+            if (confirm(`⚠️ ¿Deseas ${newStatus ? "abrir" : "cerrar"} el chat?`)) {
                 set(ref(db, 'chat_room_status'), { isOpen: newStatus });
             }
         }
@@ -468,34 +435,24 @@
             const indicator = document.getElementById('roomStatusIndicator');
             const notice = document.getElementById('chatClosedNotice');
             const inputBar = document.getElementById('inputBarTheme');
-            const toggleBtnText = document.getElementById('roomStatusText');
             const toggleBtnIcon = document.getElementById('roomStatusIcon');
 
             if (isChatOpen) {
-                indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                indicator.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0";
                 notice.classList.add('hidden');
-                if (!currentUser.isAdmin) {
-                    inputBar.classList.remove('hidden'); // Mostrar input a usuarios si está abierto
-                }
-                if (toggleBtnText) toggleBtnText.textContent = "Cerrar Chat";
+                if (!currentUser.isAdmin) inputBar.classList.remove('hidden');
                 if (toggleBtnIcon) toggleBtnIcon.textContent = "🔒";
             } else {
-                indicator.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                indicator.className = "w-2 h-2 rounded-full bg-rose-500 shrink-0";
                 notice.classList.remove('hidden');
-                // Si no es admin, ocultamos la barra de escritura para que nadie mande spam
-                if (!currentUser.isAdmin) {
-                    inputBar.classList.add('hidden');
-                }
-                if (toggleBtnText) toggleBtnText.textContent = "Abrir Chat";
+                if (!currentUser.isAdmin) inputBar.classList.add('hidden');
                 if (toggleBtnIcon) toggleBtnIcon.textContent = "🔓";
             }
         }
 
         window.clearAllMessages = function() {
             if(!currentUser.isAdmin) return;
-            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube?')) {
-                remove(ref(db, 'chat_messages'));
-            }
+            if(confirm('⚠️ ¿Borrar todo el chat?')) remove(ref(db, 'chat_messages'));
         }
 
         window.setSkin = function(skinName) {
@@ -504,43 +461,37 @@
             const subBar = document.getElementById('subBarTheme');
             const emojiBar = document.getElementById('emojiBarTheme');
             const inputBar = document.getElementById('inputBarTheme');
-            const mainArea = document.getElementById('chatMainArea');
             
             if(skinName === 'cyberpunk') {
-                body.className = "bg-[#050b14] text-cyan-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,204,0.4)]";
-                subBar.className = "bg-[#070e1a] border-b border-cyan-500/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#050b14]";
-                emojiBar.className = "bg-[#070e1a] border-t border-cyan-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#0b132b] border-t border-cyan-500/40 p-3 flex items-center space-x-2";
+                body.className = "bg-[#050b14] text-cyan-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(0,255,204,0.3)] shrink-0";
+                subBar.className = "bg-[#070e1a] border-b border-cyan-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-[#070e1a] border-t border-cyan-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-[#0b132b] border-t border-cyan-500/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'crimson') {
-                body.className = "bg-[#0f0205] text-rose-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(255,0,85,0.4)]";
-                subBar.className = "bg-[#140206] border-b border-rose-600/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#0f0205]";
-                emojiBar.className = "bg-[#140206] border-t border-rose-600/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#1a0308] border-t border-rose-600/40 p-3 flex items-center space-x-2";
+                body.className = "bg-[#0f0205] text-rose-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(255,0,85,0.3)] shrink-0";
+                subBar.className = "bg-[#140206] border-b border-rose-600/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-[#140206] border-t border-rose-600/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-[#1a0308] border-t border-rose-600/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'matrix') {
-                body.className = "bg-[#020d05] text-emerald-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,0,0.4)]";
-                subBar.className = "bg-[#021407] border-b border-emerald-500/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#020d05]";
-                emojiBar.className = "bg-[#021407] border-t border-emerald-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#031c0a] border-t border-emerald-500/40 p-3 flex items-center space-x-2";
+                body.className = "bg-[#020d05] text-emerald-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(0,255,0,0.3)] shrink-0";
+                subBar.className = "bg-[#021407] border-b border-emerald-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-[#021407] border-t border-emerald-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-[#031c0a] border-t border-emerald-500/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'glass') {
-                body.className = "bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-blue-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-blue-900/40 backdrop-blur-md border-b border-blue-400/40 px-4 py-3 flex items-center justify-between shadow-2xl";
-                subBar.className = "bg-blue-950/40 backdrop-blur-md border-b border-blue-400/20 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-transparent";
-                emojiBar.className = "bg-blue-950/40 backdrop-blur-md border-t border-blue-400/20 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-blue-900/40 backdrop-blur-md border-t border-blue-400/30 p-3 flex items-center space-x-2";
+                body.className = "bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-blue-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-blue-900/40 backdrop-blur-md border-b border-blue-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-blue-950/40 backdrop-blur-md border-b border-blue-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-blue-950/40 backdrop-blur-md border-t border-blue-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-blue-900/40 backdrop-blur-md border-t border-blue-400/30 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'minimal') {
-                body.className = "bg-zinc-950 text-zinc-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex items-center justify-between";
-                subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-zinc-950";
-                emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-3 flex items-center space-x-2";
+                body.className = "bg-zinc-950 text-zinc-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-zinc-900 border-b border-zinc-800 px-3 py-2.5 flex items-center justify-between shrink-0";
+                subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-2 flex items-center space-x-1.5 shrink-0";
             }
             togglePanel('skinsPanel');
         }
@@ -595,7 +546,7 @@
 
         window.sendMessage = function() {
             if (!isChatOpen && !currentUser.isAdmin) {
-                alert("El chat está cerrado en este momento.");
+                alert("El chat está cerrado.");
                 return;
             }
 
@@ -658,27 +609,27 @@
 
             messages.forEach(msg => {
                 const div = document.createElement('div');
-                div.className = "flex items-start space-x-3 py-3 px-2 border-b border-white/20 hover:bg-black/20 rounded-xl transition-all group";
+                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-white/10 hover:bg-black/20 rounded-xl transition-all group shrink-0";
 
                 const canDelete = currentUser.isAdmin || msg.sender === currentUser.nick;
-                const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-cyan-500/30 ml-1.5">ADMIN</span>` : '';
+                const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30 ml-1">ADMIN</span>` : '';
 
                 let contentHtml = '';
                 if(msg.text) {
                     if (isOnlyEmojis(msg.text)) {
-                        contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
+                        contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
                         const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
                         const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        contentHtml += `<p class="${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
-                    contentHtml += `<img src="${msg.image}" class="max-w-[320px] max-h-[280px] rounded-2xl mt-2 border border-slate-700 object-cover shadow-xl">`;
+                    contentHtml += `<img src="${msg.image}" class="max-w-[220px] max-h-[180px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow">`;
                 }
                 if(msg.youtube) {
                     contentHtml += `
-                        <div class="mt-2 w-full max-w-[340px] aspect-video rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="mt-1.5 w-full max-w-[240px] aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
                             <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
                         </div>
                     `;
@@ -687,34 +638,29 @@
                 const senderFontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
 
                 div.innerHTML = `
-                    <img src="${msg.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-400 shrink-0 shadow-lg">
+                    <img src="${msg.avatar}" class="w-9 h-9 rounded-full object-cover border border-cyan-400 shrink-0 shadow">
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center space-x-2">
-                            <span onclick="promptOpenInbox('${msg.sender.replace(/'/g, "\\'")}')" class="font-extrabold text-sm cursor-pointer hover:text-cyan-400 transition-colors" style="font-family: ${senderFontFamily};" title="Haz clic para enviar mensaje privado">${msg.sender}</span>
+                        <div class="flex items-center space-x-1.5">
+                            <span onclick="promptOpenInbox('${msg.sender.replace(/'/g, "\\'")}')" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${senderFontFamily};" title="Enviar privado">${msg.sender}</span>
                             ${adminBadge}
-                            <span class="text-[10px] text-slate-400">${msg.time}</span>
+                            <span class="text-[9px] text-slate-400 shrink-0">${msg.time}</span>
                         </div>
-                        <div class="mt-1">${contentHtml}</div>
+                        <div class="mt-0.5">${contentHtml}</div>
                     </div>
-                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>` : ''}
+                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer shrink-0" title="Borrar">🗑️</button>` : ''}
                 `;
                 container.appendChild(div);
             });
         }
 
         window.promptOpenInbox = function(targetUser) {
-            if (targetUser === currentUser.nick) {
-                alert("¡No puedes enviarte un mensaje privado a ti mismo!");
-                return;
-            }
-            if (confirm(`¿Deseas abrir un chat privado con "${targetUser}"?`)) {
-                openInboxWith(targetUser);
-            }
+            if (targetUser === currentUser.nick) return;
+            if (confirm(`¿Abrir chat privado con "${targetUser}"?`)) openInboxWith(targetUser);
         }
 
         function openInboxWith(targetUser) {
             currentTargetUser = targetUser;
-            document.getElementById('inboxTitle').textContent = `📬 Chat privado con: ${targetUser}`;
+            document.getElementById('inboxTitle').textContent = `📬 Privado: ${targetUser}`;
             document.getElementById('inboxModal').classList.remove('hidden');
 
             activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
@@ -735,21 +681,21 @@
                     privMessages.forEach(msg => {
                         const p = document.createElement('div');
                         const isMe = msg.sender === currentUser.nick;
-                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words group relative ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
+                        p.className = `p-2 rounded-xl text-xs max-w-[85%] break-words group relative shrink-0 ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
-                        let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
+                        let innerHtml = `<strong class="block text-[9px] opacity-70">${msg.sender}:</strong>`;
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
+                        if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[180px] max-h-[150px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
                         if (isMe) {
-                            innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-2 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>`;
+                            innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-4 top-1 text-slate-500 hover:text-red-400 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">🗑️</button>`;
                         }
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
                     });
                 } else {
-                    inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">No hay mensajes aún con ${targetUser}. ¡Di hola!</p>`;
+                    inboxContainer.innerHTML = `<p class="text-center text-[11px] text-slate-500 my-auto">Sin mensajes con ${targetUser}.</p>`;
                 }
             });
         }
