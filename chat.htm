@@ -421,4 +421,299 @@
                             
                             if (!window.notifiedMessages[notifId]) {
                                 window.notifiedMessages[notifId] = true;
-                                // Si no tenemos el chat abierto con
+                                // Si no tenemos el chat abierto con este usuario, avisamos
+                                if (currentTargetUser !== lastMsg.sender) {
+                                    if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Deseas abrir el chat con él/ella?`)) {
+                                        openInboxWith(lastMsg.sender);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        window.clearAllMessages = function() {
+            if(!currentUser.isAdmin) return;
+            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube?')) {
+                remove(ref(db, 'chat_messages'));
+            }
+        }
+
+        window.setSkin = function(skinName) {
+            const body = document.getElementById('bodyTheme');
+            const header = document.getElementById('headerTheme');
+            const subBar = document.getElementById('subBarTheme');
+            const emojiBar = document.getElementById('emojiBarTheme');
+            const inputBar = document.getElementById('inputBarTheme');
+            const mainArea = document.getElementById('chatMainArea');
+            
+            if(skinName === 'cyberpunk') {
+                body.className = "bg-[#050b14] text-cyan-100 min-h-screen flex flex-col font-sans transition-all duration-300";
+                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,204,0.4)]";
+                subBar.className = "bg-[#070e1a] border-b border-cyan-500/30 px-4 py-2 flex items-center justify-between text-xs";
+                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#050b14]";
+                emojiBar.className = "bg-[#070e1a] border-t border-cyan-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
+                inputBar.className = "bg-[#0b132b] border-t border-cyan-500/40 p-3 flex items-center space-x-2";
+            } else if(skinName === 'crimson') {
+                body.className = "bg-[#0f0205] text-rose-100 min-h-screen flex flex-col font-sans transition-all duration-300";
+                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(255,0,85,0.4)]";
+                subBar.className = "bg-[#140206] border-b border-rose-600/30 px-4 py-2 flex items-center justify-between text-xs";
+                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#0f0205]";
+                emojiBar.className = "bg-[#140206] border-t border-rose-600/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
+                inputBar.className = "bg-[#1a0308] border-t border-rose-600/40 p-3 flex items-center space-x-2";
+            } else if(skinName === 'matrix') {
+                body.className = "bg-[#020d05] text-emerald-100 min-h-screen flex flex-col font-sans transition-all duration-300";
+                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,0,0.4)]";
+                subBar.className = "bg-[#021407] border-b border-emerald-500/30 px-4 py-2 flex items-center justify-between text-xs";
+                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#020d05]";
+                emojiBar.className = "bg-[#021407] border-t border-emerald-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
+                inputBar.className = "bg-[#031c0a] border-t border-emerald-500/40 p-3 flex items-center space-x-2";
+            } else if(skinName === 'glass') {
+                body.className = "bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-blue-100 min-h-screen flex flex-col font-sans transition-all duration-300";
+                header.className = "bg-blue-900/40 backdrop-blur-md border-b border-blue-400/40 px-4 py-3 flex items-center justify-between shadow-2xl";
+                subBar.className = "bg-blue-950/40 backdrop-blur-md border-b border-blue-400/20 px-4 py-2 flex items-center justify-between text-xs";
+                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-transparent";
+                emojiBar.className = "bg-blue-950/40 backdrop-blur-md border-t border-blue-400/20 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
+                inputBar.className = "bg-blue-900/40 backdrop-blur-md border-t border-blue-400/30 p-3 flex items-center space-x-2";
+            } else if(skinName === 'minimal') {
+                body.className = "bg-zinc-950 text-zinc-100 min-h-screen flex flex-col font-sans transition-all duration-300";
+                header.className = "bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex items-center justify-between";
+                subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs";
+                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-zinc-950";
+                emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
+                inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-3 flex items-center space-x-2";
+            }
+            togglePanel('skinsPanel');
+        }
+
+        window.updateUserStyle = function() {
+            currentUser.textColor = document.getElementById('pickerTextColor').value;
+            currentUser.font = document.getElementById('selectFont').value;
+            currentUser.fontSize = document.getElementById('selectFontSize').value;
+            localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
+        }
+
+        window.togglePanel = function(panelId) {
+            document.getElementById(panelId).classList.toggle('hidden');
+        }
+
+        window.insertEmoji = function(emoji) {
+            if(!emoji) return;
+            const input = document.getElementById('messageInput');
+            input.value += emoji;
+            input.focus();
+        }
+
+        function getYouTubeEmbedUrl(text) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = text.match(regExp);
+            return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+        }
+
+        function isOnlyEmojis(text) {
+            const trimmed = text.trim();
+            if (trimmed.length === 0 || trimmed.length > 12) return false;
+            return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
+        }
+
+        window.sendMessage = function() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const newMsg = {
+                id: Date.now(),
+                sender: currentUser.nick,
+                avatar: currentUser.avatar,
+                text: text,
+                youtube: getYouTubeEmbedUrl(text),
+                textColor: currentUser.textColor,
+                font: currentUser.font,
+                fontSize: currentUser.fontSize,
+                isAdmin: currentUser.isAdmin,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            push(ref(db, 'chat_messages'), newMsg);
+            input.value = '';
+        }
+
+        window.handleKeyPress = function(e) {
+            if(e.key === 'Enter') sendMessage();
+        }
+
+        window.sendImage = function(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const newMsg = {
+                    id: Date.now(),
+                    sender: currentUser.nick,
+                    avatar: currentUser.avatar,
+                    image: event.target.result,
+                    textColor: currentUser.textColor,
+                    font: currentUser.font,
+                    fontSize: currentUser.fontSize,
+                    isAdmin: currentUser.isAdmin,
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                };
+                push(ref(db, 'chat_messages'), newMsg);
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+
+        window.deleteMessage = function(firebaseKey) {
+            remove(ref(db, `chat_messages/${firebaseKey}`));
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = "flex items-start space-x-3 py-3 px-2 border-b border-white/20 hover:bg-black/20 rounded-xl transition-all group";
+
+                const canDelete = currentUser.isAdmin || msg.sender === currentUser.nick;
+                const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-cyan-500/30 ml-1.5">ADMIN</span>` : '';
+
+                let contentHtml = '';
+                if(msg.text) {
+                    if (isOnlyEmojis(msg.text)) {
+                        contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
+                    } else {
+                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${msg.text}</p>`;
+                    }
+                }
+                if(msg.image) {
+                    contentHtml += `<img src="${msg.image}" class="max-w-[320px] max-h-[280px] rounded-2xl mt-2 border border-slate-700 object-cover shadow-xl">`;
+                }
+                if(msg.youtube) {
+                    contentHtml += `
+                        <div class="mt-2 w-full max-w-[340px] aspect-video rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
+                            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    `;
+                }
+
+                const senderFontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
+
+                div.innerHTML = `
+                    <img src="${msg.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-400 shrink-0 shadow-lg">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center space-x-2">
+                            <span onclick="promptOpenInbox('${msg.sender.replace(/'/g, "\\'")}')" class="font-extrabold text-sm cursor-pointer hover:text-cyan-400 transition-colors" style="font-family: ${senderFontFamily};" title="Haz clic para enviar mensaje privado">${msg.sender}</span>
+                            ${adminBadge}
+                            <span class="text-[10px] text-slate-400">${msg.time}</span>
+                        </div>
+                        <div class="mt-1">${contentHtml}</div>
+                    </div>
+                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer">🗑️</button>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.promptOpenInbox = function(targetUser) {
+            if (targetUser === currentUser.nick) {
+                alert("¡No puedes enviarte un mensaje privado a ti mismo!");
+                return;
+            }
+            if (confirm(`¿Deseas abrir un chat privado con "${targetUser}"?`)) {
+                openInboxWith(targetUser);
+            }
+        }
+
+        function openInboxWith(targetUser) {
+            currentTargetUser = targetUser;
+            document.getElementById('inboxTitle').textContent = `📬 Chat privado con: ${targetUser}`;
+            document.getElementById('inboxModal').classList.remove('hidden');
+
+            const usersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+            const inboxRef = ref(db, `private_chats/${usersKey}`);
+
+            if (inboxUnsubscribe) inboxUnsubscribe();
+
+            inboxUnsubscribe = onValue(inboxRef, (snapshot) => {
+                const data = snapshot.val();
+                const inboxContainer = document.getElementById('inboxContent');
+                inboxContainer.innerHTML = '';
+
+                if (data) {
+                    let privMessages = [];
+                    Object.keys(data).forEach(key => privMessages.push(data[key]));
+                    privMessages.sort((a, b) => b.id - a.id);
+
+                    privMessages.forEach(msg => {
+                        const p = document.createElement('div');
+                        const isMe = msg.sender === currentUser.nick;
+                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
+                        
+                        let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
+                        if (msg.text) innerHtml += `<span>${msg.text}</span>`;
+                        if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
+
+                        p.innerHTML = innerHtml;
+                        inboxContainer.appendChild(p);
+                    });
+                } else {
+                    inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">No hay mensajes aún con ${targetUser}. ¡Di hola!</p>`;
+                }
+            });
+        }
+
+        window.closeInboxModal = function() {
+            document.getElementById('inboxModal').classList.add('hidden');
+            currentTargetUser = null;
+        }
+
+        window.sendInboxMessage = function() {
+            if (!currentTargetUser) return;
+            const input = document.getElementById('inboxInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const usersKey = [currentUser.nick, currentTargetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+            const privMsg = {
+                id: Date.now(),
+                sender: currentUser.nick,
+                text: text,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            push(ref(db, `private_chats/${usersKey}`), privMsg);
+            input.value = '';
+        }
+
+        window.sendInboxImage = function(e) {
+            if (!currentTargetUser) return;
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const usersKey = [currentUser.nick, currentTargetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+                const privMsg = {
+                    id: Date.now(),
+                    sender: currentUser.nick,
+                    image: event.target.result,
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                };
+                push(ref(db, `private_chats/${usersKey}`), privMsg);
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+
+        window.handleInboxKeyPress = function(e) {
+            if(e.key === 'Enter') sendInboxMessage();
+        }
+    </script>
+</body>
+</html>
