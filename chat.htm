@@ -204,13 +204,13 @@
                     <span>📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube / GIF..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe (**negrita**, *cursiva*) o enlace YouTube..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
                 <button onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE INBOX PRIVADO (CON FOTOS Y NOTIFICACIÓN) -->
+    <!-- MODAL DE INBOX PRIVADO -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl flex flex-col h-[80vh]">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -220,19 +220,19 @@
             <!-- Contenedor de mensajes privados -->
             <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse">
             </div>
-            <!-- Barra de escritura privada con opción de imagen -->
+            <!-- Barra de escritura privada -->
             <div class="pt-3 border-t border-slate-800 flex items-center space-x-2">
                 <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
                     <span>📷</span>
                     <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                 </label>
-                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe privado (**negrita**, *cursiva*)..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE & LÓGICA TOTALMENTE CORREGIDA -->
+    <!-- FIREBASE & LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -263,7 +263,7 @@
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
-        let activePrivateRooms = {}; // Para vigilar notificaciones entrantes de otros usuarios
+        let activeUsersKey = null; // Llave actual del inbox abierto
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
@@ -381,7 +381,7 @@
                 renderMessages();
             });
 
-            // 2. Presencia Online (Corregido para asegurar conteo exacto de activos)
+            // 2. Presencia Online
             const myPresenceRef = push(ref(db, 'online_users'));
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
@@ -396,32 +396,27 @@
                 }
             });
 
-            // 3. Vigilante global de mensajes privados (Notificaciones emergentes)
+            // 3. Vigilante de notificaciones privadas
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
                 if (!allRooms) return;
 
                 Object.keys(allRooms).forEach(roomKey => {
-                    // Si la sala privada incluye mi nick actual
                     if (roomKey.includes(currentUser.nick)) {
                         const roomMessages = allRooms[roomKey];
                         if (!roomMessages) return;
 
-                        // Obtener el último mensaje enviado
                         const msgKeys = Object.keys(roomMessages);
                         const lastMsgKey = msgKeys[msgKeys.length - 1];
                         const lastMsg = roomMessages[lastMsgKey];
 
-                        // Si el mensaje no es mío y es nuevo, lanzamos alerta de notificación
                         if (lastMsg && lastMsg.sender !== currentUser.nick) {
-                            // Evitar disparar alerta repetida por el mismo mensaje guardado
                             const notifId = roomKey + "_" + lastMsg.id;
                             if (!window.notifiedMessages) window.notifiedMessages = {};
                             
                             if (!window.notifiedMessages[notifId]) {
                                 window.notifiedMessages[notifId] = true;
-                                // Si no tenemos el chat abierto con este usuario, avisamos
                                 if (currentTargetUser !== lastMsg.sender) {
                                     if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Deseas abrir el chat con él/ella?`)) {
                                         openInboxWith(lastMsg.sender);
@@ -506,6 +501,16 @@
             input.focus();
         }
 
+        // --- PARSER DE MARKDOWN SIMPLE (Negrita y Cursiva) ---
+        function parseMarkdown(text) {
+            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            // Negrita: **texto**
+            safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="font-black">$1</strong>');
+            // Cursiva: *texto*
+            safe = safe.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+            return safe;
+        }
+
         function getYouTubeEmbedUrl(text) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = text.match(regExp);
@@ -588,7 +593,8 @@
                         contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
                     } else {
                         const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${msg.text}</p>`;
+                        const formattedText = parseMarkdown(msg.text);
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -614,7 +620,7 @@
                         </div>
                         <div class="mt-1">${contentHtml}</div>
                     </div>
-                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer">🗑️</button>` : ''}
+                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -635,8 +641,8 @@
             document.getElementById('inboxTitle').textContent = `📬 Chat privado con: ${targetUser}`;
             document.getElementById('inboxModal').classList.remove('hidden');
 
-            const usersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
-            const inboxRef = ref(db, `private_chats/${usersKey}`);
+            activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+            const inboxRef = ref(db, `private_chats/${activeUsersKey}`);
 
             if (inboxUnsubscribe) inboxUnsubscribe();
 
@@ -647,17 +653,22 @@
 
                 if (data) {
                     let privMessages = [];
-                    Object.keys(data).forEach(key => privMessages.push(data[key]));
+                    Object.keys(data).forEach(key => privMessages.push({ firebaseKey: key, ...data[key] }));
                     privMessages.sort((a, b) => b.id - a.id);
 
                     privMessages.forEach(msg => {
                         const p = document.createElement('div');
                         const isMe = msg.sender === currentUser.nick;
-                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
+                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words group relative ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
                         let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
-                        if (msg.text) innerHtml += `<span>${msg.text}</span>`;
+                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
+
+                        // Botón de eliminar propio mensaje en Inbox
+                        if (isMe) {
+                            innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-2 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>`;
+                        }
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
@@ -671,15 +682,15 @@
         window.closeInboxModal = function() {
             document.getElementById('inboxModal').classList.add('hidden');
             currentTargetUser = null;
+            activeUsersKey = null;
         }
 
         window.sendInboxMessage = function() {
-            if (!currentTargetUser) return;
+            if (!currentTargetUser || !activeUsersKey) return;
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
 
-            const usersKey = [currentUser.nick, currentTargetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
             const privMsg = {
                 id: Date.now(),
                 sender: currentUser.nick,
@@ -687,28 +698,31 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            push(ref(db, `private_chats/${usersKey}`), privMsg);
+            push(ref(db, `private_chats/${activeUsersKey}`), privMsg);
             input.value = '';
         }
 
         window.sendInboxImage = function(e) {
-            if (!currentTargetUser) return;
+            if (!currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
             if(!file) return;
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                const usersKey = [currentUser.nick, currentTargetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
                 const privMsg = {
                     id: Date.now(),
                     sender: currentUser.nick,
                     image: event.target.result,
                     time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                 };
-                push(ref(db, `private_chats/${usersKey}`), privMsg);
+                push(ref(db, `private_chats/${activeUsersKey}`), privMsg);
             };
             reader.readAsDataURL(file);
             e.target.value = '';
+        }
+
+        window.deleteInboxMessage = function(usersKey, firebaseKey) {
+            remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`));
         }
 
         window.handleInboxKeyPress = function(e) {
