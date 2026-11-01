@@ -26,7 +26,6 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
-        /* Forzar visibilidad absoluta a negritas y cursivas */
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
     </style>
@@ -80,9 +79,14 @@
             </div>
         </div>
         <div class="flex items-center space-x-2">
-            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Borrar todo el chat (Solo Admin)">
+            <!-- BOTÓN EXCLUSIVO DE ADMIN: ABRIR/CERRAR SALA -->
+            <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Abrir o Cerrar Sala">
+                <span id="roomStatusIcon">🔒</span>
+                <span id="roomStatusText" class="hidden sm:inline">Cerrar Chat</span>
+            </button>
+            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Borrar todo el chat">
                 <span>🗑️</span>
-                <span class="hidden sm:inline">Limpiar Chat</span>
+                <span class="hidden sm:inline">Limpiar</span>
             </button>
             <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
                 <span>🎨</span>
@@ -171,7 +175,7 @@
             <!-- SUBBAR -->
             <div id="subBarTheme" class="bg-slate-900/80 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs transition-all">
                 <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="roomStatusIndicator" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos!</span>
                 </div>
                 <div class="flex items-center space-x-3">
@@ -181,6 +185,11 @@
 
             <!-- CONTENEDOR DE MENSAJES -->
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
+            </div>
+
+            <!-- AVISO DE SALA CERRADA (Se oculta cuando el chat está abierto) -->
+            <div id="chatClosedNotice" class="hidden bg-rose-950/90 border-t border-rose-600/50 p-4 text-center text-rose-200 text-xs font-bold">
+                🔒 El chat se encuentra cerrado temporalmente por el Administrador. ¡Volveremos en el próximo show en vivo!
             </div>
 
             <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO -->
@@ -203,14 +212,14 @@
                 <button onclick="insertEmoji('🚀')" class="text-base hover:scale-125 transition-transform cursor-pointer">🚀</button>
             </div>
 
-            <!-- INPUT BAR -->
+            <!-- INPUT BAR (Se bloquea si el chat está cerrado para los usuarios normales) -->
             <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-3 flex items-center space-x-2 transition-all">
-                <label class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
+                <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
                     <span>📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Usa los botones <b>B</b> e <i>I</i> para dar formato..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <button onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
+                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe tu mensaje..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
             </div>
         </div>
     </div>
@@ -222,10 +231,8 @@
                 <h3 id="inboxTitle" class="text-base font-black text-cyan-400">📬 Chat Privado</h3>
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
             </div>
-            <!-- Contenedor de mensajes privados -->
             <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse">
             </div>
-            <!-- Barra de escritura privada -->
             <div class="pt-3 border-t border-slate-800 flex items-center space-x-2">
                 <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
                     <span>📷</span>
@@ -240,7 +247,7 @@
     <!-- FIREBASE & LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBfHf7to54O5jnozK26dJG6an74n2R5tHY",
@@ -269,6 +276,7 @@
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
         let activeUsersKey = null;
+        let isChatOpen = true; // Estado global del chat
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
@@ -294,9 +302,11 @@
         function checkAdminUIs() {
             if(currentUser.isAdmin) {
                 document.getElementById('btnAdminClear').classList.remove('hidden');
+                document.getElementById('btnAdminToggleChat').classList.remove('hidden');
                 document.getElementById('adminOnlineContainer').classList.remove('hidden');
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
+                document.getElementById('btnAdminToggleChat').classList.add('hidden');
                 document.getElementById('adminOnlineContainer').classList.add('hidden');
             }
         }
@@ -357,7 +367,7 @@
             }
         }
 
-        function finalizeLogin() {
+        window.finalizeLogin = function() {
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             checkAdminUIs();
@@ -372,6 +382,7 @@
         }
 
         function initFirebaseListeners() {
+            // 1. Chat General
             const messagesRef = ref(db, 'chat_messages');
             onValue(messagesRef, (snapshot) => {
                 const data = snapshot.val();
@@ -385,6 +396,16 @@
                 renderMessages();
             });
 
+            // 2. Escuchar el Estado de la Sala (Abierto / Cerrado)
+            const chatStatusRef = ref(db, 'chat_room_status');
+            onValue(chatStatusRef, (snapshot) => {
+                const status = snapshot.val();
+                // Si nunca se ha creado, por defecto está abierto (true)
+                isChatOpen = (status !== null) ? status.isOpen : true;
+                updateRoomVisualStatus();
+            });
+
+            // 3. Presencia Online
             const myPresenceRef = push(ref(db, 'online_users'));
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
@@ -399,6 +420,7 @@
                 }
             });
 
+            // 4. Notificaciones Privadas
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
@@ -429,6 +451,44 @@
                     }
                 });
             });
+        }
+
+        // --- FUNCIÓN DE ADMIN PARA ABRIR O CERRAR EL CHAT EN TIEMPO REAL ---
+        window.toggleChatRoomStatus = function() {
+            if (!currentUser.isAdmin) return;
+            const newStatus = !isChatOpen;
+            const actionText = newStatus ? "abrir el chat para todos" : "CERRAR el chat para evitar spam";
+            
+            if (confirm(`⚠️ ¿Estás seguro de ${actionText}?`)) {
+                set(ref(db, 'chat_room_status'), { isOpen: newStatus });
+            }
+        }
+
+        function updateRoomVisualStatus() {
+            const indicator = document.getElementById('roomStatusIndicator');
+            const notice = document.getElementById('chatClosedNotice');
+            const inputBar = document.getElementById('inputBarTheme');
+            const toggleBtnText = document.getElementById('roomStatusText');
+            const toggleBtnIcon = document.getElementById('roomStatusIcon');
+
+            if (isChatOpen) {
+                indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                notice.classList.add('hidden');
+                if (!currentUser.isAdmin) {
+                    inputBar.classList.remove('hidden'); // Mostrar input a usuarios si está abierto
+                }
+                if (toggleBtnText) toggleBtnText.textContent = "Cerrar Chat";
+                if (toggleBtnIcon) toggleBtnIcon.textContent = "🔒";
+            } else {
+                indicator.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                notice.classList.remove('hidden');
+                // Si no es admin, ocultamos la barra de escritura para que nadie mande spam
+                if (!currentUser.isAdmin) {
+                    inputBar.classList.add('hidden');
+                }
+                if (toggleBtnText) toggleBtnText.textContent = "Abrir Chat";
+                if (toggleBtnIcon) toggleBtnIcon.textContent = "🔓";
+            }
         }
 
         window.clearAllMessages = function() {
@@ -503,7 +563,6 @@
             input.focus();
         }
 
-        // --- INSERCIÓN DIRECTA DE ETIQUETAS HTML ---
         window.insertFormat = function(tagStart, tagEnd) {
             const input = document.getElementById('messageInput');
             const start = input.selectionStart;
@@ -513,6 +572,13 @@
             input.value = text.substring(0, start) + tagStart + text.substring(start, end) + tagEnd + text.substring(end);
             input.focus();
             input.setSelectionRange(start + tagStart.length, end + tagStart.length);
+        }
+
+        function parseMarkdown(text) {
+            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
+            safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
+            return safe;
         }
 
         function getYouTubeEmbedUrl(text) {
@@ -528,6 +594,11 @@
         }
 
         window.sendMessage = function() {
+            if (!isChatOpen && !currentUser.isAdmin) {
+                alert("El chat está cerrado en este momento.");
+                return;
+            }
+
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if(!text) return;
@@ -536,7 +607,7 @@
                 id: Date.now(),
                 sender: currentUser.nick,
                 avatar: currentUser.avatar,
-                text: text, // Guarda el texto con sus etiquetas HTML <b> o <i>
+                text: text,
                 youtube: getYouTubeEmbedUrl(text),
                 textColor: currentUser.textColor,
                 font: currentUser.font,
@@ -554,6 +625,7 @@
         }
 
         window.sendImage = function(e) {
+            if (!isChatOpen && !currentUser.isAdmin) return;
             const file = e.target.files[0];
             if(!file) return;
 
@@ -597,8 +669,8 @@
                         contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
                     } else {
                         const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-                        // Se inyecta directamente el texto con las etiquetas <b> o <i> que el usuario puso
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${msg.text}</p>`;
+                        const formattedText = parseMarkdown(msg.text);
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -666,7 +738,7 @@
                         p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words group relative ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
                         let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
-                        if (msg.text) innerHtml += `<span>${msg.text}</span>`;
+                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
 
                         if (isMe) {
