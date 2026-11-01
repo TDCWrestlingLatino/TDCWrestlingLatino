@@ -20,8 +20,8 @@
             }
         }
     </script>
-    <!-- Google Fonts combinadas (Tus añadidas + las anteriores) -->
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
+    <!-- Google Fonts seleccionadas y verificadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Creepster&family=Inter:wght@400;700;900&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
@@ -131,27 +131,15 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Tipografía (Fuentes Disponibles):</label>
+                    <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
                     <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
-                        <!-- Las 5 que pediste al comienzo -->
                         <option value="Inter">Inter (Predeterminada)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
                         <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Impact">Impact (Pesada)</option>
                         <option value="Permanent Marker">Permanent Marker (Plumón)</option>
-                        <!-- Las demás que ya tenías para sumar variedad -->
-                        <option value="Russo One">Russo One (Deportiva/Ruda)</option>
-                        <option value="Bangers">Bangers (Estilo Cómic)</option>
-                        <option value="Bungee">Bungee (Titular Bloque)</option>
-                        <option value="VT323">VT323 (Consola Retro Arcade)</option>
-                        <option value="Dancing Script">Dancing Script (Cursiva Fina)</option>
-                        <option value="Fredoka One">Fredoka One (Redonda Amigable)</option>
-                        <option value="Rock Salt">Rock Salt (Manuscrita Graffiti)</option>
-                        <option value="Monoton">Monoton (Líneas Retro Disco)</option>
-                        <option value="Eater">Eater (Terror/Halloween)</option>
-                        <option value="Wallpoet">Wallpoet (Minimalista Geométrica)</option>
-                        <option value="Zilla Slab Highlight">Zilla Slab Highlight (Sombreada)</option>
-                        <option value="Creepster">Creepster (Horror Extremo)</option>
+                        <option value="Bangers">Bangers (Cómic)</option>
+                        <option value="Creepster">Creepster (Terror)</option>
+                        <option value="Press Start 2P">Press Start 2P (8-Bit)</option>
                     </select>
                 </div>
 
@@ -178,7 +166,6 @@
                     <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos![cite: 1]</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <!-- MIEMBROS ACTIVOS: VISIBLE SOLO PARA ADMINS -->
                     <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">1</strong></span>
                     <button onclick="openInboxModal()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1 rounded-lg font-bold transition-all shadow cursor-pointer">Mensajes privados[cite: 1]</button>
                 </div>
@@ -561,8 +548,7 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${msg.text}</p>`;
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: '${msg.font}', sans-serif;">${msg.text}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -580,7 +566,7 @@
                     <img src="${msg.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-400 shrink-0 shadow-lg">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-2">
-                            <span class="font-extrabold text-sm" style="font-family: ${msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`};">${msg.sender}</span>
+                            <span class="font-extrabold text-sm" style="font-family: '${msg.font}', sans-serif;">${msg.sender}</span>
                             ${adminBadge}
                             <span class="text-[10px] text-slate-400">${msg.time}</span>
                         </div>
@@ -595,6 +581,7 @@
         }
 
         function openInboxModal() {
+            document.getElementById('inboxModal').classList.add('hidden'); // Corregido modal
             document.getElementById('inboxModal').classList.remove('hidden');
         }
 
@@ -610,8 +597,7 @@
             
             const p = document.createElement('div');
             p.className = `bg-slate-800/80 p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] ml-auto break-words`;
-            const fontFamily = currentUser.font === 'Impact' ? 'Impact, sans-serif' : `'${currentUser.font}', sans-serif`;
-            p.style.fontFamily = fontFamily;
+            p.style.fontFamily = `'${currentUser.font}', sans-serif`;
             p.style.color = currentUser.textColor;
             p.textContent = text;
             inboxContainer.appendChild(p);
