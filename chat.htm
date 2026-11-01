@@ -34,8 +34,8 @@
     <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-2xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino![cite: 1]</h2>
-                <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.[cite: 1]</p>
+                <h2 class="text-2xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
+                <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.</p>
             </div>
             
             <div class="space-y-3">
@@ -72,8 +72,8 @@
         <div class="flex items-center space-x-3">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white shadow-lg">TDC</div>
             <div>
-                <h1 id="appTitle" class="text-base font-black tracking-wider text-white">TDC Wrestling Latino Chat Oficial[cite: 1]</h1>
-                <p id="appSubtitle" class="text-[10px] text-slate-400">Unetenos en los shows en vivo[cite: 1]</p>
+                <h1 id="appTitle" class="text-base font-black tracking-wider text-white">TDC Wrestling Latino Chat Oficial</h1>
+                <p id="appSubtitle" class="text-[10px] text-slate-400">Unetenos en los shows en vivo</p>
             </div>
         </div>
         <div class="flex items-center space-x-2">
@@ -98,7 +98,7 @@
 
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         
-        <!-- PANEL LATERAL DE SKINS RADICALES -->
+        <!-- PANEL LATERAL DE SKINS -->
         <div id="skinsPanel" class="hidden absolute md:relative z-20 w-full md:w-80 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-4 space-y-4 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-sm font-black text-cyan-400">⚡ Skins & Estilos</h3>
@@ -174,15 +174,15 @@
             <div id="subBarTheme" class="bg-slate-900/80 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs transition-all">
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos![cite: 1]</span>
+                    <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos!</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">1</strong></span>
-                    <button onclick="openInboxModal()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1 rounded-lg font-bold transition-all shadow cursor-pointer">Mensajes privados[cite: 1]</button>
+                    <!-- CONTADOR DE ACTIVOS DINÁMICO PARA ADMINS -->
+                    <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
                 </div>
             </div>
 
-            <!-- CONTENEDOR DE MENSAJES (Abajo hacia arriba) -->
+            <!-- CONTENEDOR DE MENSAJES -->
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
             </div>
 
@@ -229,7 +229,7 @@
                 </select>
             </div>
 
-            <!-- BARRA DE ESCRITURA E INPUTS -->
+            <!-- BARRA DE ESCRITURA E INPUTs -->
             <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-3 flex items-center space-x-2 transition-all">
                 <label class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
                     <span>📷</span>
@@ -245,11 +245,10 @@
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl flex flex-col h-[80vh]">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="text-base font-black text-cyan-400">📬 Inbox[cite: 1]</h3>
+                <h3 id="inboxTitle" class="text-base font-black text-cyan-400">📬 Chat Privado</h3>
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
             </div>
             <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse">
-                <p class="text-center text-xs text-slate-500 my-auto">Selecciona un usuario del chat para abrir un inbox privado.[cite: 1]</p>
             </div>
             <div class="pt-3 border-t border-slate-800 flex items-center space-x-2">
                 <input type="text" id="inboxInput" placeholder="Escribe un mensaje privado..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
@@ -258,12 +257,11 @@
         </div>
     </div>
 
-    <!-- FIREBASE SDKs (Versión Web Modular por CDN) -->
+    <!-- FIREBASE SDKs & LÓGICA CON CONTADOR DINÁMICO DE PRESENCIA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        // Configuración de Firebase provista
         const firebaseConfig = {
             apiKey: "AIzaSyBfHf7to54O5jnozK26dJG6an74n2R5tHY",
             authDomain: "tdcchat-e9e0d.firebaseapp.com",
@@ -275,11 +273,9 @@
             measurementId: "G-EM27QM3BLG"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Variables globales del chat
         let currentUser = {
             nick: '',
             avatar: '',
@@ -290,6 +286,8 @@
         };
 
         let messages = [];
+        let currentTargetUser = null;
+        let inboxUnsubscribe = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
@@ -302,7 +300,7 @@
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
                     
                     checkAdminUIs();
-                    initFirebaseListener();
+                    initFirebaseListeners();
                 } catch(e) {
                     localStorage.removeItem('tdc_chat_user');
                     document.getElementById('loginModal').classList.remove('hidden');
@@ -382,7 +380,7 @@
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             checkAdminUIs();
-            initFirebaseListener();
+            initFirebaseListeners();
         }
 
         window.logoutUser = function() {
@@ -392,36 +390,46 @@
             }
         }
 
-        // Sincronización en tiempo real con Firebase Realtime Database
-        function initFirebaseListener() {
+        // --- SISTEMA DE ESCUCHA Y PRESENCIA ONLINE EN TIEMPO REAL ---
+        function initFirebaseListeners() {
+            // 1. Escuchar mensajes del chat general
             const messagesRef = ref(db, 'chat_messages');
-            
-            // Escuchar cambios en tiempo real desde la nube
             onValue(messagesRef, (snapshot) => {
                 const data = snapshot.val();
                 messages = [];
                 if (data) {
-                    // Convertir el objeto de Firebase en un array ordenado
                     Object.keys(data).forEach(key => {
                         messages.push({
                             firebaseKey: key,
                             ...data[key]
                         });
                     });
-                    // Ordenar del más reciente al más antiguo para renderizar de abajo hacia arriba
                     messages.sort((a, b) => b.id - a.id);
                 }
                 renderMessages();
+            });
+
+            // 2. Control de usuarios activos (Presencia online con Firebase)
+            const myPresenceRef = push(ref(db, 'online_users'));
+            set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
+            onDisconnect(myPresenceRef).remove(); // Se borra automáticamente si se cierra la pestaña
+
+            // Contar cuántos nodos hay conectados en tiempo real
+            const onlineUsersRef = ref(db, 'online_users');
+            onValue(onlineUsersRef, (snapshot) => {
+                const activeCount = snapshot.numChildren();
+                const counterElement = document.getElementById('onlineCount');
+                if (counterElement) {
+                    counterElement.textContent = activeCount;
+                }
             });
         }
 
         window.clearAllMessages = function() {
             if(!currentUser.isAdmin) return;
-            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube? Se borrarán todos los comentarios para todos los usuarios.')) {
+            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube?')) {
                 const messagesRef = ref(db, 'chat_messages');
-                remove(messagesRef).then(() => {
-                    console.log("Chat limpiado en la nube.");
-                });
+                remove(messagesRef);
             }
         }
 
@@ -524,10 +532,8 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            // Enviar mensaje a Firebase Realtime Database en la nube
             const messagesRef = ref(db, 'chat_messages');
             push(messagesRef, newMsg);
-
             input.value = '';
         }
 
@@ -555,15 +561,11 @@
                 const messagesRef = ref(db, 'chat_messages');
                 push(messagesRef, newMsg);
             };
-            reader.onerror = function() {
-                alert('No se pudo cargar la imagen o GIF. Intenta con otro archivo.');
-            };
             reader.readAsDataURL(file);
             e.target.value = '';
         }
 
         window.deleteMessage = function(firebaseKey) {
-            // Borrar mensaje específico de Firebase
             const msgRef = ref(db, `chat_messages/${firebaseKey}`);
             remove(msgRef);
         }
@@ -605,7 +607,7 @@
                     <img src="${msg.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-400 shrink-0 shadow-lg">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-2">
-                            <span class="font-extrabold text-sm" style="font-family: ${senderFontFamily};">${msg.sender}</span>
+                            <span onclick="promptOpenInbox('${msg.sender.replace(/'/g, "\\'")}')" class="font-extrabold text-sm cursor-pointer hover:text-cyan-400 transition-colors" style="font-family: ${senderFontFamily};" title="Haz clic para enviar mensaje privado">${msg.sender}</span>
                             ${adminBadge}
                             <span class="text-[10px] text-slate-400">${msg.time}</span>
                         </div>
@@ -619,28 +621,83 @@
             });
         }
 
-        window.openInboxModal = function() {
+        window.promptOpenInbox = function(targetUser) {
+            if (targetUser === currentUser.nick) {
+                alert("¡No puedes enviarte un mensaje privado a ti mismo!");
+                return;
+            }
+            if (confirm(`¿Deseas abrir un chat privado con "${targetUser}"?`)) {
+                openInboxWith(targetUser);
+            }
+        }
+
+        function openInboxWith(targetUser) {
+            currentTargetUser = targetUser;
+            document.getElementById('inboxTitle').textContent = `📬 Chat privado con: ${targetUser}`;
             document.getElementById('inboxModal').classList.remove('hidden');
+
+            const usersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+            const inboxRef = ref(db, `private_chats/${usersKey}`);
+
+            if (inboxUnsubscribe) {
+                inboxUnsubscribe();
+            }
+
+            inboxUnsubscribe = onValue(inboxRef, (snapshot) => {
+                const data = snapshot.val();
+                const inboxContainer = document.getElementById('inboxContent');
+                inboxContainer.innerHTML = '';
+
+                if (data) {
+                    let privMessages = [];
+                    Object.keys(data).forEach(key => {
+                        privMessages.push(data[key]);
+                    });
+                    privMessages.sort((a, b) => b.id - a.id);
+
+                    privMessages.forEach(msg => {
+                        const p = document.createElement('div');
+                        const isMe = msg.sender === currentUser.nick;
+                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
+                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
+                        p.style.fontFamily = fontFamily;
+                        p.innerHTML = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong> ${msg.text}`;
+                        inboxContainer.appendChild(p);
+                    });
+                } else {
+                    inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">No hay mensajes aún con ${targetUser}. ¡Di hola!</p>`;
+                }
+            });
         }
 
         window.closeInboxModal = function() {
             document.getElementById('inboxModal').classList.add('hidden');
+            currentTargetUser = null;
         }
 
         window.sendInboxMessage = function() {
+            if (!currentTargetUser) return;
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
-            const inboxContainer = document.getElementById('inboxContent');
-            
-            const p = document.createElement('div');
-            p.className = `bg-slate-800/80 p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] ml-auto break-words`;
-            const fontFamily = currentUser.font === 'Impact' ? 'Impact, sans-serif' : `'${currentUser.font}', sans-serif`;
-            p.style.fontFamily = fontFamily;
-            p.style.color = currentUser.textColor;
-            p.textContent = text;
-            inboxContainer.appendChild(p);
+
+            const usersKey = [currentUser.nick, currentTargetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
+            const inboxRef = ref(db, `private_chats/${usersKey}`);
+
+            const privMsg = {
+                id: Date.now(),
+                sender: currentUser.nick,
+                text: text,
+                font: currentUser.font,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            push(inboxRef, privMsg);
             input.value = '';
+        }
+
+        window.handleInboxKeyPress = function(e) {
+            if(e.key === 'Enter') sendInboxMessage();
         }
     </script>
 </body>
