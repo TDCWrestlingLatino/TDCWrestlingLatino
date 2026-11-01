@@ -20,7 +20,7 @@
             }
         }
     </script>
-    <!-- Google Fonts con TODAS las fuentes combinadas -->
+    <!-- Google Fonts combinadas -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -131,7 +131,7 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Tipografía (Todas las fuentes):</label>
+                    <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
                     <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
                         <option value="Inter">Inter (Predeterminada)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
@@ -258,8 +258,28 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONTROL Y LÓGICA -->
-    <script>
+    <!-- FIREBASE SDKs (Versión Web Modular por CDN) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // Configuración de Firebase provista
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfHf7to54O5jnozK26dJG6an74n2R5tHY",
+            authDomain: "tdcchat-e9e0d.firebaseapp.com",
+            databaseURL: "https://tdcchat-e9e0d-default-rtdb.firebaseio.com",
+            projectId: "tdcchat-e9e0d",
+            storageBucket: "tdcchat-e9e0d.firebasestorage.app",
+            messagingSenderId: "655487245154",
+            appId: "1:655487245154:web:99d3905627002ad37faa3b",
+            measurementId: "G-EM27QM3BLG"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Variables globales del chat
         let currentUser = {
             nick: '',
             avatar: '',
@@ -282,19 +302,7 @@
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
                     
                     checkAdminUIs();
-
-                    messages.push({
-                        id: Date.now(),
-                        sender: 'SISTEMA TDC',
-                        avatar: 'https://ui-avatars.com/api/?name=TDC&background=ff0055&color=fff',
-                        text: `¡Bienvenido de vuelta al ring, ${currentUser.nick}! Tu sesión está guardada.`,
-                        textColor: '#00ffcc',
-                        font: 'Inter',
-                        fontSize: 'text-sm',
-                        isAdmin: true,
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                    });
-                    renderMessages();
+                    initFirebaseListener();
                 } catch(e) {
                     localStorage.removeItem('tdc_chat_user');
                     document.getElementById('loginModal').classList.remove('hidden');
@@ -314,7 +322,7 @@
             }
         }
 
-        function toggleAdminCode(checkbox) {
+        window.toggleAdminCode = function(checkbox) {
             const container = document.getElementById('adminCodeContainer');
             if (checkbox.checked) {
                 container.classList.remove('hidden');
@@ -324,7 +332,7 @@
             }
         }
 
-        function handleLogin() {
+        window.handleLogin = function() {
             const nickInput = document.getElementById('inputNick').value.trim();
             const urlInput = document.getElementById('inputAvatarUrl').value.trim();
             const fileInput = document.getElementById('inputAvatarFile').files[0];
@@ -374,36 +382,50 @@
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             checkAdminUIs();
-            messages.push({
-                id: Date.now(),
-                sender: 'SISTEMA TDC',
-                avatar: 'https://ui-avatars.com/api/?name=TDC&background=ff0055&color=fff',
-                text: `¡Bienvenido al chat de TDC Wrestling Latino, ${currentUser.nick}! de vuelta.[cite: 1]`,
-                textColor: '#00ffcc',
-                font: 'Inter',
-                fontSize: 'text-sm',
-                isAdmin: true,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            });
-            renderMessages();
+            initFirebaseListener();
         }
 
-        function logoutUser() {
+        window.logoutUser = function() {
             if(confirm('¿Deseas cerrar sesión y cambiar tu apodo/foto de perfil?')) {
                 localStorage.removeItem('tdc_chat_user');
                 location.reload();
             }
         }
 
-        function clearAllMessages() {
-            if(!currentUser.isAdmin) return;
-            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat? Se borrarán todos los comentarios y el chat quedará en cero.')) {
+        // Sincronización en tiempo real con Firebase Realtime Database
+        function initFirebaseListener() {
+            const messagesRef = ref(db, 'chat_messages');
+            
+            // Escuchar cambios en tiempo real desde la nube
+            onValue(messagesRef, (snapshot) => {
+                const data = snapshot.val();
                 messages = [];
+                if (data) {
+                    // Convertir el objeto de Firebase en un array ordenado
+                    Object.keys(data).forEach(key => {
+                        messages.push({
+                            firebaseKey: key,
+                            ...data[key]
+                        });
+                    });
+                    // Ordenar del más reciente al más antiguo para renderizar de abajo hacia arriba
+                    messages.sort((a, b) => b.id - a.id);
+                }
                 renderMessages();
+            });
+        }
+
+        window.clearAllMessages = function() {
+            if(!currentUser.isAdmin) return;
+            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube? Se borrarán todos los comentarios para todos los usuarios.')) {
+                const messagesRef = ref(db, 'chat_messages');
+                remove(messagesRef).then(() => {
+                    console.log("Chat limpiado en la nube.");
+                });
             }
         }
 
-        function setSkin(skinName) {
+        window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
             const subBar = document.getElementById('subBarTheme');
@@ -450,19 +472,19 @@
             togglePanel('skinsPanel');
         }
 
-        function updateUserStyle() {
+        window.updateUserStyle = function() {
             currentUser.textColor = document.getElementById('pickerTextColor').value;
             currentUser.font = document.getElementById('selectFont').value;
             currentUser.fontSize = document.getElementById('selectFontSize').value;
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
         }
 
-        function togglePanel(panelId) {
+        window.togglePanel = function(panelId) {
             const panel = document.getElementById(panelId);
             panel.classList.toggle('hidden');
         }
 
-        function insertEmoji(emoji) {
+        window.insertEmoji = function(emoji) {
             if(!emoji) return;
             const input = document.getElementById('messageInput');
             input.value += emoji;
@@ -482,7 +504,7 @@
             return emojiRegex.test(trimmed);
         }
 
-        function sendMessage() {
+        window.sendMessage = function() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if(!text) return;
@@ -502,16 +524,18 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            messages.unshift(newMsg);
+            // Enviar mensaje a Firebase Realtime Database en la nube
+            const messagesRef = ref(db, 'chat_messages');
+            push(messagesRef, newMsg);
+
             input.value = '';
-            renderMessages();
         }
 
-        function handleKeyPress(e) {
+        window.handleKeyPress = function(e) {
             if(e.key === 'Enter') sendMessage();
         }
 
-        function sendImage(e) {
+        window.sendImage = function(e) {
             const file = e.target.files[0];
             if(!file) return;
 
@@ -528,8 +552,8 @@
                     isAdmin: currentUser.isAdmin,
                     time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
                 };
-                messages.unshift(newMsg);
-                renderMessages();
+                const messagesRef = ref(db, 'chat_messages');
+                push(messagesRef, newMsg);
             };
             reader.onerror = function() {
                 alert('No se pudo cargar la imagen o GIF. Intenta con otro archivo.');
@@ -538,9 +562,10 @@
             e.target.value = '';
         }
 
-        function deleteMessage(id) {
-            messages = messages.filter(m => m.id !== id);
-            renderMessages();
+        window.deleteMessage = function(firebaseKey) {
+            // Borrar mensaje específico de Firebase
+            const msgRef = ref(db, `chat_messages/${firebaseKey}`);
+            remove(msgRef);
         }
 
         function renderMessages() {
@@ -588,21 +613,21 @@
                             ${contentHtml}
                         </div>
                     </div>
-                    ${canDelete ? `<button onclick="deleteMessage(${msg.id})" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer">🗑️</button>` : ''}
+                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer">🗑️</button>` : ''}
                 `;
                 container.appendChild(div);
             });
         }
 
-        function openInboxModal() {
+        window.openInboxModal = function() {
             document.getElementById('inboxModal').classList.remove('hidden');
         }
 
-        function closeInboxModal() {
+        window.closeInboxModal = function() {
             document.getElementById('inboxModal').classList.add('hidden');
         }
 
-        function sendInboxMessage() {
+        window.sendInboxMessage = function() {
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
