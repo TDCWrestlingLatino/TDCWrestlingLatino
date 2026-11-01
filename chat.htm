@@ -26,9 +26,9 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
-        /* Estilos forzados para Markdown */
-        .chat-bold { font-weight: 900 !important; filter: drop-shadow(0 0 1px currentColor); }
-        .chat-italic { font-style: italic !important; }
+        /* Forzar visibilidad absoluta a negritas y cursivas */
+        b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
+        i, em { font-style: italic !important; opacity: 0.95; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans transition-all duration-300" id="bodyTheme">
@@ -185,8 +185,8 @@
 
             <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO -->
             <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
-                <button onclick="insertFormat('**', '**')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Negrita"><b>B</b></button>
-                <button onclick="insertFormat('*', '*')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Cursiva"><i>I</i></button>
+                <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Negrita"><b>B</b></button>
+                <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Cursiva"><i>I</i></button>
                 <span class="text-slate-600">|</span>
                 <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer">🔥</button>
                 <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer">👍</button>
@@ -209,7 +209,7 @@
                     <span>📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Usa los botones <b>B</b> e <i>I</i> o escribe directo..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Usa los botones <b>B</b> e <i>I</i> para dar formato..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
                 <button onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
             </div>
         </div>
@@ -503,26 +503,16 @@
             input.focus();
         }
 
-        // --- BOTÓN RÁPIDO DE FORMATO (NEGRITA / CURSIVA) ---
-        window.insertFormat = function(wrapperStart, wrapperEnd) {
+        // --- INSERCIÓN DIRECTA DE ETIQUETAS HTML ---
+        window.insertFormat = function(tagStart, tagEnd) {
             const input = document.getElementById('messageInput');
             const start = input.selectionStart;
             const end = input.selectionEnd;
             const text = input.value;
             
-            input.value = text.substring(0, start) + wrapperStart + text.substring(start, end) + wrapperEnd + text.substring(end);
+            input.value = text.substring(0, start) + tagStart + text.substring(start, end) + tagEnd + text.substring(end);
             input.focus();
-            input.setSelectionRange(start + wrapperStart.length, end + wrapperStart.length);
-        }
-
-        // --- PARSER DE MARKDOWN MEJORADO Y VISIBLE ---
-        function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            // Negrita con clase forzada
-            safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="chat-bold text-white">$1</strong>');
-            // Cursiva con clase forzada
-            safe = safe.replace(/\*(.*?)\*/g, '<em class="chat-italic opacity-90">$1</em>');
-            return safe;
+            input.setSelectionRange(start + tagStart.length, end + tagStart.length);
         }
 
         function getYouTubeEmbedUrl(text) {
@@ -546,7 +536,7 @@
                 id: Date.now(),
                 sender: currentUser.nick,
                 avatar: currentUser.avatar,
-                text: text,
+                text: text, // Guarda el texto con sus etiquetas HTML <b> o <i>
                 youtube: getYouTubeEmbedUrl(text),
                 textColor: currentUser.textColor,
                 font: currentUser.font,
@@ -607,8 +597,8 @@
                         contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
                     } else {
                         const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-                        const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        // Se inyecta directamente el texto con las etiquetas <b> o <i> que el usuario puso
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${msg.text}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -676,7 +666,7 @@
                         p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words group relative ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
                         let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
-                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
+                        if (msg.text) innerHtml += `<span>${msg.text}</span>`;
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
 
                         if (isMe) {
