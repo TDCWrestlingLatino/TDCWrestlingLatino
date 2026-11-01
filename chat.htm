@@ -20,8 +20,8 @@
             }
         }
     </script>
-    <!-- Google Fonts seleccionadas y operativas -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@700&family=Courier+Prime:wght@700&family=Impact&family=Inter:wght@400;700;900&family=Lobster&family=Orbitron:wght@700&family=Pacifico&family=Permanent+Marker&family=Press+Start+2P&family=Righteous&family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <!-- 15 Nuevas Google Fonts con estilos variados y únicos -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
@@ -126,20 +126,23 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Tipografía (Font):</label>
+                    <label class="block font-bold text-slate-300 mb-1">Tipografía (15 Nuevas Fuentes):</label>
                     <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
-                        <option value="Inter">Inter (Predeterminada)</option>
-                        <option value="Orbitron">Orbitron (Futurista)</option>
-                        <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Cinzel">Cinzel (Épico/Clásico)</option>
-                        <option value="Lobster">Lobster (Cursiva)</option>
-                        <option value="Pacifico">Pacifico (Mano)</option>
-                        <option value="Courier Prime">Courier Prime (Hacker)</option>
-                        <option value="Impact">Impact (Pesada)</option>
-                        <option value="Righteous">Righteous (Moderna)</option>
-                        <option value="Permanent Marker">Permanent Marker (Plumón)</option>
-                        <option value="Press Start 2P">Press Start 2P (8-Bit)</option>
-                        <option value="Rubik">Rubik (Limpia)</option>
+                        <option value="Russo One">1. Russo One (Deportiva/Ruda)</option>
+                        <option value="Orbitron">2. Orbitron (Futurista Cíber)</option>
+                        <option value="Bangers">3. Bangers (Estilo Cómic)</option>
+                        <option value="Bungee">4. Bungee (Titular Bloque)</option>
+                        <option value="VT323">5. VT323 (Consola Retro Arcade)</option>
+                        <option value="Dancing Script">6. Dancing Script (Cursiva Fina)</option>
+                        <option value="Fredoka One">7. Fredoka One (Redonda Amigable)</option>
+                        <option value="Rock Salt">8. Rock Salt (Manuscrita Graffiti)</option>
+                        <option value="Monoton">9. Monoton (Líneas Retro Disco)</option>
+                        <option value="Eater">10. Eater (Terror/Halloween)</option>
+                        <option value="Wallpoet">11. Wallpoet (Minimalista Geométrica)</option>
+                        <option value="Zilla Slab Highlight">12. Zilla Slab Highlight (Sombreada)</option>
+                        <option value="Creepster">13. Creepster (Horror Extremo)</option>
+                        <option value="Permanent Marker">14. Permanent Marker (Plumón)</option>
+                        <option value="Press Start 2P">15. Press Start 2P (8-Bit)</option>
                     </select>
                 </div>
 
@@ -175,7 +178,7 @@
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
             </div>
 
-            <!-- BANDEJA DE EMOJIS RÁPIDOS (Principales adelante + Selector Masivo) -->
+            <!-- BANDEJA DE EMOJIS RÁPIDOS -->
             <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
                 <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Fuego">🔥</button>
                 <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Like">👍</button>
@@ -247,29 +250,27 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONTROL Y LÓGICA CON LOCALSTORAGE PERMANENTE -->
+    <!-- SCRIPT DE CONTROL Y LÓGICA -->
     <script>
         let currentUser = {
             nick: '',
             avatar: '',
             isAdmin: false,
             textColor: '#ffffff',
-            font: 'Inter',
+            font: 'Russo One',
             fontSize: 'text-sm'
         };
 
         let messages = [];
 
-        // Comprobar si ya hay una sesión guardada al cargar la página
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
-                    // Sincronizar controles con valores guardados
                     document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
-                    document.getElementById('selectFont').value = currentUser.font || 'Inter';
+                    document.getElementById('selectFont').value = currentUser.font || 'Russo One';
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
                     
                     messages.push({
@@ -278,7 +279,7 @@
                         avatar: 'https://ui-avatars.com/api/?name=TDC&background=ff0055&color=fff',
                         text: `¡Bienvenido de vuelta al ring, ${currentUser.nick}! Tu sesión está guardada.`,
                         textColor: '#00ffcc',
-                        font: 'Inter',
+                        font: 'Russo One',
                         fontSize: 'text-sm',
                         isAdmin: true,
                         time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
@@ -317,7 +318,7 @@
 
             currentUser.nick = nickInput;
             currentUser.textColor = '#00ffcc';
-            currentUser.font = 'Inter';
+            currentUser.font = 'Russo One';
             currentUser.fontSize = 'text-sm';
 
             if(wantsAdmin) {
@@ -350,7 +351,6 @@
         }
 
         function finalizeLogin() {
-            // Guardar en localStorage para que sea permanente al actualizar
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             messages.push({
@@ -359,7 +359,7 @@
                 avatar: 'https://ui-avatars.com/api/?name=TDC&background=ff0055&color=fff',
                 text: `¡Bienvenido al ring, ${currentUser.nick}! Disfruta de la transmisión y la comunidad.`,
                 textColor: '#00ffcc',
-                font: 'Inter',
+                font: 'Russo One',
                 fontSize: 'text-sm',
                 isAdmin: true,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
@@ -374,7 +374,6 @@
             }
         }
 
-        // Skins Radicales
         function setSkin(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -426,7 +425,6 @@
             currentUser.textColor = document.getElementById('pickerTextColor').value;
             currentUser.font = document.getElementById('selectFont').value;
             currentUser.fontSize = document.getElementById('selectFontSize').value;
-            // Actualizar también en localStorage
             localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
         }
 
