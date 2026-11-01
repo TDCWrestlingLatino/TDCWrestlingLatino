@@ -26,6 +26,9 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+        /* Estilos forzados para Markdown */
+        .chat-bold { font-weight: 900 !important; filter: drop-shadow(0 0 1px currentColor); }
+        .chat-italic { font-style: italic !important; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans transition-all duration-300" id="bodyTheme">
@@ -77,7 +80,6 @@
             </div>
         </div>
         <div class="flex items-center space-x-2">
-            <!-- BOTÓN DE ADMIN PARA LIMPIAR CHAT -->
             <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Borrar todo el chat (Solo Admin)">
                 <span>🗑️</span>
                 <span class="hidden sm:inline">Limpiar Chat</span>
@@ -181,8 +183,11 @@
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
             </div>
 
-            <!-- EMOJI BAR -->
+            <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO -->
             <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
+                <button onclick="insertFormat('**', '**')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Negrita"><b>B</b></button>
+                <button onclick="insertFormat('*', '*')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Cursiva"><i>I</i></button>
+                <span class="text-slate-600">|</span>
                 <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer">🔥</button>
                 <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer">👍</button>
                 <button onclick="insertEmoji('😂')" class="text-base hover:scale-125 transition-transform cursor-pointer">😂</button>
@@ -204,7 +209,7 @@
                     <span>📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe (**negrita**, *cursiva*) o enlace YouTube..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Usa los botones <b>B</b> e <i>I</i> o escribe directo..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
                 <button onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
             </div>
         </div>
@@ -226,7 +231,7 @@
                     <span>📷</span>
                     <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                 </label>
-                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe privado (**negrita**, *cursiva*)..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe tu mensaje privado..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Enviar</button>
             </div>
         </div>
@@ -263,7 +268,7 @@
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
-        let activeUsersKey = null; // Llave actual del inbox abierto
+        let activeUsersKey = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('tdc_chat_user');
@@ -367,7 +372,6 @@
         }
 
         function initFirebaseListeners() {
-            // 1. Chat General
             const messagesRef = ref(db, 'chat_messages');
             onValue(messagesRef, (snapshot) => {
                 const data = snapshot.val();
@@ -381,7 +385,6 @@
                 renderMessages();
             });
 
-            // 2. Presencia Online
             const myPresenceRef = push(ref(db, 'online_users'));
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
@@ -396,7 +399,6 @@
                 }
             });
 
-            // 3. Vigilante de notificaciones privadas
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
@@ -501,13 +503,25 @@
             input.focus();
         }
 
-        // --- PARSER DE MARKDOWN SIMPLE (Negrita y Cursiva) ---
+        // --- BOTÓN RÁPIDO DE FORMATO (NEGRITA / CURSIVA) ---
+        window.insertFormat = function(wrapperStart, wrapperEnd) {
+            const input = document.getElementById('messageInput');
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const text = input.value;
+            
+            input.value = text.substring(0, start) + wrapperStart + text.substring(start, end) + wrapperEnd + text.substring(end);
+            input.focus();
+            input.setSelectionRange(start + wrapperStart.length, end + wrapperStart.length);
+        }
+
+        // --- PARSER DE MARKDOWN MEJORADO Y VISIBLE ---
         function parseMarkdown(text) {
             let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            // Negrita: **texto**
-            safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="font-black">$1</strong>');
-            // Cursiva: *texto*
-            safe = safe.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+            // Negrita con clase forzada
+            safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="chat-bold text-white">$1</strong>');
+            // Cursiva con clase forzada
+            safe = safe.replace(/\*(.*?)\*/g, '<em class="chat-italic opacity-90">$1</em>');
             return safe;
         }
 
@@ -665,7 +679,6 @@
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
 
-                        // Botón de eliminar propio mensaje en Inbox
                         if (isMe) {
                             innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-2 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>`;
                         }
