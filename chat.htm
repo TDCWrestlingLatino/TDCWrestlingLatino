@@ -302,7 +302,6 @@
             }
         });
 
-        // Mostrar elementos exclusivos de Admin si el usuario actual es administrador
         function checkAdminUIs() {
             if(currentUser.isAdmin) {
                 document.getElementById('btnAdminClear').classList.remove('hidden');
@@ -394,7 +393,6 @@
             }
         }
 
-        // Botón exclusivo de Admin para vaciar todo el chat
         function clearAllMessages() {
             if(!currentUser.isAdmin) return;
             if(confirm('⚠️ ¿Estás seguro de limpiar todo el ring? Se borrarán todos los comentarios y el chat quedará en cero.')) {
@@ -475,6 +473,15 @@
             return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
         }
 
+        // Función inteligente para detectar si el texto contiene UNICAMENTE emojis
+        function isOnlyEmojis(text) {
+            const trimmed = text.trim();
+            if (trimmed.length === 0 || trimmed.length > 12) return false;
+            // Expresión regular universal para validar caracteres puramente de emojis
+            const emojiRegex = /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u;
+            return emojiRegex.test(trimmed);
+        }
+
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
@@ -549,7 +556,12 @@
 
                 let contentHtml = '';
                 if(msg.text) {
-                    contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: '${msg.font}', sans-serif;">${msg.text}</p>`;
+                    // Si el mensaje son solo emojis, se muestran EN GRANDE (text-5xl)
+                    if (isOnlyEmojis(msg.text)) {
+                        contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
+                    } else {
+                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: '${msg.font}', sans-serif;">${msg.text}</p>`;
+                    }
                 }
                 if(msg.image) {
                     contentHtml += `<img src="${msg.image}" class="max-w-[320px] max-h-[280px] rounded-2xl mt-2 border border-slate-700 object-cover shadow-xl">`;
