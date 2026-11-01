@@ -31,7 +31,7 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans transition-all duration-300" id="bodyTheme">
 
     <!-- MODAL DE INGRESO (BIENVENIDA / NICK / AVATAR) -->
-    <div id="loginModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
                 <h2 class="text-2xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC HD Deportes!</h2>
@@ -84,6 +84,9 @@
             <button onclick="togglePanel('configPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
                 <span>⚙️</span>
                 <span class="hidden sm:inline">Ajustes</span>
+            </button>
+            <button onclick="logoutUser()" class="bg-rose-950 hover:bg-rose-900 px-2.5 py-1.5 rounded-xl text-xs font-bold border border-rose-700 text-rose-200 transition-all cursor-pointer" title="Cambiar Perfil">
+                <span>🚪</span>
             </button>
         </div>
     </header>
@@ -174,7 +177,6 @@
 
             <!-- BANDEJA DE EMOJIS RÁPIDOS (Principales adelante + Selector Masivo) -->
             <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
-                <!-- Emojis principales al frente -->
                 <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Fuego">🔥</button>
                 <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Like">👍</button>
                 <button onclick="insertEmoji('😂')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Risa">😂</button>
@@ -186,7 +188,6 @@
                 <button onclick="insertEmoji('💪')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Fuerza">💪</button>
                 <button onclick="insertEmoji('🚀')" class="text-base hover:scale-125 transition-transform cursor-pointer" title="Cohete">🚀</button>
                 
-                <!-- Selector desplegable de más de 30+ emojis adicionales -->
                 <select onchange="insertEmoji(this.value); this.selectedIndex=0;" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs text-cyan-400 focus:outline-none cursor-pointer shrink-0">
                     <option value="">➕ Más Emojis...</option>
                     <option value="💀">💀 Calavera</option>
@@ -214,7 +215,6 @@
                     <option value="🤔">🤔 Pensativo</option>
                     <option value="🥳">🥳 Fiesta</option>
                     <option value="🐯">🐯 Tigre</option>
-                    <option value="⚡">⚡ Energía</option>
                 </select>
             </div>
 
@@ -247,7 +247,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONTROL Y LÓGICA DEL CHAT -->
+    <!-- SCRIPT DE CONTROL Y LÓGICA CON LOCALSTORAGE PERMANENTE -->
     <script>
         let currentUser = {
             nick: '',
@@ -259,6 +259,39 @@
         };
 
         let messages = [];
+
+        // Comprobar si ya hay una sesión guardada al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('tdc_chat_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    document.getElementById('loginModal').classList.add('hidden');
+                    // Sincronizar controles con valores guardados
+                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
+                    document.getElementById('selectFont').value = currentUser.font || 'Inter';
+                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
+                    
+                    messages.push({
+                        id: Date.now(),
+                        sender: 'SISTEMA TDC',
+                        avatar: 'https://ui-avatars.com/api/?name=TDC&background=ff0055&color=fff',
+                        text: `¡Bienvenido de vuelta al ring, ${currentUser.nick}! Tu sesión está guardada.`,
+                        textColor: '#00ffcc',
+                        font: 'Inter',
+                        fontSize: 'text-sm',
+                        isAdmin: true,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    });
+                    renderMessages();
+                } catch(e) {
+                    localStorage.removeItem('tdc_chat_user');
+                    document.getElementById('loginModal').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('loginModal').classList.remove('hidden');
+            }
+        });
 
         function toggleAdminCode(checkbox) {
             const container = document.getElementById('adminCodeContainer');
@@ -317,6 +350,8 @@
         }
 
         function finalizeLogin() {
+            // Guardar en localStorage para que sea permanente al actualizar
+            localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             messages.push({
                 id: Date.now(),
@@ -330,6 +365,13 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             });
             renderMessages();
+        }
+
+        function logoutUser() {
+            if(confirm('¿Deseas cerrar sesión y cambiar tu apodo/foto de perfil?')) {
+                localStorage.removeItem('tdc_chat_user');
+                location.reload();
+            }
         }
 
         // Skins Radicales
@@ -384,6 +426,8 @@
             currentUser.textColor = document.getElementById('pickerTextColor').value;
             currentUser.font = document.getElementById('selectFont').value;
             currentUser.fontSize = document.getElementById('selectFontSize').value;
+            // Actualizar también en localStorage
+            localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
         }
 
         function togglePanel(panelId) {
@@ -471,7 +515,6 @@
 
             messages.forEach(msg => {
                 const div = document.createElement('div');
-                // Línea divisoria nítida entre cada mensaje
                 div.className = "flex items-start space-x-3 py-3 px-2 border-b border-white/20 hover:bg-black/20 rounded-xl transition-all group";
 
                 const canDelete = currentUser.isAdmin || msg.sender === currentUser.nick;
