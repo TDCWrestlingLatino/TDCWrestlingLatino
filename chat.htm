@@ -80,8 +80,8 @@
             </div>
         </div>
         <div class="flex items-center space-x-1.5 shrink-0">
-            <!-- BOTÓN DE INBOX DISPONIBLE PARA TODOS LOS USUARIOS -->
-            <button onclick="openInboxWith(null)" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-200 px-2.5 py-1.5 rounded-lg border border-cyan-500/50 text-xs font-bold cursor-pointer transition-all flex items-center space-x-1 shadow" title="Centro de Mensajería">
+            <!-- BOTÓN DE INBOX DISPONIBLE PARA TODOS -->
+            <button onclick="openInboxModalMain()" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-200 px-2.5 py-1.5 rounded-lg border border-cyan-500/50 text-xs font-bold cursor-pointer transition-all flex items-center space-x-1 shadow" title="Centro de Mensajería">
                 <span>📬</span>
                 <span>Inbox</span>
             </button>
@@ -214,42 +214,45 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX ESTILO DISCORD / SIDEBAR ANCHO -->
-    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl p-5 shadow-2xl flex flex-col h-[88vh]">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3 shrink-0">
-                <h3 class="text-sm font-black text-cyan-400 flex items-center space-x-2">
+    <!-- MODAL DE INBOX EQUILIBRADO Y CÓMODO (TAMAÑO PERFECTO) -->
+    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-3xl rounded-2xl p-4 shadow-2xl flex flex-col h-[82vh]">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 shrink-0">
+                <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-2">
                     <span>📬</span>
                     <span>Centro de Mensajería Privada (Inbox)</span>
                 </h3>
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer transition-all">✕ Cerrar</button>
             </div>
             
-            <div class="flex-1 flex flex-row overflow-hidden pt-3 gap-3 min-h-0">
-                <!-- COLUMNA IZQUIERDA: LISTA DE CONTACTOS -->
-                <div class="w-64 bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex flex-col overflow-y-auto custom-scrollbar shrink-0">
-                    <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 px-1">Conversaciones</span>
-                    <div id="inboxConversationsList" class="space-y-1.5">
-                        <p class="text-xs text-slate-500 p-3 text-center">No hay chats aún. Escribe a alguien en el chat general.</p>
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden pt-2.5 gap-2.5 min-h-0">
+                <!-- LISTA DE CONTACTOS COMPACTA Y ELEGANTE -->
+                <div class="w-full md:w-56 bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 flex flex-col overflow-y-auto custom-scrollbar shrink-0 max-h-36 md:max-h-none">
+                    <div class="flex items-center justify-between mb-1.5 px-1">
+                        <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Conversaciones</span>
+                        <button onclick="startNewChatPrompt()" class="text-[10px] text-cyan-400 hover:underline font-bold">+ Nuevo</button>
+                    </div>
+                    <div id="inboxConversationsList" class="space-y-1">
+                        <p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún.</p>
                     </div>
                 </div>
 
-                <!-- COLUMNA DERECHA: CHAT PRIVADO A PANTALLA COMPLETA -->
+                <!-- ÁREA DE CHAT PRIVADO ESPACIOSA Y CÓMODA -->
                 <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800 rounded-xl overflow-hidden min-h-0">
-                    <div id="inboxChatHeader" class="bg-slate-900 px-4 py-3 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0 flex items-center space-x-2">
+                    <div id="inboxChatHeader" class="bg-slate-900 px-3.5 py-2.5 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0 flex items-center space-x-2">
                         <span>💬</span>
-                        <span>Selecciona un chat de la izquierda</span>
+                        <span>Selecciona o inicia un chat privado</span>
                     </div>
-                    <div id="inboxContent" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
-                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar a chatear en privado.</div>
+                    <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-2.5 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
+                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la izquierda o busca a alguien para escribirle.</div>
                     </div>
-                    <div class="p-3 border-t border-slate-800 flex items-center space-x-2 shrink-0 bg-slate-900/90">
+                    <div class="p-2.5 border-t border-slate-800 flex items-center space-x-2 shrink-0 bg-slate-900/90">
                         <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
                             <span class="text-xs">📷</span>
                             <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                         </label>
-                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
+                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
                     </div>
                 </div>
             </div>
@@ -450,6 +453,7 @@
                                 localStorage.setItem("notified_" + notifId, "true");
                                 if (currentTargetUser !== lastMsg.sender) {
                                     if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Abrir chat?`)) {
+                                        openInboxModalMain();
                                         openInboxWith(lastMsg.sender);
                                     }
                                 }
@@ -581,7 +585,7 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
-        // DETECCIÓN BLINDADA DE NÚMEROS: Si el mensaje contiene sólo dígitos o símbolos numéricos
+        // DETECCIÓN TOTAL DE NÚMEROS: Si el texto limpio solo contiene dígitos o espacios
         function isOnlyNumbers(text) {
             const clean = text.replace(/<[^>]*>/g, '').trim();
             return /^[\d\s]+$/.test(clean) && clean.length > 0;
@@ -662,11 +666,13 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        // SOLUCIÓN RADICAL PARA NÚMEROS: Forzamos Inter limpia si son solo números para evitar que se disparen
+                        // SOLUCIÓN DEFINITIVA A NÚMEROS: Si son solo números, anulamos la fuente rara y usamos Inter limpia normal
                         const isNum = isOnlyNumbers(msg.text);
                         const fontFamily = isNum ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
+                        const fontSizeClass = isNum ? 'text-xs' : (msg.fontSize || 'text-xs');
                         const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily}; font-weight: ${isNum ? '700' : 'normal'};">${formattedText}</p>`;
+                        
+                        contentHtml += `<p class="chat-message-text ${fontSizeClass} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -700,7 +706,22 @@
 
         window.promptOpenInbox = function(targetUser) {
             if (targetUser === currentUser.nick) return;
+            openInboxModalMain();
             openInboxWith(targetUser);
+        }
+
+        window.openInboxModalMain = function() {
+            document.getElementById('inboxModal').classList.remove('hidden');
+            if(!currentTargetUser) {
+                openInboxWith(null);
+            }
+        }
+
+        window.startNewChatPrompt = function() {
+            const recipient = prompt("Ingresa el apodo exacto del usuario con quien deseas chatear en privado:");
+            if(recipient && recipient.trim() !== "" && recipient.trim() !== currentUser.nick) {
+                openInboxWith(recipient.trim());
+            }
         }
 
         function loadConversationsList(allRooms) {
@@ -719,13 +740,13 @@
             });
 
             if (contacts.size === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-500 p-3 text-center">No hay chats aún. Dale clic al nombre de alguien en el chat general para iniciar.</p>`;
+                listContainer.innerHTML = `<p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún. Dale a "+ Nuevo" o haz clic en un usuario del chat general.</p>`;
                 return;
             }
 
             contacts.forEach(contact => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer truncate flex items-center space-x-2 ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-900 hover:bg-slate-800 text-slate-300'}`;
+                btn.className = `w-full text-left px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer truncate flex items-center space-x-2 ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300'}`;
                 btn.innerHTML = `<span>💬</span><span class="truncate">${contact}</span>`;
                 btn.onclick = () => openInboxWith(contact);
                 listContainer.appendChild(btn);
@@ -736,7 +757,7 @@
             document.getElementById('inboxModal').classList.remove('hidden');
             
             if (!targetUser) {
-                document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Selecciona un chat de la izquierda o escribe en el chat general.</span>`;
+                document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Selecciona un chat de la izquierda o dale a "+ Nuevo"</span>`;
                 document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la lista para comenzar a chatear en privado.</div>`;
                 currentTargetUser = null;
                 activeUsersKey = null;
@@ -771,7 +792,7 @@
                         if (msg.text) {
                             innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         }
-                        if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[200px] rounded-lg mt-1 border border-slate-700 object-cover">`;
+                        if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[180px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
                         if (isMe) {
                             innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-1 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">🗑️</button>`;
