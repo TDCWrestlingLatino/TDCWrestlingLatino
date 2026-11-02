@@ -20,7 +20,7 @@
             }
         }
     </script>
-    <!-- Google Fonts combinadas -->
+    <!-- Google Fonts completas (las 15 de regreso) -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
@@ -29,6 +29,8 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 4px; }
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
+        /* Corrección para que los números no se disparen de tamaño en fuentes estilizadas */
+        .chat-message-text { font-variant-numeric: normal; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
@@ -117,7 +119,7 @@
             </div>
         </div>
 
-        <!-- PANEL DE AJUSTES -->
+        <!-- PANEL DE AJUSTES (LAS 15 FUENTES RESTAURADAS) -->
         <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚙️ Ajustes Personales</h3>
@@ -134,11 +136,18 @@
                         <option value="Inter">Inter (Predeterminada)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
                         <option value="Bebas Neue">Bebas Neue (Titular)</option>
+                        <option value="Bungee">Bungee</option>
+                        <option value="Creepster">Creepster (Terror)</option>
+                        <option value="Dancing Script">Dancing Script</option>
+                        <option value="Eater">Eater</option>
+                        <option value="Fredoka One">Fredoka One</option>
+                        <option value="Monoton">Monoton</option>
                         <option value="Permanent Marker">Permanent Marker</option>
-                        <option value="Impact">Impact (Pesada)</option>
+                        <option value="Press Start 2P">Press Start 2P (Pixel)</option>
+                        <option value="Rock Salt">Rock Salt</option>
                         <option value="Russo One">Russo One</option>
-                        <option value="Bangers">Bangers</option>
                         <option value="VT323">VT323 (Retro)</option>
+                        <option value="Wallpoet">Wallpoet</option>
                     </select>
                 </div>
                 <div>
@@ -167,7 +176,7 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR DE MENSAJES (DE ABAJO HACIA ARRIBA: FLEX-COL-REVERSE CON SCROLL INTERNO) -->
+            <!-- CONTENEDOR DE MENSAJES -->
             <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-2.5 custom-scrollbar min-h-0">
             </div>
 
@@ -176,7 +185,7 @@
                 🔒 Chat cerrado temporalmente por el Administrador.
             </div>
 
-            <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO (FIJOS ABAJO) -->
+            <!-- EMOJI BAR & BOTONES DE FORMATO -->
             <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0 transition-all">
                 <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Negrita"><b>B</b></button>
                 <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Cursiva"><i>I</i></button>
@@ -190,7 +199,7 @@
                 <button onclick="insertEmoji('🚀')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🚀</button>
             </div>
 
-            <!-- INPUT BAR (FIJO Y ANCLADO ABAJO) -->
+            <!-- INPUT BAR -->
             <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-2 flex items-center space-x-1.5 shrink-0 transition-all">
                 <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center shrink-0">
                     <span class="text-xs">📷</span>
@@ -622,12 +631,14 @@
                     } else {
                         const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
                         const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        // Añadimos la clase chat-message-text para normalizar el tamaño de los números en las fuentes
+                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
                     contentHtml += `<img src="${msg.image}" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow">`;
                 }
+                // YouTube al 100% del ancho exacto del chat (w-full con contenedor aspect-video)
                 if(msg.youtube) {
                     contentHtml += `
                         <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
