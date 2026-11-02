@@ -80,6 +80,11 @@
             </div>
         </div>
         <div class="flex items-center space-x-1.5 shrink-0">
+            <!-- BOTÓN DE INBOX DISPONIBLE PARA TODOS LOS USUARIOS -->
+            <button onclick="openInboxWith(null)" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-200 px-2.5 py-1.5 rounded-lg border border-cyan-500/50 text-xs font-bold cursor-pointer transition-all flex items-center space-x-1 shadow" title="Centro de Mensajería">
+                <span>📬</span>
+                <span>Inbox</span>
+            </button>
             <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Abrir/Cerrar Sala">
                 <span id="roomStatusIcon">🔒</span>
             </button>
@@ -169,11 +174,7 @@
                     <span id="roomStatusIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                     <span class="font-bold text-slate-300 truncate" id="roomTitle">Chat en vivo TDC</span>
                 </div>
-                <div class="shrink-0 flex items-center space-x-2">
-                    <button onclick="openInboxWith(null)" class="bg-cyan-900/60 hover:bg-cyan-800 text-cyan-200 px-2.5 py-1 rounded-lg border border-cyan-500/40 text-[11px] font-bold cursor-pointer transition-all flex items-center space-x-1">
-                        <span>📬</span>
-                        <span>Inbox</span>
-                    </button>
+                <div class="shrink-0">
                     <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
                 </div>
             </div>
@@ -229,7 +230,7 @@
                 <div class="w-64 bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex flex-col overflow-y-auto custom-scrollbar shrink-0">
                     <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 px-1">Conversaciones</span>
                     <div id="inboxConversationsList" class="space-y-1.5">
-                        <p class="text-xs text-slate-500 p-3 text-center">No hay chats aún.</p>
+                        <p class="text-xs text-slate-500 p-3 text-center">No hay chats aún. Escribe a alguien en el chat general.</p>
                     </div>
                 </div>
 
@@ -428,9 +429,9 @@
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
-                if (!allRooms) return;
+                if (allRooms) loadConversationsList(allRooms);
 
-                loadConversationsList(allRooms);
+                if (!allRooms) return;
 
                 Object.keys(allRooms).forEach(roomKey => {
                     if (roomKey.includes(currentUser.nick)) {
@@ -580,10 +581,10 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
-        // Filtro estricto y limpio para detectar solo números
+        // DETECCIÓN BLINDADA DE NÚMEROS: Si el mensaje contiene sólo dígitos o símbolos numéricos
         function isOnlyNumbers(text) {
             const clean = text.replace(/<[^>]*>/g, '').trim();
-            return /^\d+$/.test(clean);
+            return /^[\d\s]+$/.test(clean) && clean.length > 0;
         }
 
         window.sendMessage = function() {
@@ -661,11 +662,11 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        // Si son solo números, forzamos Inter limpia para que no se deformen en fuentes raras
+                        // SOLUCIÓN RADICAL PARA NÚMEROS: Forzamos Inter limpia si son solo números para evitar que se disparen
                         const isNum = isOnlyNumbers(msg.text);
                         const fontFamily = isNum ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
                         const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily}; font-weight: ${isNum ? '400' : 'normal'};">${formattedText}</p>`;
+                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily}; font-weight: ${isNum ? '700' : 'normal'};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -704,6 +705,7 @@
 
         function loadConversationsList(allRooms) {
             const listContainer = document.getElementById('inboxConversationsList');
+            if(!listContainer) return;
             listContainer.innerHTML = '';
 
             let contacts = new Set();
@@ -717,7 +719,7 @@
             });
 
             if (contacts.size === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-500 p-3 text-center">No hay chats aún.</p>`;
+                listContainer.innerHTML = `<p class="text-xs text-slate-500 p-3 text-center">No hay chats aún. Dale clic al nombre de alguien en el chat general para iniciar.</p>`;
                 return;
             }
 
@@ -734,8 +736,8 @@
             document.getElementById('inboxModal').classList.remove('hidden');
             
             if (!targetUser) {
-                document.getElementById('inboxChatHeader.textContent') = "Selecciona un chat de la izquierda";
-                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar a chatear en privado.</div>`;
+                document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Selecciona un chat de la izquierda o escribe en el chat general.</span>`;
+                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la lista para comenzar a chatear en privado.</div>`;
                 currentTargetUser = null;
                 activeUsersKey = null;
                 return;
@@ -752,6 +754,7 @@
             inboxUnsubscribe = onValue(inboxRef, (snapshot) => {
                 const data = snapshot.val();
                 const inboxContainer = document.getElementById('inboxContent');
+                if(!inboxContainer) return;
                 inboxContainer.innerHTML = '';
 
                 if (data) {
@@ -766,9 +769,7 @@
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${msg.sender}:</strong>`;
                         if (msg.text) {
-                            const isNum = isOnlyNumbers(msg.text);
-                            const fontFamily = isNum ? 'Inter, sans-serif' : 'Inter, sans-serif';
-                            innerHtml += `<span style="font-family: ${fontFamily};">${parseMarkdown(msg.text)}</span>`;
+                            innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         }
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[200px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
