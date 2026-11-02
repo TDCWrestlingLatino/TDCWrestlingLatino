@@ -409,28 +409,31 @@
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
 
-        // Ajuste ligero de números (las nuevas fuentes ya vienen bastante bien)
+        // Técnica agresiva: forzamos la fuente EXACTA en cada número
         const DIGIT_SCALE = {
             'Inter': 1,
-            'Bebas Neue': 0.92,
-            'Anton': 0.90,
-            'Oswald': 0.93,
-            'Archivo Black': 0.90,
-            'Russo One': 0.92,
-            'Teko': 0.93,
-            'Orbitron': 0.90,
-            'Exo 2': 0.95,
-            'Rajdhani': 0.93,
-            'Chakra Petch': 0.93,
+            'Bebas Neue': 0.90,
+            'Anton': 0.88,
+            'Oswald': 0.90,
+            'Archivo Black': 0.88,
+            'Russo One': 0.90,
+            'Teko': 0.90,
+            'Orbitron': 0.88,
+            'Exo 2': 0.93,
+            'Rajdhani': 0.90,
+            'Chakra Petch': 0.90,
             'Rubik': 1,
             'Outfit': 1,
             'Plus Jakarta Sans': 1,
             'Nunito': 1
         };
         function scaleDigits(html, fontName) {
-            const k = DIGIT_SCALE[fontName] ?? 0.95;
-            if (k === 1) return html;
-            return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em !important; font-family:inherit !important; color:inherit !important; line-height:1; vertical-align:baseline">${m}</span>`);
+            const k = DIGIT_SCALE[fontName] ?? 0.92;
+            const safeName = String(fontName || 'Inter').replace(/'/g, '');
+            // Forzamos nombre de fuente real + tamaño + color en cada número
+            return html.replace(/\d+/g, (m) => {
+                return `<span style="font-family: '${safeName}', sans-serif !important; font-size: ${k}em !important; color: inherit !important; line-height: 1 !important; vertical-align: baseline !important;">${m}</span>`;
+            });
         }
         function isValidYouTubeEmbed(url) {
             return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
@@ -892,7 +895,7 @@
                     if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else {
-                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor}; font-family: ${fontFamily};">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
                     }
                 }
                 const imageSrc = safeUrl(msg.image);
@@ -911,7 +914,7 @@
                     <img src="${esc(avatar)}" class="w-9 h-9 rounded-xl object-cover border border-cyan-400 shrink-0 shadow">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-1.5">
-                            <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily};" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
+                            <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily} !important;" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
                             ${adminBadge}
                             <span class="text-[9px] text-slate-400 shrink-0">${esc(msg.time)}</span>
                         </div>
