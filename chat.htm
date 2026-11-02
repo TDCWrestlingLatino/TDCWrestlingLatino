@@ -409,24 +409,30 @@
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
 
-        // Algunas tipografías dibujan los números mucho más grandes (o más chicos) que sus letras.
-        // Se ajusta el tamaño de los dígitos para que guarden mejor proporción con las letras.
+        // Ajuste universal de números: casi todas las fuentes decorativas dibujan los dígitos demasiado grandes.
+        // Se aplica una reducción fuerte para que los números respeten mejor el tamaño de las letras.
         const DIGIT_SCALE = {
-            'Dancing Script': 0.72,
-            'Eater': 1.22,
-            'Permanent Marker': 0.82,
-            'Rock Salt': 0.78,
-            'Creepster': 0.88,
-            'Monoton': 0.90,
-            'Bungee': 0.93,
-            'Fredoka One': 0.95,
-            'Wallpoet': 0.92
+            'Inter': 1,
+            'Orbitron': 0.88,
+            'Bebas Neue': 0.78,
+            'Bungee': 0.80,
+            'Creepster': 0.70,
+            'Dancing Script': 0.60,
+            'Eater': 1.12,
+            'Fredoka One': 0.80,
+            'Monoton': 0.72,
+            'Permanent Marker': 0.68,
+            'Press Start 2P': 0.85,
+            'Rock Salt': 0.62,
+            'Russo One': 0.84,
+            'VT323': 0.90,
+            'Wallpoet': 0.75
         };
         function scaleDigits(html, fontName) {
-            const k = DIGIT_SCALE[fontName];
-            if (!k) return html;
-            // Escala solo los números reales (no entidades HTML)
-            return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em; line-height:1">${m}</span>`);
+            // Si la fuente no está mapeada, aplicamos reducción general de seguridad
+            const k = DIGIT_SCALE[fontName] ?? 0.78;
+            if (k === 1) return html;
+            return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em; line-height:1; vertical-align:baseline">${m}</span>`);
         }
         function isValidYouTubeEmbed(url) {
             return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
@@ -1013,10 +1019,8 @@
                         }
                         if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
-                        // El dueño del mensaje o cualquier admin puede borrar
-                        if (isMe || currentUser.isAdmin) {
-                            innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="msg-del absolute -left-5 top-1 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>`;
-                        }
+                        // Cualquiera puede borrar cualquier mensaje del inbox
+                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="msg-del absolute -left-6 top-1 text-[10px] text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer font-bold" title="Borrar mensaje">Borrar</button>`;
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
