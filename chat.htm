@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>TDC Wrestling Latino v3 - PRUEBA</title>
+    <title>TDC Wrestling Latino Chat Oficial</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -21,7 +21,7 @@
         }
     </script>
     <!-- Google Fonts completas -->
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Chakra+Petch:wght@500;700&family=Exo+2:wght@500;700&family=Inter:wght@400;700;900&family=Nunito:wght@600;800&family=Orbitron:wght@600;700&family=Oswald:wght@500;700&family=Outfit:wght@500;700&family=Plus+Jakarta+Sans:wght@500;700&family=Rajdhani:wght@600;700&family=Rubik:wght@500;700&family=Russo+One&family=Teko:wght@500;600&display=swap" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; overflow: hidden; -webkit-text-size-adjust: 100%; }
         /* Al llegar al final del chat no se mueve la página de Blogger que está detrás */
@@ -43,7 +43,7 @@
     <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex overflow-y-auto p-3">
         <div class="m-auto bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino v3!</h2>
+                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
                 <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.</p>
             </div>
             
@@ -81,8 +81,8 @@
         <div class="flex items-center space-x-2 min-w-0">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs shadow-md shrink-0">TDC</div>
             <div class="min-w-0">
-                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino v3</h1>
-                <p id="appSubtitle" class="text-[9px] text-amber-400 font-bold truncate">PRUEBA - Código Nuevo Cargado</p>
+                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino</h1>
+                <p id="appSubtitle" class="text-[9px] text-slate-400 truncate">Chat Oficial en Vivo</p>
             </div>
         </div>
         <div class="flex items-center space-x-1.5 shrink-0">
@@ -141,21 +141,21 @@
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
                     <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
-                        <option value="Inter">Inter (Predeterminada)</option>
+                        <option value="Inter">Inter (Limpia)</option>
+                        <option value="Bebas Neue">Bebas Neue (Impact)</option>
+                        <option value="Anton">Anton (Extra Bold)</option>
+                        <option value="Oswald">Oswald (Condensada)</option>
+                        <option value="Archivo Black">Archivo Black (Pesada)</option>
+                        <option value="Russo One">Russo One (Fuerte)</option>
+                        <option value="Teko">Teko (Deportiva)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
-                        <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Bungee">Bungee</option>
-                        <option value="Creepster">Creepster (Terror)</option>
-                        <option value="Dancing Script">Dancing Script</option>
-                        <option value="Eater">Eater</option>
-                        <option value="Fredoka One">Fredoka One</option>
-                        <option value="Monoton">Monoton</option>
-                        <option value="Permanent Marker">Permanent Marker</option>
-                        <option value="Press Start 2P">Press Start 2P (Pixel)</option>
-                        <option value="Rock Salt">Rock Salt</option>
-                        <option value="Russo One">Russo One</option>
-                        <option value="VT323">VT323 (Retro)</option>
-                        <option value="Wallpoet">Wallpoet</option>
+                        <option value="Exo 2">Exo 2 (Tech)</option>
+                        <option value="Rajdhani">Rajdhani (Tech Condensada)</option>
+                        <option value="Chakra Petch">Chakra Petch (Cyber)</option>
+                        <option value="Rubik">Rubik (Moderna)</option>
+                        <option value="Outfit">Outfit (Elegante)</option>
+                        <option value="Plus Jakarta Sans">Plus Jakarta Sans (Premium)</option>
+                        <option value="Nunito">Nunito (Redondeada)</option>
                     </select>
                 </div>
                 <div>
@@ -405,34 +405,31 @@
         function safeColor(color) {
             return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#ffffff';
         }
-        const ALLOWED_FONTS = ['Inter', 'Orbitron', 'Bebas Neue', 'Bungee', 'Creepster', 'Dancing Script', 'Eater', 'Fredoka One', 'Monoton', 'Permanent Marker', 'Press Start 2P', 'Rock Salt', 'Russo One', 'VT323', 'Wallpoet'];
+        const ALLOWED_FONTS = ['Inter', 'Bebas Neue', 'Anton', 'Oswald', 'Archivo Black', 'Russo One', 'Teko', 'Orbitron', 'Exo 2', 'Rajdhani', 'Chakra Petch', 'Rubik', 'Outfit', 'Plus Jakarta Sans', 'Nunito'];
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
 
-        // Ajuste universal de números: casi todas las fuentes decorativas dibujan los dígitos demasiado grandes.
-        // Se aplica una reducción fuerte para que los números respeten mejor el tamaño de las letras.
+        // Ajuste ligero de números (las nuevas fuentes ya vienen bastante bien)
         const DIGIT_SCALE = {
             'Inter': 1,
-            'Orbitron': 0.88,
-            'Bebas Neue': 0.78,
-            'Bungee': 0.80,
-            'Creepster': 0.70,
-            'Dancing Script': 0.60,
-            'Eater': 1.12,
-            'Fredoka One': 0.80,
-            'Monoton': 0.72,
-            'Permanent Marker': 0.68,
-            'Press Start 2P': 0.85,
-            'Rock Salt': 0.62,
-            'Russo One': 0.84,
-            'VT323': 0.90,
-            'Wallpoet': 0.75
+            'Bebas Neue': 0.92,
+            'Anton': 0.90,
+            'Oswald': 0.93,
+            'Archivo Black': 0.90,
+            'Russo One': 0.92,
+            'Teko': 0.93,
+            'Orbitron': 0.90,
+            'Exo 2': 0.95,
+            'Rajdhani': 0.93,
+            'Chakra Petch': 0.93,
+            'Rubik': 1,
+            'Outfit': 1,
+            'Plus Jakarta Sans': 1,
+            'Nunito': 1
         };
         function scaleDigits(html, fontName) {
-            // Si la fuente no está mapeada, aplicamos reducción general de seguridad
-            const k = DIGIT_SCALE[fontName] ?? 0.78;
+            const k = DIGIT_SCALE[fontName] ?? 0.95;
             if (k === 1) return html;
-            // Forzamos herencia de fuente y color para que los números respeten el estilo
             return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em !important; font-family:inherit !important; color:inherit !important; line-height:1; vertical-align:baseline">${m}</span>`);
         }
         function isValidYouTubeEmbed(url) {
