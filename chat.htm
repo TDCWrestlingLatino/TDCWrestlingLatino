@@ -213,9 +213,9 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX AMPLIADO Y CÓMODO -->
+    <!-- MODAL DE INBOX ESTILO DISCORD / SIDEBAR ANCHO -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl p-5 shadow-2xl flex flex-col h-[85vh]">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl p-5 shadow-2xl flex flex-col h-[88vh]">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 shrink-0">
                 <h3 class="text-sm font-black text-cyan-400 flex items-center space-x-2">
                     <span>📬</span>
@@ -224,30 +224,31 @@
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer transition-all">✕ Cerrar</button>
             </div>
             
-            <div class="flex-1 flex flex-col md:flex-row overflow-hidden pt-3 gap-3 min-h-0">
-                <!-- LISTA DE CONVERSACIONES (ANCHA Y CÓMODA) -->
-                <div class="w-full md:w-1/3 bg-slate-950/60 border border-slate-800 rounded-xl p-3 flex flex-col overflow-y-auto custom-scrollbar shrink-0">
+            <div class="flex-1 flex flex-row overflow-hidden pt-3 gap-3 min-h-0">
+                <!-- COLUMNA IZQUIERDA: LISTA DE CONTACTOS -->
+                <div class="w-64 bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex flex-col overflow-y-auto custom-scrollbar shrink-0">
                     <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 px-1">Conversaciones</span>
                     <div id="inboxConversationsList" class="space-y-1.5">
                         <p class="text-xs text-slate-500 p-3 text-center">No hay chats aún.</p>
                     </div>
                 </div>
 
-                <!-- ÁREA DE CHAT PRIVADO AMPLIADA -->
+                <!-- COLUMNA DERECHA: CHAT PRIVADO A PANTALLA COMPLETA -->
                 <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800 rounded-xl overflow-hidden min-h-0">
-                    <div id="inboxChatHeader" class="bg-slate-900 px-3 py-2.5 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0">
-                        Selecciona un chat a la izquierda
+                    <div id="inboxChatHeader" class="bg-slate-900 px-4 py-3 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0 flex items-center space-x-2">
+                        <span>💬</span>
+                        <span>Selecciona un chat de la izquierda</span>
                     </div>
-                    <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
-                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar.</div>
+                    <div id="inboxContent" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
+                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar a chatear en privado.</div>
                     </div>
-                    <div class="p-2.5 border-t border-slate-800 flex items-center space-x-2 shrink-0 bg-slate-900/80">
+                    <div class="p-3 border-t border-slate-800 flex items-center space-x-2 shrink-0 bg-slate-900/90">
                         <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
                             <span class="text-xs">📷</span>
                             <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                         </label>
-                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
+                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
                     </div>
                 </div>
             </div>
@@ -579,9 +580,10 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
-        // Filtro estricto para detectar números puros y evitar errores de fuentes
+        // Filtro estricto y limpio para detectar solo números
         function isOnlyNumbers(text) {
-            return /^\d+$/.test(text.trim());
+            const clean = text.replace(/<[^>]*>/g, '').trim();
+            return /^\d+$/.test(clean);
         }
 
         window.sendMessage = function() {
@@ -659,10 +661,11 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        // Si el texto es puramente numérico, bloqueamos la fuente rara y usamos Inter limpia para evitar deformaciones
-                        const fontFamily = isOnlyNumbers(msg.text) ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
+                        // Si son solo números, forzamos Inter limpia para que no se deformen en fuentes raras
+                        const isNum = isOnlyNumbers(msg.text);
+                        const fontFamily = isNum ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
                         const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily}; font-weight: ${isNum ? '400' : 'normal'};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -731,7 +734,7 @@
             document.getElementById('inboxModal').classList.remove('hidden');
             
             if (!targetUser) {
-                document.getElementById('inboxChatHeader').textContent = "Selecciona un chat de la lista izquierda";
+                document.getElementById('inboxChatHeader.textContent') = "Selecciona un chat de la izquierda";
                 document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar a chatear en privado.</div>`;
                 currentTargetUser = null;
                 activeUsersKey = null;
@@ -739,7 +742,7 @@
             }
 
             currentTargetUser = targetUser;
-            document.getElementById('inboxChatHeader').textContent = `📬 Chat Privado con: ${targetUser}`;
+            document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Chat Privado con: ${targetUser}</span>`;
 
             activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
             const inboxRef = ref(db, `private_chats/${activeUsersKey}`);
@@ -762,7 +765,11 @@
                         p.className = `p-2.5 rounded-xl text-xs w-full max-w-[85%] break-words group relative shrink-0 ${isMe ? 'bg-cyan-950/85 text-cyan-200 ml-auto border border-cyan-500/40 shadow' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${msg.sender}:</strong>`;
-                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
+                        if (msg.text) {
+                            const isNum = isOnlyNumbers(msg.text);
+                            const fontFamily = isNum ? 'Inter, sans-serif' : 'Inter, sans-serif';
+                            innerHtml += `<span style="font-family: ${fontFamily};">${parseMarkdown(msg.text)}</span>`;
+                        }
                         if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[200px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
                         if (isMe) {
