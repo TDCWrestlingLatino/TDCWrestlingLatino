@@ -20,7 +20,7 @@
             }
         }
     </script>
-    <!-- Google Fonts completas (las 15 de regreso) -->
+    <!-- Google Fonts completas -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
@@ -29,8 +29,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 4px; }
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
-        /* Corrección para que los números no se disparen de tamaño en fuentes estilizadas */
-        .chat-message-text { font-variant-numeric: normal; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
@@ -119,7 +117,7 @@
             </div>
         </div>
 
-        <!-- PANEL DE AJUSTES (LAS 15 FUENTES RESTAURADAS) -->
+        <!-- PANEL DE AJUSTES -->
         <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚙️ Ajustes Personales</h3>
@@ -132,23 +130,23 @@
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
- <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
-    <option value="Inter">Inter (Predeterminada)</option>
-    <option value="Orbitron">Orbitron (Futurista)</option>
-    <option value="Bebas Neue">Bebas Neue (Titular)</option>
-    <option value="Bungee">Bungee</option>
-    <option value="Creepster">Creepster (Terror)</option>
-    <option value="Dancing Script">Dancing Script</option>
-    <option value="Eater">Eater</option>
-    <option value="Fredoka One">Fredoka One</option>
-    <option value="Monoton">Monoton</option>
-    <option value="Permanent Marker">Permanent Marker</option>
-    <option value="Press Start 2P">Press Start 2P (Pixel)</option>
-    <option value="Rock Salt">Rock Salt</option>
-    <option value="Russo One">Russo One</option>
-    <option value="VT323">VT323 (Retro)</option>
-    <option value="Wallpoet">Wallpoet</option>
-</select>
+                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <option value="Inter">Inter (Predeterminada)</option>
+                        <option value="Orbitron">Orbitron (Futurista)</option>
+                        <option value="Bebas Neue">Bebas Neue (Titular)</option>
+                        <option value="Bungee">Bungee</option>
+                        <option value="Creepster">Creepster (Terror)</option>
+                        <option value="Dancing Script">Dancing Script</option>
+                        <option value="Eater">Eater</option>
+                        <option value="Fredoka One">Fredoka One</option>
+                        <option value="Monoton">Monoton</option>
+                        <option value="Permanent Marker">Permanent Marker</option>
+                        <option value="Press Start 2P">Press Start 2P (Pixel)</option>
+                        <option value="Rock Salt">Rock Salt</option>
+                        <option value="Russo One">Russo One</option>
+                        <option value="VT323">VT323 (Retro)</option>
+                        <option value="Wallpoet">Wallpoet</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tamaño:</label>
@@ -171,7 +169,8 @@
                     <span id="roomStatusIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                     <span class="font-bold text-slate-300 truncate" id="roomTitle">Chat en vivo TDC</span>
                 </div>
-                <div class="shrink-0">
+                <div class="shrink-0 flex items-center space-x-2">
+                    <button onclick="openInboxWith(null)" class="bg-cyan-900/60 hover:bg-cyan-800 text-cyan-200 px-2 py-0.5 rounded-lg border border-cyan-500/40 text-[10px] font-bold cursor-pointer transition-all">📬 Inbox</button>
                     <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
                 </div>
             </div>
@@ -211,22 +210,40 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX PRIVADO -->
+    <!-- MODAL DE INBOX PRIVADO CON LISTA DE CONTACTOS -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-4 shadow-2xl flex flex-col h-[75vh]">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-4 shadow-2xl flex flex-col h-[80vh]">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 shrink-0">
-                <h3 id="inboxTitle" class="text-xs font-black text-cyan-400 truncate">📬 Chat Privado</h3>
+                <h3 id="inboxTitle" class="text-xs font-black text-cyan-400 truncate">📬 Mensajes Privados (Inbox)</h3>
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
             </div>
-            <div id="inboxContent" class="flex-1 overflow-y-auto p-2.5 space-y-2.5 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
-            </div>
-            <div class="pt-2.5 border-t border-slate-800 flex items-center space-x-1.5 shrink-0">
-                <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
-                    <span class="text-xs">📷</span>
-                    <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
-                </label>
-                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-                <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shrink-0 cursor-pointer">Enviar</button>
+            
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden pt-2.5 gap-2.5 min-h-0">
+                <!-- LISTA DE CONVERSACIONES -->
+                <div class="w-full md:w-1/3 bg-slate-950/50 border border-slate-800 rounded-xl p-2 flex flex-col overflow-y-auto custom-scrollbar shrink-0">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Tus Conversaciones</span>
+                    <div id="inboxConversationsList" class="space-y-1">
+                        <p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún. Dale clic al nombre de alguien en el chat general.</p>
+                    </div>
+                </div>
+
+                <!-- ÁREA DE CHAT PRIVADO -->
+                <div class="flex-1 flex flex-col bg-slate-950/30 border border-slate-800 rounded-xl overflow-hidden min-h-0">
+                    <div id="inboxChatHeader" class="bg-slate-900/80 px-3 py-2 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0">
+                        Selecciona un chat a la izquierda
+                    </div>
+                    <div id="inboxContent" class="flex-1 overflow-y-auto p-2.5 space-y-2.5 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
+                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación para comenzar.</div>
+                    </div>
+                    <div class="p-2 border-t border-slate-800 flex items-center space-x-1.5 shrink-0 bg-slate-900/50">
+                        <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
+                            <span class="text-xs">📷</span>
+                            <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
+                        </label>
+                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shrink-0 cursor-pointer">Enviar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -401,10 +418,13 @@
                 if (counterElement) counterElement.textContent = activeCount;
             });
 
+            // ESCUCHADOR DE INBOX CON CONTROL DE NOTIFICACIONES ÚNICAS
             const privateChatsRef = ref(db, 'private_chats');
             onValue(privateChatsRef, (snapshot) => {
                 const allRooms = snapshot.val();
                 if (!allRooms) return;
+
+                loadConversationsList(allRooms);
 
                 Object.keys(allRooms).forEach(roomKey => {
                     if (roomKey.includes(currentUser.nick)) {
@@ -417,10 +437,10 @@
 
                         if (lastMsg && lastMsg.sender !== currentUser.nick) {
                             const notifId = roomKey + "_" + lastMsg.id;
-                            if (!window.notifiedMessages) window.notifiedMessages = {};
+                            const alreadyNotified = localStorage.getItem("notified_" + notifId);
                             
-                            if (!window.notifiedMessages[notifId]) {
-                                window.notifiedMessages[notifId] = true;
+                            if (!alreadyNotified) {
+                                localStorage.setItem("notified_" + notifId, "true");
                                 if (currentTargetUser !== lastMsg.sender) {
                                     if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Abrir chat?`)) {
                                         openInboxWith(lastMsg.sender);
@@ -554,6 +574,11 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
+        // Detecta si un texto es puramente numérico para evitar bugs de fuentes
+        function isOnlyNumbers(text) {
+            return /^\d+$/.test(text.trim());
+        }
+
         window.sendMessage = function() {
             if (!isChatOpen && !currentUser.isAdmin) {
                 alert("El chat está cerrado.");
@@ -629,23 +654,23 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
+                        // Si son solo números, forzamos tipografía normal (Inter) para evitar fallos de fuentes estilizadas
+                        const fontFamily = isOnlyNumbers(msg.text) ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
                         const formattedText = parseMarkdown(msg.text);
-                        // Añadimos la clase chat-message-text para normalizar el tamaño de los números en las fuentes
                         contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
                     contentHtml += `<img src="${msg.image}" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow">`;
                 }
-                // YouTube al 100% del ancho exacto del chat (w-full con contenedor aspect-video)
-if(msg.youtube) {
-    contentHtml += `
-        <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
-            <iframe src="${msg.youtube}" class="w-2000 h-full" frameborder="0" allowfullscreen></iframe>
-        </div>
-    `;
-}
+                if(msg.youtube) {
+                    contentHtml += `
+                        <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
+                            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    `;
+                }
+
                 const senderFontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
 
                 div.innerHTML = `
@@ -666,13 +691,51 @@ if(msg.youtube) {
 
         window.promptOpenInbox = function(targetUser) {
             if (targetUser === currentUser.nick) return;
-            if (confirm(`¿Abrir chat privado con "${targetUser}"?`)) openInboxWith(targetUser);
+            openInboxWith(targetUser);
         }
 
-        function openInboxWith(targetUser) {
-            currentTargetUser = targetUser;
-            document.getElementById('inboxTitle').textContent = `📬 Privado: ${targetUser}`;
+        // CARGAR LISTA DE CONVERSACIONES EN EL INBOX
+        function loadConversationsList(allRooms) {
+            const listContainer = document.getElementById('inboxConversationsList');
+            listContainer.innerHTML = '';
+
+            let contacts = new Set();
+            Object.keys(allRooms).forEach(roomKey => {
+                if (roomKey.includes(currentUser.nick)) {
+                    const parts = roomKey.split('_');
+                    parts.forEach(p => {
+                        if (p !== currentUser.nick && p) contacts.add(p);
+                    });
+                }
+            });
+
+            if (contacts.size === 0) {
+                listContainer.innerHTML = `<p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún.</p>`;
+                return;
+            }
+
+            contacts.forEach(contact => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer truncate ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300'}`;
+                btn.textContent = `💬 ${contact}`;
+                btn.onclick = () => openInboxWith(contact);
+                listContainer.appendChild(btn);
+            });
+        }
+
+        window.openInboxWith = function(targetUser) {
             document.getElementById('inboxModal').classList.remove('hidden');
+            
+            if (!targetUser) {
+                document.getElementById('inboxChatHeader').textContent = "Selecciona un chat a la izquierda";
+                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la lista.</div>`;
+                currentTargetUser = null;
+                activeUsersKey = null;
+                return;
+            }
+
+            currentTargetUser = targetUser;
+            document.getElementById('inboxChatHeader').textContent = `📬 Chat con: ${targetUser}`;
 
             activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
             const inboxRef = ref(db, `private_chats/${activeUsersKey}`);
@@ -706,7 +769,7 @@ if(msg.youtube) {
                         inboxContainer.appendChild(p);
                     });
                 } else {
-                    inboxContainer.innerHTML = `<p class="text-center text-[11px] text-slate-500 my-auto">Sin mensajes con ${targetUser}.</p>`;
+                    inboxContainer.innerHTML = `<p class="text-center text-[11px] text-slate-500 my-auto">Inicia la charla con ${targetUser}.</p>`;
                 }
             });
         }
