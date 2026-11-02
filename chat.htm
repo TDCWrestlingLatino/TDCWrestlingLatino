@@ -132,23 +132,23 @@
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
-                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
-                        <option value="Inter">Inter (Predeterminada)</option>
-                        <option value="Orbitron">Orbitron (Futurista)</option>
-                        <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Bungee">Bungee</option>
-                        <option value="Creepster">Creepster (Terror)</option>
-                        <option value="Dancing Script">Dancing Script</option>
-                        <option value="Eater">Eater</option>
-                        <option value="Fredoka One">Fredoka One</option>
-                        <option value="Monoton">Monoton</option>
-                        <option value="Permanent Marker">Permanent Marker</option>
-                        <option value="Press Start 2P">Press Start 2P (Pixel)</option>
-                        <option value="Rock Salt">Rock Salt</option>
-                        <option value="Russo One">Russo One</option>
-                        <option value="VT323">VT323 (Retro)</option>
-                        <option value="Wallpoet">Wallpoet</option>
-                    </select>
+ <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+    <option value="Inter">Inter (Predeterminada)</option>
+    <option value="Orbitron">Orbitron (Futurista)</option>
+    <option value="Bebas Neue">Bebas Neue (Titular)</option>
+    <option value="Bungee">Bungee</option>
+    <option value="Creepster">Creepster (Terror)</option>
+    <option value="Dancing Script">Dancing Script</option>
+    <option value="Eater">Eater</option>
+    <option value="Fredoka One">Fredoka One</option>
+    <option value="Monoton">Monoton</option>
+    <option value="Permanent Marker">Permanent Marker</option>
+    <option value="Press Start 2P">Press Start 2P (Pixel)</option>
+    <option value="Rock Salt">Rock Salt</option>
+    <option value="Russo One">Russo One</option>
+    <option value="VT323">VT323 (Retro)</option>
+    <option value="Wallpoet">Wallpoet</option>
+</select>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tamaño:</label>
@@ -639,14 +639,13 @@
                     contentHtml += `<img src="${msg.image}" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow">`;
                 }
                 // YouTube al 100% del ancho exacto del chat (w-full con contenedor aspect-video)
-                if(msg.youtube) {
-                    contentHtml += `
-                        <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
-                            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    `;
-                }
-
+if(msg.youtube) {
+    contentHtml += `
+        <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
+            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+        </div>
+    `;
+}
                 const senderFontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
 
                 div.innerHTML = `
