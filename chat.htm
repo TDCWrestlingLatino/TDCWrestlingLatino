@@ -432,7 +432,8 @@
             // Si la fuente no está mapeada, aplicamos reducción general de seguridad
             const k = DIGIT_SCALE[fontName] ?? 0.78;
             if (k === 1) return html;
-            return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em; line-height:1; vertical-align:baseline">${m}</span>`);
+            // Forzamos herencia de fuente y color para que los números respeten el estilo
+            return html.replace(/\d+/g, (m) => `<span style="font-size:${k}em !important; font-family:inherit !important; color:inherit !important; line-height:1; vertical-align:baseline">${m}</span>`);
         }
         function isValidYouTubeEmbed(url) {
             return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
@@ -1019,8 +1020,8 @@
                         }
                         if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
-                        // Cualquiera puede borrar cualquier mensaje del inbox
-                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="msg-del absolute -left-6 top-1 text-[10px] text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer font-bold" title="Borrar mensaje">Borrar</button>`;
+                        // Cualquiera puede borrar cualquier mensaje del inbox (siempre visible)
+                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1.5 text-[10px] text-red-400/90 hover:text-red-300 cursor-pointer font-bold bg-black/30 px-1.5 py-0.5 rounded" title="Borrar mensaje">Borrar</button>`;
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
