@@ -792,6 +792,10 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
+        function isOnlyNumbers(text) {
+            return /^\d+$/.test(String(text).trim());
+        }
+
         window.sendMessage = function() {
             if (!isChatOpen && !currentUser.isAdmin) {
                 uiAlert("El chat está cerrado.");
@@ -872,6 +876,9 @@
                     const text = String(msg.text);
                     if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
+                    } else if (isOnlyNumbers(text)) {
+                        // Solo números → forzar Inter para que se vean limpios y consistentes
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
                     } else {
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
                     }
