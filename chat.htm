@@ -80,7 +80,6 @@
             </div>
         </div>
         <div class="flex items-center space-x-1.5 shrink-0">
-            <!-- BOTÓN DE INBOX DISPONIBLE PARA TODOS -->
             <button onclick="openInboxModalMain()" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-200 px-2.5 py-1.5 rounded-lg border border-cyan-500/50 text-xs font-bold cursor-pointer transition-all flex items-center space-x-1 shadow" title="Centro de Mensajería">
                 <span>📬</span>
                 <span>Inbox</span>
@@ -214,45 +213,44 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX EQUILIBRADO Y CÓMODO (TAMAÑO PERFECTO) -->
-    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-3xl rounded-2xl p-4 shadow-2xl flex flex-col h-[82vh]">
+    <!-- MODAL DE INBOX VERTICAL COMPACTO (EXACTAMENTE COMO LA FOTO) -->
+    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col h-[85vh]">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 shrink-0">
-                <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-2">
+                <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5 truncate">
                     <span>📬</span>
-                    <span>Centro de Mensajería Privada (Inbox)</span>
+                    <span class="truncate">Centro de Mensajería (Inbox)</span>
                 </h3>
-                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer transition-all">✕ Cerrar</button>
+                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded-lg bg-slate-800 text-xs cursor-pointer transition-all">✕</button>
             </div>
             
-            <div class="flex-1 flex flex-col md:flex-row overflow-hidden pt-2.5 gap-2.5 min-h-0">
-                <!-- LISTA DE CONTACTOS COMPACTA Y ELEGANTE -->
-                <div class="w-full md:w-56 bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 flex flex-col overflow-y-auto custom-scrollbar shrink-0 max-h-36 md:max-h-none">
+            <div class="flex-1 flex flex-col overflow-hidden pt-2.5 gap-2.5 min-h-0">
+                <!-- LISTA DE CONVERSACIONES ARRIBA (COMPACTA Y AJUSTADA) -->
+                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-2 shrink-0 max-h-36 overflow-y-auto custom-scrollbar">
                     <div class="flex items-center justify-between mb-1.5 px-1">
                         <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Conversaciones</span>
                         <button onclick="startNewChatPrompt()" class="text-[10px] text-cyan-400 hover:underline font-bold">+ Nuevo</button>
                     </div>
                     <div id="inboxConversationsList" class="space-y-1">
-                        <p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún.</p>
+                        <p class="text-[11px] text-slate-500 p-1.5 text-center">No hay chats aún.</p>
                     </div>
                 </div>
 
-                <!-- ÁREA DE CHAT PRIVADO ESPACIOSA Y CÓMODA -->
+                <!-- ÁREA DE CHAT PRIVADO ABAJO (AMPLIA Y COMODA) -->
                 <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800 rounded-xl overflow-hidden min-h-0">
-                    <div id="inboxChatHeader" class="bg-slate-900 px-3.5 py-2.5 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0 flex items-center space-x-2">
-                        <span>💬</span>
-                        <span>Selecciona o inicia un chat privado</span>
+                    <div id="inboxChatHeader" class="bg-slate-900 px-3 py-2 border-b border-slate-800 text-[11px] font-bold text-cyan-300 shrink-0 truncate">
+                        💬 Selecciona un chat arriba
                     </div>
-                    <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-2.5 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
-                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la izquierda o busca a alguien para escribirle.</div>
+                    <div id="inboxContent" class="flex-1 overflow-y-auto p-2.5 space-y-2 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
+                        <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de arriba para comenzar.</div>
                     </div>
-                    <div class="p-2.5 border-t border-slate-800 flex items-center space-x-2 shrink-0 bg-slate-900/90">
-                        <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
+                    <div class="p-2 border-t border-slate-800 flex items-center space-x-1.5 shrink-0 bg-slate-900/90">
+                        <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
                             <span class="text-xs">📷</span>
                             <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
                         </label>
-                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
+                        <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe un mensaje..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shrink-0 cursor-pointer shadow">Enviar</button>
                     </div>
                 </div>
             </div>
@@ -585,12 +583,6 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
-        // DETECCIÓN TOTAL DE NÚMEROS: Si el texto limpio solo contiene dígitos o espacios
-        function isOnlyNumbers(text) {
-            const clean = text.replace(/<[^>]*>/g, '').trim();
-            return /^[\d\s]+$/.test(clean) && clean.length > 0;
-        }
-
         window.sendMessage = function() {
             if (!isChatOpen && !currentUser.isAdmin) {
                 alert("El chat está cerrado.");
@@ -666,13 +658,9 @@
                     if (isOnlyEmojis(msg.text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${msg.text}</div>`;
                     } else {
-                        // SOLUCIÓN DEFINITIVA A NÚMEROS: Si son solo números, anulamos la fuente rara y usamos Inter limpia normal
-                        const isNum = isOnlyNumbers(msg.text);
-                        const fontFamily = isNum ? 'Inter, sans-serif' : (msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`);
-                        const fontSizeClass = isNum ? 'text-xs' : (msg.fontSize || 'text-xs');
+                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
                         const formattedText = parseMarkdown(msg.text);
-                        
-                        contentHtml += `<p class="chat-message-text ${fontSizeClass} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        contentHtml += `<p class="chat-message-text ${msg.fontSize || 'text-xs'} break-words leading-relaxed" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
                     }
                 }
                 if(msg.image) {
@@ -740,13 +728,13 @@
             });
 
             if (contacts.size === 0) {
-                listContainer.innerHTML = `<p class="text-[11px] text-slate-500 p-2 text-center">No hay chats aún. Dale a "+ Nuevo" o haz clic en un usuario del chat general.</p>`;
+                listContainer.innerHTML = `<p class="text-[11px] text-slate-500 p-1.5 text-center">No hay chats aún. Dale a "+ Nuevo".</p>`;
                 return;
             }
 
             contacts.forEach(contact => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left px-2.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer truncate flex items-center space-x-2 ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300'}`;
+                btn.className = `w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer truncate flex items-center space-x-2 ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300'}`;
                 btn.innerHTML = `<span>💬</span><span class="truncate">${contact}</span>`;
                 btn.onclick = () => openInboxWith(contact);
                 listContainer.appendChild(btn);
@@ -757,15 +745,15 @@
             document.getElementById('inboxModal').classList.remove('hidden');
             
             if (!targetUser) {
-                document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Selecciona un chat de la izquierda o dale a "+ Nuevo"</span>`;
-                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la lista para comenzar a chatear en privado.</div>`;
+                document.getElementById('inboxChatHeader').innerHTML = `💬 Selecciona un chat de arriba`;
+                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación arriba para comenzar.</div>`;
                 currentTargetUser = null;
                 activeUsersKey = null;
                 return;
             }
 
             currentTargetUser = targetUser;
-            document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Chat Privado con: ${targetUser}</span>`;
+            document.getElementById('inboxChatHeader').innerHTML = `💬 Chat Privado con: ${targetUser}`;
 
             activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
             const inboxRef = ref(db, `private_chats/${activeUsersKey}`);
@@ -792,7 +780,7 @@
                         if (msg.text) {
                             innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         }
-                        if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[180px] rounded-lg mt-1 border border-slate-700 object-cover">`;
+                        if (msg.image) innerHtml += `<img src="${msg.image}" class="w-full max-h-[160px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
                         if (isMe) {
                             innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-1 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">🗑️</button>`;
