@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>TDC Wrestling Latino Chat Oficial</title>
+    <title>TDC Wrestling Latino v3 - PRUEBA</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -43,7 +43,7 @@
     <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex overflow-y-auto p-3">
         <div class="m-auto bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
+                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino v3!</h2>
                 <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.</p>
             </div>
             
@@ -81,8 +81,8 @@
         <div class="flex items-center space-x-2 min-w-0">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs shadow-md shrink-0">TDC</div>
             <div class="min-w-0">
-                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino</h1>
-                <p id="appSubtitle" class="text-[9px] text-slate-400 truncate">Chat Oficial en Vivo</p>
+                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino v3</h1>
+                <p id="appSubtitle" class="text-[9px] text-amber-400 font-bold truncate">PRUEBA - Código Nuevo Cargado</p>
             </div>
         </div>
         <div class="flex items-center space-x-1.5 shrink-0">
@@ -1020,8 +1020,8 @@
                         }
                         if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
-                        // Cualquiera puede borrar cualquier mensaje del inbox (siempre visible)
-                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1.5 text-[10px] text-red-400/90 hover:text-red-300 cursor-pointer font-bold bg-black/30 px-1.5 py-0.5 rounded" title="Borrar mensaje">Borrar</button>`;
+                        // Cualquiera puede borrar cualquier mensaje del inbox (muy visible para prueba)
+                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
