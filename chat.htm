@@ -409,31 +409,9 @@
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
 
-        // Técnica agresiva: forzamos la fuente EXACTA en cada número
-        const DIGIT_SCALE = {
-            'Inter': 1,
-            'Bebas Neue': 0.90,
-            'Anton': 0.88,
-            'Oswald': 0.90,
-            'Archivo Black': 0.88,
-            'Russo One': 0.90,
-            'Teko': 0.90,
-            'Orbitron': 0.88,
-            'Exo 2': 0.93,
-            'Rajdhani': 0.90,
-            'Chakra Petch': 0.90,
-            'Rubik': 1,
-            'Outfit': 1,
-            'Plus Jakarta Sans': 1,
-            'Nunito': 1
-        };
+        // Sistema de ajuste de números desactivado (letras y números usan la fuente nativa sin interferencias)
         function scaleDigits(html, fontName) {
-            const k = DIGIT_SCALE[fontName] ?? 0.92;
-            const safeName = String(fontName || 'Inter').replace(/'/g, '');
-            // Forzamos nombre de fuente real + tamaño + color en cada número
-            return html.replace(/\d+/g, (m) => {
-                return `<span style="font-family: '${safeName}', sans-serif !important; font-size: ${k}em !important; color: inherit !important; line-height: 1 !important; vertical-align: baseline !important;">${m}</span>`;
-            });
+            return html; // no modifica nada
         }
         function isValidYouTubeEmbed(url) {
             return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
