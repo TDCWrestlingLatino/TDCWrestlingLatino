@@ -96,6 +96,9 @@
             <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Limpiar Chat">
                 <span>🗑️</span>
             </button>
+            <button id="btnAdminBans" onclick="openBannedList()" class="hidden bg-red-700 hover:bg-red-600 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Usuarios Bloqueados">
+                <span>🚫</span>
+            </button>
             <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Skins">
                 <span>🎨</span>
             </button>
@@ -275,6 +278,20 @@
                 <button id="dialogCancel" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs border border-slate-700 cursor-pointer">Cancelar</button>
                 <button id="dialogOk" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow cursor-pointer">Aceptar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL LISTA DE BLOQUEADOS (solo admins) -->
+    <div id="bannedListModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-red-400">🚫 Usuarios Bloqueados</h3>
+                <button onclick="closeBannedList()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+            </div>
+            <div id="bannedListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 min-h-[120px]">
+                <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-3 text-center">Nota: Si la persona cambia de apodo puede volver a entrar.</p>
         </div>
     </div>
 
@@ -465,12 +482,16 @@
         // Los admins pueden borrar mensajes del inbox (propios y ajenos).
         let adminNodeNicks = new Set();   // admins registrados en Firebase (nodo "admins")
         let latestRooms = null;           // últimos chats privados recibidos
-        const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_');
+        let bannedUsers = {};             // { nickKey: { nick, bannedBy, bannedAt } }
+        const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         const pairKey = (a, b) => [a, b].sort().join('_').replace(/[.#$\[\]]/g, '_');
         function isAdminNick(nick) {
             const k = nickKey(nick);
             // respaldo: quien haya escrito en el chat público como admin también cuenta
             return adminNodeNicks.has(k) || messages.some(m => m.isAdmin && nickKey(m.sender) === k);
+        }
+        function isBanned(nick) {
+            return !!bannedUsers[nickKey(nick)];
         }
         // Cualquiera puede escribir a cualquiera (incluyendo admins)
         const canWriteTo = (target) => true;
@@ -513,10 +534,12 @@
             if(currentUser.isAdmin) {
                 document.getElementById('btnAdminClear').classList.remove('hidden');
                 document.getElementById('btnAdminToggleChat').classList.remove('hidden');
+                document.getElementById('btnAdminBans').classList.remove('hidden');
                 document.getElementById('adminOnlineContainer').classList.remove('hidden');
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
                 document.getElementById('btnAdminToggleChat').classList.add('hidden');
+                document.getElementById('btnAdminBans').classList.add('hidden');
                 document.getElementById('adminOnlineContainer').classList.add('hidden');
             }
         }
@@ -597,6 +620,11 @@
                 const data = snapshot.val();
                 adminNodeNicks = new Set(data ? Object.keys(data) : []);
                 updateInboxComposer();
+            }, (err) => console.error(err));
+
+            // Lista de usuarios bloqueados
+            onValue(ref(db, 'banned_users'), (snapshot) => {
+                bannedUsers = snapshot.val() || {};
             }, (err) => console.error(err));
 
             const messagesRef = ref(db, 'chat_messages');
@@ -702,6 +730,65 @@
             if(await uiConfirm('⚠️ ¿Borrar todo el chat?')) remove(ref(db, 'chat_messages')).catch(dbError);
         }
 
+        // ===== Sistema de bloqueo =====
+        window.banUser = async function(targetNick) {
+            if (!currentUser.isAdmin) return;
+            if (!targetNick || targetNick === currentUser.nick) return;
+            if (isAdminNick(targetNick)) {
+                await uiAlert('No puedes bloquear a otro administrador.');
+                return;
+            }
+            if (await uiConfirm(`¿Bloquear a "${targetNick}"?\n\nNo podrá escribir en el chat ni por inbox.`)) {
+                const key = nickKey(targetNick);
+                set(ref(db, 'banned_users/' + key), {
+                    nick: targetNick,
+                    bannedBy: currentUser.nick,
+                    bannedAt: Date.now()
+                }).catch(dbError);
+                showToast({ text: `🚫 "${targetNick}" ha sido bloqueado.`, duration: 5000 });
+            }
+        };
+
+        window.unbanUser = async function(targetNick) {
+            if (!currentUser.isAdmin) return;
+            if (await uiConfirm(`¿Desbloquear a "${targetNick}"?`)) {
+                remove(ref(db, 'banned_users/' + nickKey(targetNick))).catch(dbError);
+                showToast({ text: `✅ "${targetNick}" ha sido desbloqueado.`, duration: 5000 });
+            }
+        };
+
+        window.openBannedList = function() {
+            if (!currentUser.isAdmin) return;
+            const modal = document.getElementById('bannedListModal');
+            const list = document.getElementById('bannedListContent');
+            if (!modal || !list) return;
+
+            const entries = Object.values(bannedUsers || {});
+            if (entries.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>`;
+            } else {
+                list.innerHTML = entries.map(u => {
+                    const nick = esc(u.nick || '');
+                    const by = esc(u.bannedBy || 'Admin');
+                    return `
+                        <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
+                            <div class="min-w-0">
+                                <div class="font-bold text-sm text-white truncate">${nick}</div>
+                                <div class="text-[10px] text-slate-400">Bloqueado por: ${by}</div>
+                            </div>
+                            <button onclick="unbanUser('${nick.replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0">Desbloquear</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+            modal.classList.remove('hidden');
+        };
+
+        window.closeBannedList = function() {
+            const modal = document.getElementById('bannedListModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
         window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -797,6 +884,10 @@
         }
 
         window.sendMessage = function() {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes escribir en el chat.");
+                return;
+            }
             if (!isChatOpen && !currentUser.isAdmin) {
                 uiAlert("El chat está cerrado.");
                 return;
@@ -828,6 +919,11 @@
         }
 
         window.sendImage = function(e) {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar imágenes.");
+                e.target.value = '';
+                return;
+            }
             if (!isChatOpen && !currentUser.isAdmin) return;
             const file = e.target.files[0];
             e.target.value = '';
@@ -863,7 +959,9 @@
 
                 const sender = String(msg.sender ?? '');
                 const canDelete = currentUser.isAdmin || sender === currentUser.nick;
+                const canBan = currentUser.isAdmin && sender !== currentUser.nick && !isAdminNick(sender);
                 const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30 ml-1">ADMIN</span>` : '';
+                const bannedBadge = isBanned(sender) ? `<span class="bg-red-500/20 text-red-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-red-500/30 ml-1">BLOQUEADO</span>` : '';
 
                 const fontName = safeFont(msg.font);
                 const fontFamily = `'${fontName}', sans-serif`;
@@ -901,11 +999,15 @@
                         <div class="flex items-center space-x-1.5">
                             <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily} !important;" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
                             ${adminBadge}
+                            ${bannedBadge}
                             <span class="text-[9px] text-slate-400 shrink-0">${esc(msg.time)}</span>
                         </div>
                         <div class="mt-0.5">${contentHtml}</div>
                     </div>
-                    ${canDelete ? `<button data-key="${esc(msg.firebaseKey)}" onclick="deleteMessage(this.dataset.key)" class="msg-del opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer shrink-0" title="Borrar">🗑️</button>` : ''}
+                    <div class="flex flex-col items-center gap-1 shrink-0">
+                        ${canDelete ? `<button data-key="${esc(msg.firebaseKey)}" onclick="deleteMessage(this.dataset.key)" class="msg-del opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer" title="Borrar">🗑️</button>` : ''}
+                        ${canBan ? `<button data-nick="${esc(sender)}" onclick="banUser(this.dataset.nick)" class="msg-del opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer" title="Bloquear usuario">🚫</button>` : ''}
+                    </div>
                 `;
                 container.appendChild(div);
             });
@@ -913,11 +1015,19 @@
 
         window.promptOpenInbox = function(targetUser) {
             if (targetUser === currentUser.nick) return;
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
+                return;
+            }
             openInboxModalMain();
             openInboxWith(targetUser);
         }
 
         window.openInboxModalMain = function() {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes usar el inbox.");
+                return;
+            }
             document.getElementById('inboxModal').classList.remove('hidden');
             if(!currentTargetUser) {
                 openInboxWith(null);
@@ -925,6 +1035,10 @@
         }
 
         window.startNewChatPrompt = async function() {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
+                return;
+            }
             const recipient = await uiPrompt("Ingresa el apodo exacto del usuario con quien deseas chatear en privado:");
             if(recipient && recipient.trim() !== "" && recipient.trim() !== currentUser.nick) {
                 const target = recipient.trim();
@@ -1024,6 +1138,10 @@
         }
 
         window.sendInboxMessage = function() {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
+                return;
+            }
             if (!currentTargetUser || !activeUsersKey) return;
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
@@ -1041,6 +1159,11 @@
         }
 
         window.sendInboxImage = function(e) {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar imágenes privadas.");
+                e.target.value = '';
+                return;
+            }
             if (!currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
             e.target.value = '';
