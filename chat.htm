@@ -116,7 +116,7 @@
 
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full h-full min-h-0">
         
-        <!-- PANEL DE SKINS -->
+        <!-- PANEL DE SKINS (15 OPCIONES TOTALES) -->
         <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚡ Skins & Estilos</h3>
@@ -129,6 +129,17 @@
                     <button onclick="setSkin('matrix')" class="text-left px-2.5 py-1.5 rounded-lg bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-500 font-bold text-emerald-200 cursor-pointer">💻 Matrix Terminal</button>
                     <button onclick="setSkin('glass')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-950/85 hover:bg-blue-900 border border-blue-400 font-bold text-blue-200 cursor-pointer">🔮 Glassmorphism</button>
                     <button onclick="setSkin('minimal')" class="text-left px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 font-bold text-zinc-100 cursor-pointer">🌙 Minimal Dark</button>
+                    <!-- 10 Nuevos Skins con Degradados Oscuros -->
+                    <button onclick="setSkin('purple')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-950/85 hover:bg-purple-900 border border-purple-400 font-bold text-purple-200 cursor-pointer">💜 Purple Neon</button>
+                    <button onclick="setSkin('sunset')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-950/85 hover:bg-amber-900 border border-orange-500 font-bold text-amber-200 cursor-pointer">🌅 Sunset Amber</button>
+                    <button onclick="setSkin('gold')" class="text-left px-2.5 py-1.5 rounded-lg bg-yellow-950/85 hover:bg-yellow-900 border border-yellow-500 font-bold text-yellow-200 cursor-pointer">⚜️ Deep Gold</button>
+                    <button onclick="setSkin('royal')" class="text-left px-2.5 py-1.5 rounded-lg bg-indigo-950/85 hover:bg-indigo-900 border border-indigo-400 font-bold text-indigo-200 cursor-pointer">🌌 Royal Indigo</button>
+                    <button onclick="setSkin('toxic')" class="text-left px-2.5 py-1.5 rounded-lg bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-400 font-bold text-emerald-200 cursor-pointer">🧪 Toxic Acid</button>
+                    <button onclick="setSkin('ruby')" class="text-left px-2.5 py-1.5 rounded-lg bg-pink-950/85 hover:bg-pink-900 border border-pink-500 font-bold text-pink-200 cursor-pointer">🩸 Blood Ruby</button>
+                    <button onclick="setSkin('teal')" class="text-left px-2.5 py-1.5 rounded-lg bg-teal-950/85 hover:bg-teal-900 border border-teal-400 font-bold text-teal-200 cursor-pointer">🌊 Midnight Teal</button>
+                    <button onclick="setSkin('yellow')" class="text-left px-2.5 py-1.5 rounded-lg bg-yellow-950/85 hover:bg-yellow-900 border border-yellow-400 font-bold text-yellow-200 cursor-pointer">⚡ Cyber Yellow</button>
+                    <button onclick="setSkin('charcoal')" class="text-left px-2.5 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-slate-600 font-bold text-slate-200 cursor-pointer">🖤 Charcoal Tech</button>
+                    <button onclick="setSkin('violet')" class="text-left px-2.5 py-1.5 rounded-lg bg-fuchsia-950/85 hover:bg-fuchsia-900 border border-fuchsia-400 font-bold text-fuchsia-200 cursor-pointer">🌸 Dark Violet</button>
                 </div>
             </div>
         </div>
@@ -231,7 +242,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX: ventana compacta, contactos en una sola fila chica y caja de escribir grande -->
+    <!-- MODAL DE INBOX -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-xl rounded-2xl p-3 shadow-2xl flex flex-col h-full max-h-[640px]">
             <div class="flex items-center justify-between pb-2 shrink-0">
@@ -242,7 +253,6 @@
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer transition-all">✕ Cerrar</button>
             </div>
 
-            <!-- CONTACTOS: una sola fila chica con scroll horizontal -->
             <div class="flex items-center gap-1.5 pb-2 shrink-0">
                 <button onclick="startNewChatPrompt()" class="shrink-0 text-[11px] bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-2 py-0.5 rounded-md cursor-pointer">+ Nuevo</button>
                 <div id="inboxConversationsList" class="flex flex-nowrap items-center gap-1 overflow-x-auto custom-scrollbar min-w-0 flex-1">
@@ -250,7 +260,6 @@
                 </div>
             </div>
 
-            <!-- CONVERSACIÓN: ocupa casi todo el espacio -->
             <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800 rounded-xl overflow-hidden min-h-0">
                 <div id="inboxChatHeader" class="bg-slate-900 px-3 py-1.5 border-b border-slate-800 text-xs font-bold text-cyan-300 shrink-0 flex items-center space-x-2 truncate">
                     <span>💬</span>
@@ -260,12 +269,10 @@
                     <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la parte superior para comenzar.</div>
                 </div>
 
-                <!-- Aviso de solo lectura (ya no se usa: cualquiera puede escribir a admins) -->
                 <div id="inboxReadOnlyNote" class="hidden px-3 py-2.5 border-t border-slate-800 bg-slate-900/90 text-center text-[11px] text-amber-300 font-bold shrink-0">
                     🔒 Solo lectura
                 </div>
 
-                <!-- CAJA DE ESCRIBIR GRANDE -->
                 <div id="inboxComposer" class="hidden p-2 border-t border-slate-800 flex items-end gap-2 shrink-0 bg-slate-900/90">
                     <label class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 shrink-0">
                         <span class="text-sm">📷</span>
@@ -278,7 +285,7 @@
         </div>
     </div>
 
-    <!-- DIÁLOGOS PROPIOS: alert/confirm/prompt del navegador se bloquean dentro de un iframe -->
+    <!-- DIÁLOGOS PROPIOS -->
     <div id="dialogModal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex overflow-y-auto p-3">
         <div class="m-auto w-full max-w-sm bg-slate-900 border border-slate-700 rounded-2xl p-4 shadow-2xl space-y-3">
             <p id="dialogMessage" class="text-sm text-slate-200 whitespace-pre-line break-words"></p>
@@ -290,7 +297,7 @@
         </div>
     </div>
 
-    <!-- MODAL LISTA DE BLOQUEADOS (solo admins) -->
+    <!-- MODAL LISTA DE BLOQUEADOS -->
     <div id="bannedListModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
@@ -304,14 +311,14 @@
         </div>
     </div>
 
-    <!-- PANEL DE PALABRAS BLOQUEADAS (solo Admin principal) -->
+    <!-- PANEL DE PALABRAS BLOQUEADAS -->
     <div id="blockedWordsModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
         <div class="bg-slate-900 border border-purple-700/50 w-full max-w-lg rounded-2xl p-4 shadow-2xl flex flex-col max-h-[80vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
                 <h3 class="text-sm font-black text-purple-400">🛡️ Palabras Bloqueadas</h3>
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea). Cualquier mensaje que las contenga no se enviará.</p>
+            <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
             <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
@@ -320,7 +327,7 @@
         </div>
     </div>
 
-    <!-- AVISOS (por ejemplo, mensaje privado nuevo) -->
+    <!-- AVISOS -->
     <div id="toastContainer" class="fixed bottom-16 left-2 right-2 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- FIREBASE & LÓGICA -->
@@ -342,10 +349,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ===== Utilidades para que el chat funcione bien dentro de un IFRAME =====
-
-        // localStorage puede estar bloqueado dentro de un iframe (Safari, Brave, Firefox estricto).
-        // Si falla, se usa memoria temporal para que el chat siga funcionando.
         const store = (() => {
             const mem = {};
             let ok = false;
@@ -361,7 +364,6 @@
             };
         })();
 
-        // alert / confirm / prompt del navegador no funcionan bien en iframes: se reemplazan por ventanas propias
         let activeDialogClose = null;
         function showDialog({ message, input = false, defaultValue = '', cancelable = false }) {
             return new Promise(resolve => {
@@ -401,7 +403,6 @@
         const uiConfirm = (message) => showDialog({ message, cancelable: true });
         const uiPrompt = (message) => showDialog({ message, input: true });
 
-        // Avisos que no bloquean el chat
         function showToast({ text, actionLabel, onAction, duration = 12000 }) {
             const box = document.getElementById('toastContainer');
             if (!box) return;
@@ -428,7 +429,6 @@
             if (duration) setTimeout(dismiss, duration);
         }
 
-        // Si Firebase rechaza una acción (reglas, conexión, tamaño), se avisa en pantalla
         function dbError(err) {
             console.error(err);
             const code = (err && (err.code || err.message)) || 'error';
@@ -436,7 +436,6 @@
             showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
         }
 
-        // Todo lo que viene de la base de datos se escapa/valida antes de pintarse en pantalla
         function esc(value) {
             return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
@@ -451,15 +450,11 @@
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
 
-        // Sistema de ajuste de números desactivado (letras y números usan la fuente nativa sin interferencias)
-        function scaleDigits(html, fontName) {
-            return html; // no modifica nada
-        }
+        function scaleDigits(html, fontName) { return html; }
         function isValidYouTubeEmbed(url) {
             return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
         }
 
-        // Reduce las imágenes antes de guardarlas (una foto de celular pesa varios MB y Firebase la rechaza o la hace lenta)
         function compressImage(file, maxSize, quality) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -486,54 +481,31 @@
             });
         }
 
-
-        let currentUser = {
-            nick: '',
-            avatar: '',
-            isAdmin: false,
-            textColor: '#ffffff',
-            font: 'Inter',
-            fontSize: 'text-xs'
-        };
-
+        let currentUser = { nick: '', avatar: '', isAdmin: false, textColor: '#ffffff', font: 'Inter', fontSize: 'text-xs' };
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
         let activeUsersKey = null;
         let isChatOpen = true;
 
-        // ===== Administradores =====
-        // Ahora cualquiera puede abrir y responder inbox con admins.
-        // Los admins pueden borrar mensajes del inbox (propios y ajenos).
-        let adminNodeNicks = new Set();   // admins registrados en Firebase (nodo "admins")
-        let latestRooms = null;           // últimos chats privados recibidos
-        let bannedUsers = {};             // { nickKey: { nick, bannedBy, bannedAt } }
-        let blockedWordsList = [];        // array de palabras bloqueadas (en minúsculas)
+        let adminNodeNicks = new Set();
+        let latestRooms = null;
+        let bannedUsers = {};
+        let blockedWordsList = [];
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         const pairKey = (a, b) => [a, b].sort().join('_').replace(/[.#$\[\]]/g, '_');
         function isAdminNick(nick) {
             const k = nickKey(nick);
-            // respaldo: quien haya escrito en el chat público como admin también cuenta
             return adminNodeNicks.has(k) || messages.some(m => m.isAdmin && nickKey(m.sender) === k);
         }
-        function isBanned(nick) {
-            return !!bannedUsers[nickKey(nick)];
-        }
-        // Cualquiera puede escribir a cualquiera (incluyendo admins)
-        const canWriteTo = (target) => true;
-        function conversationExists(target) {
-            return !!(latestRooms && latestRooms[pairKey(currentUser.nick, target)]);
-        }
+        function isBanned(nick) { return !!bannedUsers[nickKey(nick)]; }
         function updateInboxComposer() {
             const composer = document.getElementById('inboxComposer');
             const note = document.getElementById('inboxReadOnlyNote');
             if (!composer || !note) return;
-            const hasTarget = !!currentTargetUser;
-            // Ya no hay bloqueo: el composer se muestra siempre que haya un destinatario
-            composer.classList.toggle('hidden', !hasTarget);
-            note.classList.add('hidden'); // el aviso de "solo lectura" ya no se usa
+            composer.classList.toggle('hidden', !currentTargetUser);
+            note.classList.add('hidden');
         }
-
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = store.get('tdc_chat_user');
@@ -544,7 +516,6 @@
                     document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
-                    
                     checkAdminUIs();
                     initFirebaseListeners();
                 } catch(e) {
@@ -568,7 +539,6 @@
                 document.getElementById('btnAdminToggleChat').classList.remove('hidden');
                 document.getElementById('btnAdminBans').classList.remove('hidden');
                 document.getElementById('adminOnlineContainer').classList.remove('hidden');
-                // Solo el Admin principal ve el botón de palabras bloqueadas
                 document.getElementById('btnBlockedWords').classList.toggle('hidden', !isMainAdmin());
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
@@ -581,12 +551,8 @@
 
         window.toggleAdminCode = function(checkbox) {
             const container = document.getElementById('adminCodeContainer');
-            if (checkbox.checked) {
-                container.classList.remove('hidden');
-            } else {
-                container.classList.add('hidden');
-                document.getElementById('inputAdminCode').value = '';
-            }
+            if (checkbox.checked) container.classList.remove('hidden');
+            else { container.classList.add('hidden'); document.getElementById('inputAdminCode').value = ''; }
         }
 
         window.handleLogin = async function() {
@@ -596,10 +562,7 @@
             const wantsAdmin = document.getElementById('checkAdmin').checked;
             const adminCode = document.getElementById('inputAdminCode').value.trim();
 
-            if(!nickInput) {
-                await uiAlert('Por favor ingresa un apodo válido.');
-                return;
-            }
+            if(!nickInput) { await uiAlert('Por favor ingresa un apodo válido.'); return; }
 
             currentUser.nick = nickInput;
             currentUser.textColor = '#00ffcc';
@@ -607,29 +570,19 @@
             currentUser.fontSize = 'text-xs';
 
             if(wantsAdmin) {
-                if(adminCode === 'tdc2026') {
-                    currentUser.isAdmin = true;
-                } else {
-                    await uiAlert('Código incorrecto. Ingresarás como usuario estándar.');
-                    currentUser.isAdmin = false;
-                }
-            } else {
-                currentUser.isAdmin = false;
-            }
+                if(adminCode === 'tdc2026') currentUser.isAdmin = true;
+                else { await uiAlert('Código incorrecto. Ingresarás como usuario estándar.'); currentUser.isAdmin = false; }
+            } else { currentUser.isAdmin = false; }
 
             currentUser.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(nickInput)}&background=00ffcc&color=000&bold=true`;
 
-            if(urlInput) {
-                currentUser.avatar = urlInput;
-                finalizeLogin();
-            } else if(fileInput) {
+            if(urlInput) { currentUser.avatar = urlInput; finalizeLogin(); }
+            else if(fileInput) {
                 compressImage(fileInput, 128, 0.8)
                     .then(data => { currentUser.avatar = data; })
                     .catch(() => {})
                     .finally(finalizeLogin);
-            } else {
-                finalizeLogin();
-            }
+            } else { finalizeLogin(); }
         }
 
         window.finalizeLogin = function() {
@@ -647,7 +600,6 @@
         }
 
         function initFirebaseListeners() {
-            // Registra a los admins para que los usuarios no puedan escribirles por privado
             if (currentUser.isAdmin) {
                 set(ref(db, 'admins/' + nickKey(currentUser.nick)), true).catch(dbError);
             }
@@ -657,39 +609,27 @@
                 updateInboxComposer();
             }, (err) => console.error(err));
 
-            // Lista de usuarios bloqueados
-            onValue(ref(db, 'banned_users'), (snapshot) => {
-                bannedUsers = snapshot.val() || {};
-            }, (err) => console.error(err));
+            onValue(ref(db, 'banned_users'), (snapshot) => { bannedUsers = snapshot.val() || {}; }, (err) => console.error(err));
 
-            // Palabras bloqueadas (solo el admin principal las edita)
             onValue(ref(db, 'blocked_words'), (snapshot) => {
                 const data = snapshot.val();
-                if (Array.isArray(data)) {
-                    blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
-                } else if (typeof data === 'string') {
-                    blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
-                } else {
-                    blockedWordsList = [];
-                }
+                if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
+                else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+                else blockedWordsList = [];
             }, (err) => console.error(err));
 
-            const messagesRef = ref(db, 'chat_messages');
-            onValue(messagesRef, (snapshot) => {
+            onValue(ref(db, 'chat_messages'), (snapshot) => {
                 const data = snapshot.val();
                 messages = [];
                 if (data) {
-                    Object.keys(data).forEach(key => {
-                        messages.push({ firebaseKey: key, ...data[key] });
-                    });
+                    Object.keys(data).forEach(key => { messages.push({ firebaseKey: key, ...data[key] }); });
                     messages.sort((a, b) => b.id - a.id);
                 }
                 renderMessages();
                 updateInboxComposer();
             }, (err) => dbError(err));
 
-            const chatStatusRef = ref(db, 'chat_room_status');
-            onValue(chatStatusRef, (snapshot) => {
+            onValue(ref(db, 'chat_room_status'), (snapshot) => {
                 const status = snapshot.val();
                 isChatOpen = (status !== null) ? status.isOpen : true;
                 updateRoomVisualStatus();
@@ -699,43 +639,35 @@
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
 
-            const onlineUsersRef = ref(db, 'online_users');
-            onValue(onlineUsersRef, (snapshot) => {
+            onValue(ref(db, 'online_users'), (snapshot) => {
                 const data = snapshot.val();
                 const activeCount = data ? Object.keys(data).length : 1;
                 const counterElement = document.getElementById('onlineCount');
                 if (counterElement) counterElement.textContent = activeCount;
             });
 
-            const privateChatsRef = ref(db, 'private_chats');
-            onValue(privateChatsRef, (snapshot) => {
+            onValue(ref(db, 'private_chats'), (snapshot) => {
                 const allRooms = snapshot.val();
                 latestRooms = allRooms;
                 if (allRooms) loadConversationsList(allRooms);
-
                 if (!allRooms) return;
 
                 Object.keys(allRooms).forEach(roomKey => {
                     if (roomKey.includes(currentUser.nick)) {
                         const roomMessages = allRooms[roomKey];
                         if (!roomMessages) return;
-
                         const msgKeys = Object.keys(roomMessages);
-                        const lastMsgKey = msgKeys[msgKeys.length - 1];
-                        const lastMsg = roomMessages[lastMsgKey];
+                        const lastMsg = roomMessages[msgKeys[msgKeys.length - 1]];
 
                         if (lastMsg && lastMsg.sender !== currentUser.nick) {
                             const notifId = roomKey + "_" + lastMsg.id;
-                            const alreadyNotified = store.get("notified_" + notifId);
-                            
-                            if (!alreadyNotified) {
+                            if (!store.get("notified_" + notifId)) {
                                 store.set("notified_" + notifId, "true");
                                 if (currentTargetUser !== lastMsg.sender) {
-                                    const from = lastMsg.sender;
                                     showToast({
-                                        text: `📬 Nuevo mensaje privado de "${from}"`,
+                                        text: `📬 Nuevo mensaje privado de "${lastMsg.sender}"`,
                                         actionLabel: 'Abrir',
-                                        onAction: () => { openInboxModalMain(); openInboxWith(from); }
+                                        onAction: () => { openInboxModalMain(); openInboxWith(lastMsg.sender); }
                                     });
                                 }
                             }
@@ -777,21 +709,11 @@
             if(await uiConfirm('⚠️ ¿Borrar todo el chat?')) remove(ref(db, 'chat_messages')).catch(dbError);
         }
 
-        // ===== Sistema de bloqueo =====
         window.banUser = async function(targetNick) {
-            if (!currentUser.isAdmin) return;
-            if (!targetNick || targetNick === currentUser.nick) return;
-            if (isAdminNick(targetNick)) {
-                await uiAlert('No puedes bloquear a otro administrador.');
-                return;
-            }
-            if (await uiConfirm(`¿Bloquear a "${targetNick}"?\n\nNo podrá escribir en el chat ni por inbox.`)) {
-                const key = nickKey(targetNick);
-                set(ref(db, 'banned_users/' + key), {
-                    nick: targetNick,
-                    bannedBy: currentUser.nick,
-                    bannedAt: Date.now()
-                }).catch(dbError);
+            if (!currentUser.isAdmin || !targetNick || targetNick === currentUser.nick) return;
+            if (isAdminNick(targetNick)) { uiAlert('No puedes bloquear a otro administrador.'); return; }
+            if (await uiConfirm(`¿Bloquear a "${targetNick}"?`)) {
+                set(ref(db, 'banned_users/' + nickKey(targetNick)), { nick: targetNick, bannedBy: currentUser.nick, bannedAt: Date.now() }).catch(dbError);
                 showToast({ text: `🚫 "${targetNick}" ha sido bloqueado.`, duration: 5000 });
             }
         };
@@ -800,7 +722,7 @@
             if (!currentUser.isAdmin) return;
             if (await uiConfirm(`¿Desbloquear a "${targetNick}"?`)) {
                 remove(ref(db, 'banned_users/' + nickKey(targetNick))).catch(dbError);
-                showToast({ text: `✅ "${targetNick}" ha sido desbloqueado.`, duration: 5000 });
+                showToast({ text: `✅ "${targetNick}" desbloqueado.`, duration: 5000 });
             }
         };
 
@@ -811,69 +733,41 @@
             if (!modal || !list) return;
 
             const entries = Object.values(bannedUsers || {});
-            if (entries.length === 0) {
-                list.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>`;
-            } else {
-                list.innerHTML = entries.map(u => {
-                    const nick = esc(u.nick || '');
-                    const by = esc(u.bannedBy || 'Admin');
-                    return `
-                        <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
-                            <div class="min-w-0">
-                                <div class="font-bold text-sm text-white truncate">${nick}</div>
-                                <div class="text-[10px] text-slate-400">Bloqueado por: ${by}</div>
-                            </div>
-                            <button onclick="unbanUser('${nick.replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0">Desbloquear</button>
-                        </div>
-                    `;
-                }).join('');
-            }
+            list.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>` : entries.map(u => `
+                <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
+                        <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
+                    </div>
+                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0">Desbloquear</button>
+                </div>
+            `).join('');
             modal.classList.remove('hidden');
         };
 
-        window.closeBannedList = function() {
-            const modal = document.getElementById('bannedListModal');
-            if (modal) modal.classList.add('hidden');
-        };
+        window.closeBannedList = function() { document.getElementById('bannedListModal').classList.add('hidden'); };
 
-        // ===== Palabras bloqueadas (solo Admin principal) =====
         window.openBlockedWordsPanel = function() {
-            if (!isMainAdmin()) {
-                uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.');
-                return;
-            }
+            if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
             const modal = document.getElementById('blockedWordsModal');
             const input = document.getElementById('blockedWordsInput');
-            const counter = document.getElementById('blockedWordsCount');
-            if (!modal || !input) return;
             input.value = blockedWordsList.join('\n');
-            if (counter) counter.textContent = blockedWordsList.length + ' palabras';
+            document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
             modal.classList.remove('hidden');
-            setTimeout(() => input.focus(), 50);
         };
 
-        window.closeBlockedWordsPanel = function() {
-            const modal = document.getElementById('blockedWordsModal');
-            if (modal) modal.classList.add('hidden');
-        };
+        window.closeBlockedWordsPanel = function() { document.getElementById('blockedWordsModal').classList.add('hidden'); };
 
         window.saveBlockedWords = async function() {
             if (!isMainAdmin()) return;
-            const input = document.getElementById('blockedWordsInput');
-            if (!input) return;
-            const raw = input.value || '';
-            const words = raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
-            // Eliminar duplicados
-            const unique = [...new Set(words)];
+            const raw = document.getElementById('blockedWordsInput').value || '';
+            const unique = [...new Set(raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean))];
             try {
                 await set(ref(db, 'blocked_words'), unique);
                 blockedWordsList = unique;
-                const counter = document.getElementById('blockedWordsCount');
-                if (counter) counter.textContent = unique.length + ' palabras';
-                showToast({ text: `🛡️ Lista guardada: ${unique.length} palabras bloqueadas.`, duration: 5000 });
-            } catch (err) {
-                dbError(err);
-            }
+                document.getElementById('blockedWordsCount').textContent = unique.length + ' palabras';
+                showToast({ text: `🛡️ ${unique.length} palabras bloqueadas guardadas.`, duration: 5000 });
+            } catch (err) { dbError(err); }
         };
 
         function containsBlockedWord(text) {
@@ -882,6 +776,7 @@
             return blockedWordsList.some(word => word && lower.includes(word));
         }
 
+        // CONTROL DE LAS 15 SKINS (TODAS CON DEGRADADOS OSCUROS)
         window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -891,19 +786,19 @@
             
             if(skinName === 'cyberpunk') {
                 body.className = "bg-[#050b14] text-cyan-100 h-full w-full flex flex-col font-sans overflow-hidden";
-                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(0,255,204,0.3)] shrink-0";
+                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-3 py-2.5 flex items-center justify-between shadow-md shrink-0";
                 subBar.className = "bg-[#070e1a] border-b border-cyan-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
                 emojiBar.className = "bg-[#070e1a] border-t border-cyan-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
                 inputBar.className = "bg-[#0b132b] border-t border-cyan-500/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'crimson') {
                 body.className = "bg-[#0f0205] text-rose-100 h-full w-full flex flex-col font-sans overflow-hidden";
-                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(255,0,85,0.3)] shrink-0";
+                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-3 py-2.5 flex items-center justify-between shadow-md shrink-0";
                 subBar.className = "bg-[#140206] border-b border-rose-600/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
                 emojiBar.className = "bg-[#140206] border-t border-rose-600/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
                 inputBar.className = "bg-[#1a0308] border-t border-rose-600/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'matrix') {
                 body.className = "bg-[#020d05] text-emerald-100 h-full w-full flex flex-col font-sans overflow-hidden";
-                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-3 py-2.5 flex items-center justify-between shadow-[0_0_15px_rgba(0,255,0,0.3)] shrink-0";
+                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-3 py-2.5 flex items-center justify-between shadow-md shrink-0";
                 subBar.className = "bg-[#021407] border-b border-emerald-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
                 emojiBar.className = "bg-[#021407] border-t border-emerald-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
                 inputBar.className = "bg-[#031c0a] border-t border-emerald-500/40 p-2 flex items-center space-x-1.5 shrink-0";
@@ -919,6 +814,66 @@
                 subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
                 emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
                 inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'purple') {
+                body.className = "bg-gradient-to-br from-purple-950 via-slate-900 to-indigo-950 text-purple-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-purple-900/40 backdrop-blur-md border-b border-purple-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-purple-950/40 backdrop-blur-md border-b border-purple-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-purple-950/40 backdrop-blur-md border-t border-purple-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-purple-900/40 backdrop-blur-md border-t border-purple-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'sunset') {
+                body.className = "bg-gradient-to-br from-amber-950 via-slate-900 to-orange-950 text-amber-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-amber-900/40 backdrop-blur-md border-b border-orange-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-amber-950/40 backdrop-blur-md border-b border-orange-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-amber-950/40 backdrop-blur-md border-t border-orange-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-amber-900/40 backdrop-blur-md border-t border-orange-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'gold') {
+                body.className = "bg-gradient-to-br from-yellow-950 via-slate-900 to-amber-950 text-yellow-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-yellow-900/40 backdrop-blur-md border-b border-yellow-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-yellow-950/40 backdrop-blur-md border-b border-yellow-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-yellow-950/40 backdrop-blur-md border-t border-yellow-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-yellow-900/40 backdrop-blur-md border-t border-yellow-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'royal') {
+                body.className = "bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 text-indigo-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-indigo-900/40 backdrop-blur-md border-b border-indigo-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-indigo-950/40 backdrop-blur-md border-b border-indigo-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-indigo-950/40 backdrop-blur-md border-t border-indigo-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-indigo-900/40 backdrop-blur-md border-t border-indigo-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'toxic') {
+                body.className = "bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-emerald-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-emerald-900/40 backdrop-blur-md border-b border-emerald-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-emerald-950/40 backdrop-blur-md border-b border-emerald-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-emerald-950/40 backdrop-blur-md border-t border-emerald-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-emerald-900/40 backdrop-blur-md border-t border-emerald-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'ruby') {
+                body.className = "bg-gradient-to-br from-pink-950 via-slate-900 to-rose-950 text-pink-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-pink-900/40 backdrop-blur-md border-b border-pink-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-pink-950/40 backdrop-blur-md border-b border-pink-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-pink-950/40 backdrop-blur-md border-t border-pink-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-pink-900/40 backdrop-blur-md border-t border-pink-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'teal') {
+                body.className = "bg-gradient-to-br from-teal-950 via-slate-900 to-cyan-950 text-teal-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-teal-900/40 backdrop-blur-md border-b border-teal-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-teal-950/40 backdrop-blur-md border-b border-teal-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-teal-950/40 backdrop-blur-md border-t border-teal-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-teal-900/40 backdrop-blur-md border-t border-teal-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'yellow') {
+                body.className = "bg-gradient-to-br from-yellow-950 via-slate-900 to-yellow-900 text-yellow-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-yellow-900/40 backdrop-blur-md border-b border-yellow-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-yellow-950/40 backdrop-blur-md border-b border-yellow-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-yellow-950/40 backdrop-blur-md border-t border-yellow-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-yellow-900/40 backdrop-blur-md border-t border-yellow-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'charcoal') {
+                body.className = "bg-gradient-to-br from-neutral-950 via-slate-900 to-zinc-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-neutral-900/60 backdrop-blur-md border-b border-slate-600/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-neutral-950/60 backdrop-blur-md border-b border-slate-600/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-neutral-950/60 backdrop-blur-md border-t border-slate-600/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-neutral-900/60 backdrop-blur-md border-t border-slate-600/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'violet') {
+                body.className = "bg-gradient-to-br from-fuchsia-950 via-slate-900 to-purple-950 text-fuchsia-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-fuchsia-900/40 backdrop-blur-md border-b border-fuchsia-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-fuchsia-950/40 backdrop-blur-md border-b border-fuchsia-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-fuchsia-950/40 backdrop-blur-md border-t border-fuchsia-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-fuchsia-900/40 backdrop-blur-md border-t border-fuchsia-400/30 p-2 flex items-center space-x-1.5 shrink-0";
             }
             updateRoomVisualStatus();
             togglePanel('skinsPanel');
@@ -942,7 +897,6 @@
             input.focus();
         }
 
-        // Panel grande de emojis
         const EXTRA_EMOJIS = [
             '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊',
             '😋','😎','😍','😘','🥰','😗','😙','😚','🙂','🤗',
@@ -971,16 +925,13 @@
             if (!panel || !grid) return;
 
             if (panel.classList.contains('hidden')) {
-                // Llenar el grid solo la primera vez
                 if (grid.children.length === 0) {
                     EXTRA_EMOJIS.forEach(e => {
                         const btn = document.createElement('button');
                         btn.type = 'button';
                         btn.className = 'hover:bg-slate-800 rounded p-1 transition-transform hover:scale-125 cursor-pointer';
                         btn.textContent = e;
-                        btn.onclick = () => {
-                            insertEmoji(e);
-                        };
+                        btn.onclick = () => { insertEmoji(e); };
                         grid.appendChild(btn);
                     });
                 }
@@ -990,7 +941,6 @@
             }
         };
 
-        // Cerrar el panel si se hace clic fuera
         document.addEventListener('click', function(e) {
             const panel = document.getElementById('emojiPickerPanel');
             const bar = document.getElementById('emojiBarTheme');
@@ -1005,7 +955,6 @@
             const start = input.selectionStart;
             const end = input.selectionEnd;
             const text = input.value;
-            
             input.value = text.substring(0, start) + tagStart + text.substring(start, end) + tagEnd + text.substring(end);
             input.focus();
             input.setSelectionRange(start + tagStart.length, end + tagStart.length);
@@ -1131,7 +1080,6 @@
                     if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
-                        // Solo números → forzar Inter para que se vean limpios y consistentes
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
                     } else {
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
@@ -1170,35 +1118,22 @@
         }
 
         window.promptOpenInbox = function(targetUser) {
-            if (targetUser === currentUser.nick) return;
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
-                return;
-            }
+            if (targetUser === currentUser.nick || isBanned(currentUser.nick)) return;
             openInboxModalMain();
             openInboxWith(targetUser);
         }
 
         window.openInboxModalMain = function() {
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes usar el inbox.");
-                return;
-            }
+            if (isBanned(currentUser.nick)) { uiAlert("Estás bloqueado."); return; }
             document.getElementById('inboxModal').classList.remove('hidden');
-            if(!currentTargetUser) {
-                openInboxWith(null);
-            }
+            if(!currentTargetUser) openInboxWith(null);
         }
 
         window.startNewChatPrompt = async function() {
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
-                return;
-            }
-            const recipient = await uiPrompt("Ingresa el apodo exacto del usuario con quien deseas chatear en privado:");
+            if (isBanned(currentUser.nick)) return;
+            const recipient = await uiPrompt("Ingresa el apodo exacto del usuario:");
             if(recipient && recipient.trim() !== "" && recipient.trim() !== currentUser.nick) {
-                const target = recipient.trim();
-                openInboxWith(target);
+                openInboxWith(recipient.trim());
             }
         }
 
@@ -1210,10 +1145,7 @@
             let contacts = new Set();
             Object.keys(allRooms).forEach(roomKey => {
                 if (roomKey.includes(currentUser.nick)) {
-                    const parts = roomKey.split('_');
-                    parts.forEach(p => {
-                        if (p !== currentUser.nick && p) contacts.add(p);
-                    });
+                    roomKey.split('_').forEach(p => { if (p !== currentUser.nick && p) contacts.add(p); });
                 }
             });
 
@@ -1224,8 +1156,7 @@
 
             contacts.forEach(contact => {
                 const btn = document.createElement('button');
-                // Botones ultra chiquitos y compactos tipo badge/chip
-                btn.className = `text-[11px] px-2 py-0.5 rounded-md font-bold transition-all cursor-pointer flex items-center space-x-1 shrink-0 whitespace-nowrap max-w-[9rem] ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'}`;
+                btn.className = `text-[11px] px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center space-x-1 shrink-0 whitespace-nowrap max-w-[9rem] ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'}`;
                 btn.innerHTML = `<span>💬</span><span class="truncate">${esc(contact)}</span>`;
                 btn.onclick = () => openInboxWith(contact);
                 listContainer.appendChild(btn);
@@ -1270,12 +1201,9 @@
                         p.className = `p-2.5 rounded-xl text-xs w-full max-w-[85%] break-words whitespace-pre-wrap group relative shrink-0 ${isMe ? 'bg-cyan-950/85 text-cyan-200 ml-auto border border-cyan-500/40 shadow' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
-                        if (msg.text) {
-                            innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        }
+                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
                         if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover">`;
 
-                        // Cualquiera puede borrar cualquier mensaje del inbox (muy visible para prueba)
                         innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
                         p.innerHTML = innerHtml;
@@ -1294,19 +1222,11 @@
         }
 
         window.sendInboxMessage = function() {
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes enviar mensajes privados.");
-                return;
-            }
-            if (!currentTargetUser || !activeUsersKey) return;
+            if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
-
-            if (containsBlockedWord(text)) {
-                uiAlert("Tu mensaje contiene palabras no permitidas y no se puede enviar.");
-                return;
-            }
+            if (containsBlockedWord(text)) { uiAlert("Tu mensaje contiene palabras no permitidas."); return; }
 
             const privMsg = {
                 id: Date.now(),
@@ -1320,12 +1240,7 @@
         }
 
         window.sendInboxImage = function(e) {
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes enviar imágenes privadas.");
-                e.target.value = '';
-                return;
-            }
-            if (!currentTargetUser || !activeUsersKey) return;
+            if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
             e.target.value = '';
             if(!file) return;
@@ -1342,9 +1257,7 @@
             }).catch(dbError);
         }
 
-        window.deleteInboxMessage = function(usersKey, firebaseKey) {
-            remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`)).catch(dbError);
-        }
+        window.deleteInboxMessage = function(usersKey, firebaseKey) { remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`)).catch(dbError); }
 
         window.handleInboxKeyPress = function(e) {
             if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendInboxMessage(); }
