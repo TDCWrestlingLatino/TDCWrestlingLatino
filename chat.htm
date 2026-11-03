@@ -1269,27 +1269,21 @@
         }
     </script>
 
-<!-- SCRIPT DE CLIC DERECHO PERSONALIZADO INDEPENDIENTE -->
-    <script>
-        // 1. Crear el elemento del menú flotante dinámicamente si no existe
-        let customContextMenu = document.getElementById('customContextMenu');
-        if (!customContextMenu) {
-            customContextMenu = document.createElement('div');
-            customContextMenu.id = 'customContextMenu';
-            customContextMenu.className = 'hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md';
-            customContextMenu.innerHTML = `
-                <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
-                <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
-                <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
-                <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
-            `;
-            document.body.appendChild(customContextMenu);
-        }
 
-        // 2. Interceptar el clic derecho
+
+<!-- MENÚ FLOTANTE DE CLIC DERECHO -->
+    <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
+        <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
+        <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
+        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
+        <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
+    </div>    
+<script>
         document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Cancela el menú por defecto del navegador
             const menu = document.getElementById('customContextMenu');
+            if (!menu) return;
+
             let x = e.clientX;
             let y = e.clientY;
             
@@ -1308,7 +1302,7 @@
             menu.style.top = y + 'px';
         });
 
-        // 3. Ocultar el menú al hacer clic fuera
+        // Ocultar el menú al hacer cualquier clic izquierdo o scroll
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('customContextMenu');
             if (menu && !menu.contains(e.target)) {
@@ -1316,7 +1310,6 @@
             }
         });
 
-        // 4. Funciones de los botones
         function menuActionReload() {
             location.reload();
         }
