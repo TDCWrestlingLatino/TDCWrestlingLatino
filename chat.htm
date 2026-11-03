@@ -200,7 +200,7 @@
             </div>
 
             <!-- EMOJI BAR & BOTONES DE FORMATO -->
-            <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0 transition-all">
+            <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0 transition-all relative">
                 <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Negrita"><b>B</b></button>
                 <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Cursiva"><i>I</i></button>
                 <span class="text-slate-600 text-xs">|</span>
@@ -211,6 +211,12 @@
                 <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
                 <button onclick="insertEmoji('🤔')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤔</button>
                 <button onclick="insertEmoji('🚀')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🚀</button>
+                <button onclick="toggleEmojiPicker()" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2 py-0.5 rounded text-sm border border-slate-700 cursor-pointer shrink-0" title="Más emojis">😀+</button>
+
+                <!-- Panel grande de emojis -->
+                <div id="emojiPickerPanel" class="hidden absolute bottom-full left-0 right-0 mb-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 z-30 max-h-52 overflow-y-auto custom-scrollbar">
+                    <div id="emojiPickerGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1 text-xl text-center select-none"></div>
+                </div>
             </div>
 
             <!-- INPUT BAR -->
@@ -935,6 +941,64 @@
             input.value += emoji;
             input.focus();
         }
+
+        // Panel grande de emojis
+        const EXTRA_EMOJIS = [
+            '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊',
+            '😋','😎','😍','😘','🥰','😗','😙','😚','🙂','🤗',
+            '🤩','🤔','🤨','😐','😑','😶','🙄','😏','😣','😥',
+            '😮','🤐','😯','😪','😫','🥱','😴','😌','😛','😜',
+            '😝','🤤','😒','😓','😔','😕','🙃','🤑','😲','☹️',
+            '🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨',
+            '😩','🤯','😬','😰','😱','🥵','🥶','😳','🤪','😵',
+            '😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🥴','😇',
+            '🥳','🥺','🤠','🤡','🤥','🤫','🤭','🧐','🤓','😈',
+            '👿','👹','👺','💀','👻','👽','🤖','💩','😺','😸',
+            '😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛',
+            '💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞',
+            '💓','💗','💖','💘','💝','👍','👎','👊','✊','🤛',
+            '🤜','👏','🙌','👐','🤲','🤝','🙏','💪','🦾','🖕',
+            '✌️','🤞','🤟','🤘','👌','🤌','🤏','👈','👉','👆',
+            '👇','☝️','👋','🤚','🖐️','✋','🖖','🔥','⭐','🌟',
+            '✨','💥','💢','💦','💨','🚀','🎉','🎊','🏆','🥇',
+            '⚽','🏀','🏈','⚾','🎾','🥊','🎮','🎲','🎯','🎵',
+            '🎶','🍺','🍻','🍷','🍸','🍹','☕','🍕','🍔','🍟'
+        ];
+
+        window.toggleEmojiPicker = function() {
+            const panel = document.getElementById('emojiPickerPanel');
+            const grid = document.getElementById('emojiPickerGrid');
+            if (!panel || !grid) return;
+
+            if (panel.classList.contains('hidden')) {
+                // Llenar el grid solo la primera vez
+                if (grid.children.length === 0) {
+                    EXTRA_EMOJIS.forEach(e => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'hover:bg-slate-800 rounded p-1 transition-transform hover:scale-125 cursor-pointer';
+                        btn.textContent = e;
+                        btn.onclick = () => {
+                            insertEmoji(e);
+                        };
+                        grid.appendChild(btn);
+                    });
+                }
+                panel.classList.remove('hidden');
+            } else {
+                panel.classList.add('hidden');
+            }
+        };
+
+        // Cerrar el panel si se hace clic fuera
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('emojiPickerPanel');
+            const bar = document.getElementById('emojiBarTheme');
+            if (!panel || panel.classList.contains('hidden')) return;
+            if (bar && !bar.contains(e.target)) {
+                panel.classList.add('hidden');
+            }
+        });
 
         window.insertFormat = function(tagStart, tagEnd) {
             const input = document.getElementById('messageInput');
