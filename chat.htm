@@ -1101,7 +1101,7 @@
                 }
 
                 div.innerHTML = `
-                    <img src="${esc(avatar)}" class="w-16 h-16 rounded-xl object-cover border border-cyan-400 shrink-0 shadow">
+                    <img src="${esc(avatar)}" class="w-14 h-14 rounded-xl object-cover border border-cyan-400 shrink-0 shadow">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-1.5">
                             <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily} !important;" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
