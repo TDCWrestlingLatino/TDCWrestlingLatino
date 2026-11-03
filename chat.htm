@@ -99,6 +99,9 @@
             <button id="btnAdminBans" onclick="openBannedList()" class="hidden bg-red-700 hover:bg-red-600 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Usuarios Bloqueados">
                 <span>🚫</span>
             </button>
+            <button id="btnBlockedWords" onclick="openBlockedWordsPanel()" class="hidden bg-purple-700 hover:bg-purple-600 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Palabras Bloqueadas">
+                <span>🛡️</span>
+            </button>
             <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Skins">
                 <span>🎨</span>
             </button>
@@ -295,6 +298,22 @@
         </div>
     </div>
 
+    <!-- PANEL DE PALABRAS BLOQUEADAS (solo Admin principal) -->
+    <div id="blockedWordsModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-purple-700/50 w-full max-w-lg rounded-2xl p-4 shadow-2xl flex flex-col max-h-[80vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-purple-400">🛡️ Palabras Bloqueadas</h3>
+                <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea). Cualquier mensaje que las contenga no se enviará.</p>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
+                <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
+                <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow">Guardar Lista</button>
+            </div>
+        </div>
+    </div>
+
     <!-- AVISOS (por ejemplo, mensaje privado nuevo) -->
     <div id="toastContainer" class="fixed bottom-16 left-2 right-2 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
@@ -483,6 +502,7 @@
         let adminNodeNicks = new Set();   // admins registrados en Firebase (nodo "admins")
         let latestRooms = null;           // últimos chats privados recibidos
         let bannedUsers = {};             // { nickKey: { nick, bannedBy, bannedAt } }
+        let blockedWordsList = [];        // array de palabras bloqueadas (en minúsculas)
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         const pairKey = (a, b) => [a, b].sort().join('_').replace(/[.#$\[\]]/g, '_');
         function isAdminNick(nick) {
@@ -530,16 +550,25 @@
             }
         });
 
+        function isMainAdmin() {
+            if (!currentUser.isAdmin) return false;
+            const n = String(currentUser.nick || '').trim().toLowerCase();
+            return n === 'gran enigma' || n === 'the gran enigma';
+        }
+
         function checkAdminUIs() {
             if(currentUser.isAdmin) {
                 document.getElementById('btnAdminClear').classList.remove('hidden');
                 document.getElementById('btnAdminToggleChat').classList.remove('hidden');
                 document.getElementById('btnAdminBans').classList.remove('hidden');
                 document.getElementById('adminOnlineContainer').classList.remove('hidden');
+                // Solo el Admin principal ve el botón de palabras bloqueadas
+                document.getElementById('btnBlockedWords').classList.toggle('hidden', !isMainAdmin());
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
                 document.getElementById('btnAdminToggleChat').classList.add('hidden');
                 document.getElementById('btnAdminBans').classList.add('hidden');
+                document.getElementById('btnBlockedWords').classList.add('hidden');
                 document.getElementById('adminOnlineContainer').classList.add('hidden');
             }
         }
@@ -625,6 +654,18 @@
             // Lista de usuarios bloqueados
             onValue(ref(db, 'banned_users'), (snapshot) => {
                 bannedUsers = snapshot.val() || {};
+            }, (err) => console.error(err));
+
+            // Palabras bloqueadas (solo el admin principal las edita)
+            onValue(ref(db, 'blocked_words'), (snapshot) => {
+                const data = snapshot.val();
+                if (Array.isArray(data)) {
+                    blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
+                } else if (typeof data === 'string') {
+                    blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+                } else {
+                    blockedWordsList = [];
+                }
             }, (err) => console.error(err));
 
             const messagesRef = ref(db, 'chat_messages');
@@ -789,6 +830,52 @@
             if (modal) modal.classList.add('hidden');
         };
 
+        // ===== Palabras bloqueadas (solo Admin principal) =====
+        window.openBlockedWordsPanel = function() {
+            if (!isMainAdmin()) {
+                uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.');
+                return;
+            }
+            const modal = document.getElementById('blockedWordsModal');
+            const input = document.getElementById('blockedWordsInput');
+            const counter = document.getElementById('blockedWordsCount');
+            if (!modal || !input) return;
+            input.value = blockedWordsList.join('\n');
+            if (counter) counter.textContent = blockedWordsList.length + ' palabras';
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        };
+
+        window.closeBlockedWordsPanel = function() {
+            const modal = document.getElementById('blockedWordsModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.saveBlockedWords = async function() {
+            if (!isMainAdmin()) return;
+            const input = document.getElementById('blockedWordsInput');
+            if (!input) return;
+            const raw = input.value || '';
+            const words = raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+            // Eliminar duplicados
+            const unique = [...new Set(words)];
+            try {
+                await set(ref(db, 'blocked_words'), unique);
+                blockedWordsList = unique;
+                const counter = document.getElementById('blockedWordsCount');
+                if (counter) counter.textContent = unique.length + ' palabras';
+                showToast({ text: `🛡️ Lista guardada: ${unique.length} palabras bloqueadas.`, duration: 5000 });
+            } catch (err) {
+                dbError(err);
+            }
+        };
+
+        function containsBlockedWord(text) {
+            if (!text || blockedWordsList.length === 0) return false;
+            const lower = String(text).toLowerCase();
+            return blockedWordsList.some(word => word && lower.includes(word));
+        }
+
         window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -896,6 +983,11 @@
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if(!text) return;
+
+            if (containsBlockedWord(text)) {
+                uiAlert("Tu mensaje contiene palabras no permitidas y no se puede enviar.");
+                return;
+            }
 
             const newMsg = {
                 id: Date.now(),
@@ -1146,6 +1238,11 @@
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
+
+            if (containsBlockedWord(text)) {
+                uiAlert("Tu mensaje contiene palabras no permitidas y no se puede enviar.");
+                return;
+            }
 
             const privMsg = {
                 id: Date.now(),
