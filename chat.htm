@@ -1096,7 +1096,8 @@
                 }
                 const imageSrc = safeUrl(msg.image);
                 if(imageSrc) {
-                    contentHtml += `<img src="${esc(imageSrc)}" onclick="window.open(this.src, '_blank')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en pestaña aparte">`;
+                contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                }
                 }
                 if(isValidYouTubeEmbed(msg.youtube)) {
                     contentHtml += `
@@ -1211,7 +1212,7 @@
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="window.open(this.src, '_blank')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en pestaña aparte">`;
+                        if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="openImageModal('${esc(safeUrl(msg.image))}')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
 
                         innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
@@ -1331,7 +1332,22 @@
             document.getElementById('customContextMenu').classList.add('hidden');
         }
     </script>
-
+<script>
+    function openImageModal(imgSrc) {
+        const win = window.open();
+        if (win) {
+            win.document.write(`
+                <html>
+                    <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
+                    <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
+                        <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                    </body>
+                </html>
+            `);
+            win.document.close();
+        }
+    }
+</script>
     
 </body>
 </html>
