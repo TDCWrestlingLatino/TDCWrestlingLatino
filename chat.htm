@@ -19,19 +19,14 @@
                 }
             }
         }
-
-        
     </script>
 
     <!-- Google Fonts completas -->
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Chakra+Petch:wght@500;700&family=Exo+2:wght@500;700&family=Inter:wght@400;700;900&family=Nunito:wght@600;800&family=Orbitron:wght@600;700&family=Oswald:wght@500;700&family=Outfit:wght@500;700&family=Plus+Jakarta+Sans:wght@500;700&family=Rajdhani:wght@600;700&family=Rubik:wght@500;700&family=Russo+One&family=Teko:wght@500;600&display=swap" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; overflow: hidden; -webkit-text-size-adjust: 100%; }
-        /* Al llegar al final del chat no se mueve la página de Blogger que está detrás */
         .custom-scrollbar { overscroll-behavior: contain; }
-        /* iOS hace zoom al tocar campos con letra menor a 16px: se evita en pantallas táctiles */
         @media (pointer: coarse) { input[type="text"], input[type="password"], select, textarea { font-size: 16px !important; } }
-        /* En pantallas táctiles no existe hover: el botón de borrar queda visible */
         @media (hover: none) { .msg-del { opacity: 0.7 !important; } }
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
@@ -39,8 +34,6 @@
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
     </style>
-
-    
 </head>
 <body class="bg-slate-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
 
@@ -121,7 +114,7 @@
 
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full h-full min-h-0">
         
-        <!-- PANEL DE SKINS (15 OPCIONES TOTALES) -->
+        <!-- PANEL DE SKINS -->
         <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚡ Skins & Estilos</h3>
@@ -134,7 +127,6 @@
                     <button onclick="setSkin('matrix')" class="text-left px-2.5 py-1.5 rounded-lg bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-500 font-bold text-emerald-200 cursor-pointer">💻 Matrix Terminal</button>
                     <button onclick="setSkin('glass')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-950/85 hover:bg-blue-900 border border-blue-400 font-bold text-blue-200 cursor-pointer">🔮 Glassmorphism</button>
                     <button onclick="setSkin('minimal')" class="text-left px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 font-bold text-zinc-100 cursor-pointer">🌙 Minimal Dark</button>
-                    <!-- 10 Nuevos Skins con Degradados Oscuros -->
                     <button onclick="setSkin('purple')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-950/85 hover:bg-purple-900 border border-purple-400 font-bold text-purple-200 cursor-pointer">💜 Purple Neon</button>
                     <button onclick="setSkin('sunset')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-950/85 hover:bg-amber-900 border border-orange-500 font-bold text-amber-200 cursor-pointer">🌅 Sunset Amber</button>
                     <button onclick="setSkin('gold')" class="text-left px-2.5 py-1.5 rounded-lg bg-yellow-950/85 hover:bg-yellow-900 border border-yellow-500 font-bold text-yellow-200 cursor-pointer">⚜️ Deep Gold</button>
@@ -215,7 +207,7 @@
                 🔒 Chat cerrado temporalmente por el Administrador.
             </div>
 
-            <!-- Panel grande de emojis (fuera de la barra con scroll para que no se corte) -->
+            <!-- Panel grande de emojis -->
             <div id="emojiPickerPanel" class="hidden absolute bottom-16 left-2 right-2 sm:left-3 sm:right-3 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 z-30 max-h-52 overflow-y-auto custom-scrollbar">
                 <div id="emojiPickerGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1 text-xl text-center select-none"></div>
             </div>
@@ -498,7 +490,6 @@
         let bannedUsers = {};
         let blockedWordsList = [];
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
-        const pairKey = (a, b) => [a, b].sort().join('_').replace(/[.#$\[\]]/g, '_');
         function isAdminNick(nick) {
             const k = nickKey(nick);
             return adminNodeNicks.has(k) || messages.some(m => m.isAdmin && nickKey(m.sender) === k);
@@ -781,7 +772,7 @@
             return blockedWordsList.some(word => word && lower.includes(word));
         }
 
-        // CONTROL DE LAS 15 SKINS (TODAS CON DEGRADADOS OSCUROS)
+        // CONTROL DE LAS 15 SKINS
         window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -903,24 +894,15 @@
         }
 
         const EXTRA_EMOJIS = [
-            '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊',
-            '😋','😎','😍','😘','🥰','😗','😙','😚','🙂','🤗',
-            '🤩','🤔','🤨','😐','😑','😶','🙄','😏','😣','😥',
-            '😮','🤐','😯','😪','😫','🥱','😴','😌','😛','😜',
-            '😝','🤤','😒','😓','😔','😕','🙃','🤑','😲','☹️',
-            '🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨',
-            '😩','🤯','😬','😰','😱','🥵','🥶','😳','🤪','😵',
-            '😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🥴','😇',
-            '🥳','🥺','🤠','🤡','🤥','🤫','🤭','🧐','🤓','😈',
-            '👿','👹','👺','💀','👻','👽','🤖','💩','😺','😸',
-            '😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛',
-            '💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞',
-            '💓','💗','💖','💘','💝','👍','👎','👊','✊','🤛',
-            '🤜','👏','🙌','👐','🤲','🤝','🙏','💪','🦾','🖕',
-            '✌️','🤞','🤟','🤘','👌','🤌','🤏','👈','👉','👆',
-            '👇','☝️','👋','🤚','🖐️','✋','🖖','🔥','⭐','🌟',
-            '✨','💥','💢','💦','💨','🚀','🎉','🎊','🏆','🥇',
-            '⚽','🏀','🏈','⚾','🎾','🥊','🎮','🎲','🎯','🎵',
+            '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','🙂','🤗',
+            '🤩','🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','🥱','😴','😌','😛','😜',
+            '😝','🤤','😒','😓','😔','😕','🙃','🤑','😲','☹️','🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨',
+            '😩','🤯','😬','😰','😱','🥵','🥶','😳','🤪','😵','😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🥴','😇',
+            '🥳','🥺','🤠','🤡','🤥','🤫','🤭','🧐','🤓','😈','👿','👹','👺','💀','👻','👽','🤖','💩','😺','😸',
+            '😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞',
+            '💓','💗','💖','💘','💝','👍','👎','👊','✊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','💪','🦾','🖕',
+            '✌️','🤞','🤟','🤘','👌','🤌','🤏','👈','👉','👆','👇','☝️','👋','🤚','🖐️','✋','🖖','🔥','⭐','🌟',
+            '✨','💥','💢','💦','💨','🚀','🎉','🎊','🏆','🥇','⚽','🏀','🏈','⚾','🎾','🥊','🎮','🎲','🎯','🎵',
             '🎶','🍺','🍻','🍷','🍸','🍹','☕','🍕','🍔','🍟'
         ];
 
@@ -967,10 +949,7 @@
 
         function parseMarkdown(text) {
             let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            
-            // Detectar URLs y convertirlas en enlaces que abren en otra pestaña
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-
             safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
             safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
             return safe;
@@ -1094,11 +1073,12 @@
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
                     }
                 }
+
                 const imageSrc = safeUrl(msg.image);
                 if(imageSrc) {
-                contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                    contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                 }
-                }
+
                 if(isValidYouTubeEmbed(msg.youtube)) {
                     contentHtml += `
                         <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
@@ -1274,18 +1254,16 @@
         }
     </script>
 
-
-
-<!-- MENÚ FLOTANTE DE CLIC DERECHO -->
+    <!-- MENÚ FLOTANTE DE CLIC DERECHO -->
     <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
         <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
         <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
         <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
         <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
     </div>    
-<script>
+    <script>
         document.addEventListener('contextmenu', function(e) {
-            e.preventDefault(); // Cancela el menú por defecto del navegador
+            e.preventDefault();
             const menu = document.getElementById('customContextMenu');
             if (!menu) return;
 
@@ -1307,7 +1285,6 @@
             menu.style.top = y + 'px';
         });
 
-        // Ocultar el menú al hacer cualquier clic izquierdo o scroll
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('customContextMenu');
             if (menu && !menu.contains(e.target)) {
@@ -1331,23 +1308,21 @@
             }
             document.getElementById('customContextMenu').classList.add('hidden');
         }
-    </script>
-<script>
-    function openImageModal(imgSrc) {
-        const win = window.open();
-        if (win) {
-            win.document.write(`
-                <html>
-                    <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
-                    <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
-                        <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
-                    </body>
-                </html>
-            `);
-            win.document.close();
+
+        function openImageModal(imgSrc) {
+            const win = window.open();
+            if (win) {
+                win.document.write(`
+                    <html>
+                        <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
+                        <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
+                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                        </body>
+                    </html>
+                `);
+                win.document.close();
+            }
         }
-    }
-</script>
-    
+    </script>
 </body>
 </html>
