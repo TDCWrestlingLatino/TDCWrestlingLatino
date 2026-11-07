@@ -1115,10 +1115,10 @@
                 }
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
-                    // Usamos playsinline=1 para forzar que corra directo en el chat sin abrirse a pantalla completa obligatoria ni pestañas externas
                     const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&playsinline=1` : `${msg.youtube}?playsinline=1`;
+                    // MODIFICACIÓN CLAVE AQUÍ: w-full y una altura generosa (h-64 sm:h-80) para que ocupe todo el ancho y sea grande
                     contentHtml += `
-                        <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
+                        <div class="mt-2 w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-black">
                             <iframe src="${ytUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     `;
