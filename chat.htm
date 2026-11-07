@@ -1068,10 +1068,8 @@
         function renderMessages() {
             const container = document.getElementById('chatMessages');
             
-            // Creamos una firma única con las llaves actuales de los mensajes para saber si realmente hubo un mensaje nuevo
             const currentKeys = messages.map(m => m.firebaseKey).join(',');
             if (currentKeys === lastRenderedKeys && container.children.length > 0) {
-                // Si son exactamente los mismos mensajes, solo aseguramos el scroll al fondo sin recrear el DOM (evita que los videos se cierren)
                 container.scrollTop = container.scrollHeight;
                 return;
             }
@@ -1117,8 +1115,8 @@
                 }
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
-                    // Añadimos parámetro enablejsapi=1 para estabilizar el reproductor en línea
-                    const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&enablejsapi=1` : `${msg.youtube}?enablejsapi=1`;
+                    // Usamos playsinline=1 para forzar que corra directo en el chat sin abrirse a pantalla completa obligatoria ni pestañas externas
+                    const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&playsinline=1` : `${msg.youtube}?playsinline=1`;
                     contentHtml += `
                         <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
                             <iframe src="${ytUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
