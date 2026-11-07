@@ -198,8 +198,8 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR DE MENSAJES -->
-            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-2.5 custom-scrollbar min-h-0">
+            <!-- CONTENEDOR DE MENSAJES (Flujo de arriba hacia abajo) -->
+            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col space-y-2.5 custom-scrollbar min-h-0">
             </div>
 
             <!-- AVISO DE SALA CERRADA -->
@@ -262,7 +262,8 @@
                     <span>💬</span>
                     <span>Selecciona un chat de arriba</span>
                 </div>
-                <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse min-h-0">
+                <!-- INBOX CONTENT (Flujo de arriba hacia abajo) -->
+                <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col min-h-0">
                     <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la parte superior para comenzar.</div>
                 </div>
 
@@ -619,7 +620,8 @@
                 messages = [];
                 if (data) {
                     Object.keys(data).forEach(key => { messages.push({ firebaseKey: key, ...data[key] }); });
-                    messages.sort((a, b) => b.id - a.id);
+                    // Orden ascendente: más antiguos arriba, más nuevos abajo
+                    messages.sort((a, b) => a.id - b.id);
                 }
                 renderMessages();
                 updateInboxComposer();
@@ -1011,6 +1013,7 @@
             if(e.key === 'Enter') sendMessage();
         }
 
+        // SOPORTE PARA GIFS ANIMADOS E IMÁGENES NORMALES
         window.sendImage = function(e) {
             if (isBanned(currentUser.nick)) {
                 uiAlert("Estás bloqueado. No puedes enviar imágenes.");
@@ -1022,20 +1025,39 @@
             e.target.value = '';
             if(!file) return;
 
-            compressImage(file, 900, 0.75).then(data => {
-                const newMsg = {
-                    id: Date.now(),
-                    sender: currentUser.nick,
-                    avatar: currentUser.avatar,
-                    image: data,
-                    textColor: currentUser.textColor,
-                    font: currentUser.font,
-                    fontSize: currentUser.fontSize,
-                    isAdmin: currentUser.isAdmin,
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            if (file.type === 'image/gif') {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    const newMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        avatar: currentUser.avatar,
+                        image: uploadEvent.target.result,
+                        textColor: currentUser.textColor,
+                        font: currentUser.font,
+                        fontSize: currentUser.fontSize,
+                        isAdmin: currentUser.isAdmin,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    push(ref(db, 'chat_messages'), newMsg).catch(dbError);
                 };
-                return push(ref(db, 'chat_messages'), newMsg);
-            }).catch(dbError);
+                reader.readAsDataURL(file);
+            } else {
+                compressImage(file, 900, 0.75).then(data => {
+                    const newMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        avatar: currentUser.avatar,
+                        image: data,
+                        textColor: currentUser.textColor,
+                        font: currentUser.font,
+                        fontSize: currentUser.fontSize,
+                        isAdmin: currentUser.isAdmin,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    return push(ref(db, 'chat_messages'), newMsg);
+                }).catch(dbError);
+            }
         }
 
         window.deleteMessage = function(firebaseKey) {
@@ -1105,6 +1127,8 @@
                 `;
                 container.appendChild(div);
             });
+            // Mantener el scroll al fondo automáticamente al cargar o recibir mensajes
+            container.scrollTop = container.scrollHeight;
         }
 
         window.promptOpenInbox = function(targetUser) {
@@ -1183,7 +1207,8 @@
                 if (data) {
                     let privMessages = [];
                     Object.keys(data).forEach(key => privMessages.push({ firebaseKey: key, ...data[key] }));
-                    privMessages.sort((a, b) => b.id - a.id);
+                    // Orden ascendente en inbox también
+                    privMessages.sort((a, b) => a.id - b.id);
 
                     privMessages.forEach(msg => {
                         const p = document.createElement('div');
@@ -1199,6 +1224,7 @@
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
                     });
+                    inboxContainer.scrollTop = inboxContainer.scrollHeight;
                 } else {
                     inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">Inicia la charla privada con ${esc(targetUser)}.</p>`;
                 }
@@ -1236,15 +1262,29 @@
             if(!file) return;
 
             const usersKey = activeUsersKey;
-            compressImage(file, 900, 0.75).then(data => {
-                const privMsg = {
-                    id: Date.now(),
-                    sender: currentUser.nick,
-                    image: data,
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            if (file.type === 'image/gif') {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    const privMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        image: uploadEvent.target.result,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    push(ref(db, `private_chats/${usersKey}`), privMsg).catch(dbError);
                 };
-                return push(ref(db, `private_chats/${usersKey}`), privMsg);
-            }).catch(dbError);
+                reader.readAsDataURL(file);
+            } else {
+                compressImage(file, 900, 0.75).then(data => {
+                    const privMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        image: data,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    return push(ref(db, `private_chats/${usersKey}`), privMsg);
+                }).catch(dbError);
+            }
         }
 
         window.deleteInboxMessage = function(usersKey, firebaseKey) { remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`)).catch(dbError); }
@@ -1298,7 +1338,7 @@
 
         function menuActionScrollBottom() {
             const container = document.getElementById('chatMessages');
-            if (container) container.scrollTop = 0;
+            if (container) container.scrollTop = container.scrollHeight;
             document.getElementById('customContextMenu').classList.add('hidden');
         }
 
