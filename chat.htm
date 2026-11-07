@@ -233,7 +233,7 @@
                     <span class="text-xs">📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega el enlace de un GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube/GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
         </div>
@@ -1011,7 +1011,6 @@
             if(e.key === 'Enter') sendMessage();
         }
 
-        // SOPORTE PARA GIFS E IMÁGENES SUBIDAS
         window.sendImage = function(e) {
             if (isBanned(currentUser.nick)) {
                 uiAlert("Estás bloqueado. No puedes enviar imágenes.");
@@ -1064,8 +1063,20 @@
             remove(ref(db, `chat_messages/${firebaseKey}`)).catch(dbError);
         }
 
+        let lastRenderedKeys = "";
+
         function renderMessages() {
             const container = document.getElementById('chatMessages');
+            
+            // Creamos una firma única con las llaves actuales de los mensajes para saber si realmente hubo un mensaje nuevo
+            const currentKeys = messages.map(m => m.firebaseKey).join(',');
+            if (currentKeys === lastRenderedKeys && container.children.length > 0) {
+                // Si son exactamente los mismos mensajes, solo aseguramos el scroll al fondo sin recrear el DOM (evita que los videos se cierren)
+                container.scrollTop = container.scrollHeight;
+                return;
+            }
+            lastRenderedKeys = currentKeys;
+
             container.innerHTML = '';
 
             messages.forEach(msg => {
@@ -1087,7 +1098,6 @@
                 let contentHtml = '';
                 if(msg.text) {
                     const text = String(msg.text).trim();
-                    // Detectar si pegaron un enlace directo de imagen o GIF en el texto
                     const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
 
                     if (isDirectImgUrl) {
@@ -1107,9 +1117,11 @@
                 }
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
+                    // Añadimos parámetro enablejsapi=1 para estabilizar el reproductor en línea
+                    const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&enablejsapi=1` : `${msg.youtube}?enablejsapi=1`;
                     contentHtml += `
                         <div class="mt-1.5 w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow">
-                            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                            <iframe src="${ytUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     `;
                 }
