@@ -198,7 +198,7 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR DE MENSAJES (Flujo de arriba hacia abajo) -->
+            <!-- CONTENEDOR DE MENSAJES (De arriba hacia abajo) -->
             <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col space-y-2.5 custom-scrollbar min-h-0">
             </div>
 
@@ -233,7 +233,7 @@
                     <span class="text-xs">📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega el enlace de un GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
         </div>
@@ -262,7 +262,6 @@
                     <span>💬</span>
                     <span>Selecciona un chat de arriba</span>
                 </div>
-                <!-- INBOX CONTENT (Flujo de arriba hacia abajo) -->
                 <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col min-h-0">
                     <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la parte superior para comenzar.</div>
                 </div>
@@ -620,7 +619,6 @@
                 messages = [];
                 if (data) {
                     Object.keys(data).forEach(key => { messages.push({ firebaseKey: key, ...data[key] }); });
-                    // Orden ascendente: más antiguos arriba, más nuevos abajo
                     messages.sort((a, b) => a.id - b.id);
                 }
                 renderMessages();
@@ -1013,8 +1011,8 @@
             if(e.key === 'Enter') sendMessage();
         }
 
-        // SOPORTE PARA GIFS ANIMADOS E IMÁGENES NORMALES
-      window.sendImage = function(e) {
+        // SOPORTE PARA GIFS E IMÁGENES SUBIDAS
+        window.sendImage = function(e) {
             if (isBanned(currentUser.nick)) {
                 uiAlert("Estás bloqueado. No puedes enviar imágenes.");
                 e.target.value = '';
@@ -1025,7 +1023,6 @@
             e.target.value = '';
             if(!file) return;
 
-            // Detección robusta: por tipo MIME o si el nombre termina en .gif
             const isGif = file.type.includes('gif') || (file.name && file.name.toLowerCase().endsWith('.gif'));
 
             if (isGif) {
@@ -1089,8 +1086,13 @@
 
                 let contentHtml = '';
                 if(msg.text) {
-                    const text = String(msg.text);
-                    if (isOnlyEmojis(text)) {
+                    const text = String(msg.text).trim();
+                    // Detectar si pegaron un enlace directo de imagen o GIF en el texto
+                    const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
+
+                    if (isDirectImgUrl) {
+                        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                    } else if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
@@ -1130,7 +1132,6 @@
                 `;
                 container.appendChild(div);
             });
-            // Mantener el scroll al fondo automáticamente al cargar o recibir mensajes
             container.scrollTop = container.scrollHeight;
         }
 
@@ -1210,7 +1211,6 @@
                 if (data) {
                     let privMessages = [];
                     Object.keys(data).forEach(key => privMessages.push({ firebaseKey: key, ...data[key] }));
-                    // Orden ascendente en inbox también
                     privMessages.sort((a, b) => a.id - b.id);
 
                     privMessages.forEach(msg => {
@@ -1258,7 +1258,7 @@
             input.value = '';
         }
 
-       window.sendInboxImage = function(e) {
+        window.sendInboxImage = function(e) {
             if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
             e.target.value = '';
