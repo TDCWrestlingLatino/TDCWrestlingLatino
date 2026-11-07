@@ -1014,7 +1014,7 @@
         }
 
         // SOPORTE PARA GIFS ANIMADOS E IMÁGENES NORMALES
-        window.sendImage = function(e) {
+      window.sendImage = function(e) {
             if (isBanned(currentUser.nick)) {
                 uiAlert("Estás bloqueado. No puedes enviar imágenes.");
                 e.target.value = '';
@@ -1025,7 +1025,10 @@
             e.target.value = '';
             if(!file) return;
 
-            if (file.type === 'image/gif') {
+            // Detección robusta: por tipo MIME o si el nombre termina en .gif
+            const isGif = file.type.includes('gif') || (file.name && file.name.toLowerCase().endsWith('.gif'));
+
+            if (isGif) {
                 const reader = new FileReader();
                 reader.onload = function(uploadEvent) {
                     const newMsg = {
@@ -1255,14 +1258,16 @@
             input.value = '';
         }
 
-        window.sendInboxImage = function(e) {
+       window.sendInboxImage = function(e) {
             if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
             e.target.value = '';
             if(!file) return;
 
             const usersKey = activeUsersKey;
-            if (file.type === 'image/gif') {
+            const isGif = file.type.includes('gif') || (file.name && file.name.toLowerCase().endsWith('.gif'));
+
+            if (isGif) {
                 const reader = new FileReader();
                 reader.onload = function(uploadEvent) {
                     const privMsg = {
