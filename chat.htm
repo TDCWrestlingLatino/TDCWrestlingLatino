@@ -194,12 +194,22 @@
                     <span class="font-bold text-slate-300 truncate" id="roomTitle">Chat en vivo TDC</span>
                 </div>
                 <div class="shrink-0">
-                    <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
+                    <!-- BOTÓN CLIQUEABLE PARA VER QUIÉN ESTÁ CONECTADO -->
+                    <button onclick="openOnlineUsersModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-0.5 rounded-lg border border-slate-700 transition-all cursor-pointer flex items-center space-x-1 shadow" title="Ver usuarios conectados">
+                        <span>🟢 Activos:</span>
+                        <strong id="onlineCount" class="text-cyan-400">0</strong>
+                    </button>
                 </div>
             </div>
 
             <!-- CONTENEDOR DE MENSAJES (De arriba hacia abajo) -->
             <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col space-y-2.5 custom-scrollbar min-h-0">
+            </div>
+
+            <!-- FRANJA DE "ESCRIBIENDO..." -->
+            <div id="typingIndicatorBar" class="hidden px-3 py-1 bg-slate-900/90 border-t border-slate-800 text-[11px] text-cyan-400 italic flex items-center space-x-1.5 shrink-0 transition-all">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span id="typingText">Alguien está escribiendo...</span>
             </div>
 
             <!-- AVISO DE SALA CERRADA -->
@@ -233,9 +243,26 @@
                     <span class="text-xs">📷</span>
                     <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube/GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" oninput="handleTypingInput()" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube/GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE USUARIOS CONECTADOS -->
+    <div id="onlineUsersModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-cyan-500/50 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-cyan-400 flex items-center space-x-2">
+                    <span>🟢</span>
+                    <span>Usuarios Conectados Ahora</span>
+                </h3>
+                <button onclick="closeOnlineUsersModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+            </div>
+            <div id="onlineUsersListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 space-y-1.5 min-h-[140px]">
+                <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-3 text-center">Haz clic en cualquier nick para iniciar chat privado.</p>
         </div>
     </div>
 
@@ -489,6 +516,9 @@
         let latestRooms = null;
         let bannedUsers = {};
         let blockedWordsList = [];
+        let onlineUsersMap = {};
+        let typingTimeout = null;
+
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         function isAdminNick(nick) {
             const k = nickKey(nick);
@@ -534,14 +564,12 @@
                 document.getElementById('btnAdminClear').classList.remove('hidden');
                 document.getElementById('btnAdminToggleChat').classList.remove('hidden');
                 document.getElementById('btnAdminBans').classList.remove('hidden');
-                document.getElementById('adminOnlineContainer').classList.remove('hidden');
                 document.getElementById('btnBlockedWords').classList.toggle('hidden', !isMainAdmin());
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
                 document.getElementById('btnAdminToggleChat').classList.add('hidden');
                 document.getElementById('btnAdminBans').classList.add('hidden');
                 document.getElementById('btnBlockedWords').classList.add('hidden');
-                document.getElementById('adminOnlineContainer').classList.add('hidden');
             }
         }
 
@@ -631,15 +659,52 @@
                 updateRoomVisualStatus();
             });
 
+            // GESTIÓN DE USUARIOS CONECTADOS
             const myPresenceRef = push(ref(db, 'online_users'));
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
 
             onValue(ref(db, 'online_users'), (snapshot) => {
-                const data = snapshot.val();
-                const activeCount = data ? Object.keys(data).length : 1;
+                const data = snapshot.val() || {};
+                onlineUsersMap = data;
+                const activeCount = Object.keys(data).length;
                 const counterElement = document.getElementById('onlineCount');
                 if (counterElement) counterElement.textContent = activeCount;
+            });
+
+            // GESTIÓN DEL INDICADOR DE "ESCRIBIENDO..."
+            onValue(ref(db, 'typing_users'), (snapshot) => {
+                const data = snapshot.val() || {};
+                const typingBar = document.getElementById('typingIndicatorBar');
+                const typingText = document.getElementById('typingText');
+                
+                let activeTypers = [];
+                const now = Date.now();
+                
+                Object.keys(data).forEach(k => {
+                    const info = data[k];
+                    if (info && info.nick && info.nick !== currentUser.nick) {
+                        // Expirar si pasó más de 4 segundos sin actualizar
+                        if (now - (info.time || 0) < 4000) {
+                            activeTypers.push(info.nick);
+                        }
+                    }
+                });
+
+                if (activeTypers.length > 0) {
+                    let text = "";
+                    if (activeTypers.length === 1) {
+                        text = `✍️ ${activeTypers[0]} está escribiendo...`;
+                    } else if (activeTypers.length === 2) {
+                        text = `✍️ ${activeTypers[0]} y ${activeTypers[1]} están escribiendo...`;
+                    } else {
+                        text = `✍️ Varios usuarios están escribiendo...`;
+                    }
+                    typingText.textContent = text;
+                    typingBar.classList.remove('hidden');
+                } else {
+                    typingBar.classList.add('hidden');
+                }
             });
 
             onValue(ref(db, 'private_chats'), (snapshot) => {
@@ -671,6 +736,66 @@
                     }
                 });
             });
+        }
+
+        // FUNCIONES NUEVAS PARA LA LISTA DE CONECTADOS
+        window.openOnlineUsersModal = function() {
+            const modal = document.getElementById('onlineUsersModal');
+            const listContent = document.getElementById('onlineUsersListContent');
+            if (!modal || !listContent) return;
+
+            let uniqueUsers = {};
+            Object.values(onlineUsersMap).forEach(item => {
+                if (item && item.nick) {
+                    uniqueUsers[item.nick] = true;
+                }
+            });
+
+            const nicks = Object.keys(uniqueUsers);
+            listContent.innerHTML = nicks.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios activos registrados.</p>` : nicks.map(nick => {
+                const isAdmin = isAdminNick(nick);
+                const isMe = nick === currentUser.nick;
+                return `
+                    <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 cursor-pointer transition-all">
+                        <div class="flex items-center space-x-2 truncate">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
+                            ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
+                            ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
+                        </div>
+                        ${!isMe ? `<span class="text-[10px] text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">💬 Mensaje</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            modal.classList.remove('hidden');
+        }
+
+        window.closeOnlineUsersModal = function() {
+            document.getElementById('onlineUsersModal').classList.add('hidden');
+        }
+
+        window.clickOnlineUser = function(targetNick) {
+            if (targetNick === currentUser.nick || isBanned(currentUser.nick)) return;
+            closeOnlineUsersModal();
+            openInboxModalMain();
+            openInboxWith(targetNick);
+        }
+
+        // FUNCIONES NUEVAS PARA EL INDICADOR DE "ESCRIBIENDO..."
+        window.handleTypingInput = function() {
+            if (!currentUser.nick || isBanned(currentUser.nick)) return;
+            const typingRef = ref(db, 'typing_users/' + nickKey(currentUser.nick));
+            
+            set(typingRef, {
+                nick: currentUser.nick,
+                time: serverTimestamp()
+            }).catch(() => {});
+
+            if (typingTimeout) clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                remove(typingRef).catch(() => {});
+            }, 3000);
         }
 
         window.toggleChatRoomStatus = async function() {
@@ -990,6 +1115,9 @@
                 return;
             }
 
+            // Limpiar estado de typing al enviar
+            remove(ref(db, 'typing_users/' + nickKey(currentUser.nick))).catch(() => {});
+
             const newMsg = {
                 id: Date.now(),
                 sender: currentUser.nick,
@@ -1116,7 +1244,6 @@
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
                     const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&playsinline=1` : `${msg.youtube}?playsinline=1`;
-                    // MODIFICACIÓN CLAVE AQUÍ: w-full y una altura generosa (h-64 sm:h-80) para que ocupe todo el ancho y sea grande
                     contentHtml += `
                         <div class="mt-2 w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-black">
                             <iframe src="${ytUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
