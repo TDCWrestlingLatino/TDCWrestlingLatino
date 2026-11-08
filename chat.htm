@@ -744,6 +744,12 @@
 
         // FUNCIONES NUEVAS PARA LA LISTA DE CONECTADOS
         window.openOnlineUsersModal = function() {
+            // SOLO ADMINISTRADORES PUEDEN ABRIR EL MODAL
+            if (!currentUser.isAdmin) {
+                uiAlert("Esta función es exclusiva para Administradores.");
+                return;
+            }
+
             const modal = document.getElementById('onlineUsersModal');
             const listContent = document.getElementById('onlineUsersListContent');
             if (!modal || !listContent) return;
