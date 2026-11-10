@@ -249,7 +249,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE USUARIOS CONECTADOS (SOLO PARA ADMINS) -->
+    <!-- MODAL DE USUARIOS CONECTADOS (CON BOTÓN DE EXPULSAR SESIÓN) -->
     <div id="onlineUsersModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
         <div class="bg-slate-900 border border-cyan-500/50 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
@@ -262,7 +262,7 @@
             <div id="onlineUsersListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 space-y-1.5 min-h-[140px]">
                 <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
             </div>
-            <p class="text-[10px] text-slate-500 mt-3 text-center">Haz clic en cualquier nick para iniciar chat privado.</p>
+            <p class="text-[10px] text-slate-500 mt-3 text-center">Haz clic en expulsar para sacar una sesión fantasma o iniciar chat privado.</p>
         </div>
     </div>
 
@@ -518,6 +518,7 @@
         let blockedWordsList = [];
         let onlineUsersMap = {};
         let typingTimeout = null;
+        let myPresenceKey = null;
 
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         function isAdminNick(nick) {
@@ -621,6 +622,7 @@
 
         window.logoutUser = async function() {
             if(await uiConfirm('¿Deseas cambiar tu perfil?')) {
+                if (myPresenceKey) remove(ref(db, 'online_users/' + myPresenceKey)).catch(() => {});
                 store.remove('tdc_chat_user');
                 location.reload();
             }
@@ -662,10 +664,21 @@
                 updateRoomVisualStatus();
             });
 
-            const myPresenceId = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
-            const myPresenceRef = ref(db, 'online_users/' + myPresenceId);
+            // GESTIÓN DE PRESENCIA Y EXPULSIONES REMOTAS
+            myPresenceKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+            const myPresenceRef = ref(db, 'online_users/' + myPresenceKey);
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
+
+            // Escuchar si este cliente específico fue expulsado por un admin
+            onValue(myPresenceRef, (snapshot) => {
+                if (!snapshot.exists() && store.get('tdc_chat_user')) {
+                    // Si el nodo fue borrado desde fuera, forzamos salida local
+                    showToast({ text: '⚠️ Has sido desconectado o expulsado de la sala.', duration: 5000 });
+                    store.remove('tdc_chat_user');
+                    setTimeout(() => location.reload(), 1500);
+                }
+            });
 
             onValue(ref(db, 'online_users'), (snapshot) => {
                 const data = snapshot.val() || {};
@@ -745,32 +758,30 @@
             });
         }
 
+        // MODAL DE CONECTADOS CON BOTÓN DE EXPULSAR SESIÓN
         window.openOnlineUsersModal = function() {
             if (!currentUser.isAdmin) return;
             const modal = document.getElementById('onlineUsersModal');
             const listContent = document.getElementById('onlineUsersListContent');
             if (!modal || !listContent) return;
 
-            let uniqueUsers = {};
-            Object.values(onlineUsersMap).forEach(item => {
-                if (item && item.nick) {
-                    uniqueUsers[item.nick] = true;
-                }
-            });
-
-            const nicks = Object.keys(uniqueUsers);
-            listContent.innerHTML = nicks.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios activos registrados.</p>` : nicks.map(nick => {
+            const entries = Object.entries(onlineUsersMap || {});
+            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([sessionKey, item]) => {
+                if (!item || !item.nick) return '';
+                const nick = item.nick;
                 const isAdmin = isAdminNick(nick);
                 const isMe = nick === currentUser.nick;
                 return `
-                    <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 cursor-pointer transition-all">
-                        <div class="flex items-center space-x-2 truncate">
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
+                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
                             <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
                             ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
                             ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
                         </div>
-                        ${!isMe ? `<span class="text-[10px] text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">💬 Mensaje</span>` : ''}
+                        <div class="flex items-center gap-1 shrink-0">
+                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -788,6 +799,16 @@
             openInboxModalMain();
             openInboxWith(targetNick);
         }
+
+        // FUNCIÓN PARA EXPULSAR UNA SESIÓN ESPECÍFICA (MATA LA PATADITA FANTASMA)
+        window.kickUserSession = async function(sessionKey, targetNick) {
+            if (!currentUser.isAdmin) return;
+            if (await uiConfirm(`⚡ ¿Deseas expulsar la sesión activa de "${targetNick}"?`)) {
+                remove(ref(db, 'online_users/' + sessionKey)).catch(dbError);
+                showToast({ text: `⚡ Sesión de "${targetNick}" expulsada correctamente.`, duration: 4000 });
+                openOnlineUsersModal();
+            }
+        };
 
         window.handleTypingInput = function() {
             if (!currentUser.nick || isBanned(currentUser.nick)) return;
@@ -1191,7 +1212,6 @@
             }
         }
 
-        // FUNCIÓN CORREGIDA PARA BORRAR EL MENSAJE AL INSTANTE EN LA VISTA Y EN FIREBASE
         window.deleteMessage = function(firebaseKey) {
             remove(ref(db, `chat_messages/${firebaseKey}`)).catch(dbError);
             const el = document.getElementById(`msg_${firebaseKey}`);
