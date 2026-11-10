@@ -662,7 +662,6 @@
                 updateRoomVisualStatus();
             });
 
-            // GESTIÓN DE USUARIOS CONECTADOS (CORREGIDO CON ID ÚNICO Y ON DISCONNECT)
             const myPresenceId = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
             const myPresenceRef = ref(db, 'online_users/' + myPresenceId);
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
@@ -672,7 +671,6 @@
                 const data = snapshot.val() || {};
                 onlineUsersMap = data;
                 
-                // Contar usuarios únicos por nick para evitar duplicados en vivo
                 let uniqueNicks = new Set();
                 Object.values(data).forEach(item => {
                     if (item && item.nick) uniqueNicks.add(item.nick);
@@ -683,7 +681,6 @@
                 if (counterElement) counterElement.textContent = activeCount;
             });
 
-            // GESTIÓN DEL INDICADOR DE "ESCRIBIENDO..."
             onValue(ref(db, 'typing_users'), (snapshot) => {
                 const data = snapshot.val() || {};
                 const typingBar = document.getElementById('typingIndicatorBar');
@@ -748,7 +745,6 @@
             });
         }
 
-        // FUNCIONES DE LA LISTA DE CONECTADOS (EXCLUSIVO ADMINS)
         window.openOnlineUsersModal = function() {
             if (!currentUser.isAdmin) return;
             const modal = document.getElementById('onlineUsersModal');
@@ -907,7 +903,6 @@
             return blockedWordsList.some(word => word && lower.includes(word));
         }
 
-        // CONTROL DE LAS 15 SKINS
         window.setSkin = function(skinName) {
             const body = document.getElementById('bodyTheme');
             const header = document.getElementById('headerTheme');
@@ -1196,32 +1191,32 @@
             }
         }
 
+        // FUNCIÓN CORREGIDA PARA BORRAR EL MENSAJE AL INSTANTE EN LA VISTA Y EN FIREBASE
         window.deleteMessage = function(firebaseKey) {
             remove(ref(db, `chat_messages/${firebaseKey}`)).catch(dbError);
+            const el = document.getElementById(`msg_${firebaseKey}`);
+            if (el) el.remove();
+            renderedMessageKeys.delete(firebaseKey);
         }
 
         let renderedMessageKeys = new Set();
 
-        // RENDERIZADO INTELIGENTE (SOLO AGREGA MENSAJES NUEVOS PARA NO CORTAR VIDEOS DE YOUTUBE)
         function renderMessages() {
             const container = document.getElementById('chatMessages');
             if (!container) return;
 
-            // Si se borró todo el chat (mensajes vacíos), limpiamos el contenedor y el Set
             if (messages.length === 0) {
                 container.innerHTML = '';
                 renderedMessageKeys.clear();
                 return;
             }
 
-            // Identificar los mensajes que aún no han sido pintados en la pantalla
             const newMessages = messages.filter(msg => !renderedMessageKeys.has(msg.firebaseKey));
 
             if (newMessages.length === 0 && container.children.length > 0) {
-                return; // Si no hay mensajes nuevos, no tocamos nada para proteger los iframes activos
+                return;
             }
 
-            // Si es la primera carga o hay elementos nuevos, agregamos exclusivamente los nuevos
             newMessages.forEach(msg => {
                 renderedMessageKeys.add(msg.firebaseKey);
 
@@ -1290,7 +1285,6 @@
                 container.appendChild(div);
             });
 
-            // Sincronizar por si se eliminó algún mensaje desde la base de datos
             const existingKeys = new Set(messages.map(m => m.firebaseKey));
             Array.from(container.children).forEach(child => {
                 const key = child.id.replace('msg_', '');
