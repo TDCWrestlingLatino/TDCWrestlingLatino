@@ -31,8 +31,14 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
-        b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
+        b, strong { font-weight: 900 !important; color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
         i, em { font-style: italic !important; opacity: 0.95; }
+        
+        /* Sombreado negro debajo (sombra de texto inferior) para todos los mensajes del chat */
+        .chat-message-text {
+            color: #ffffff !important;
+            text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.85);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-zinc-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
@@ -154,10 +160,6 @@
             </div>
             <div class="space-y-2.5 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Color de Texto:</label>
-                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
-                </div>
-                <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
                     <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
                         <option value="Inter">Inter (Limpia)</option>
@@ -271,11 +273,10 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX (AJUSTADO CON LÍNEAS DELGADAS Y COMPACTAS) -->
+    <!-- MODAL DE INBOX -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-3">
         <div class="bg-slate-900 border border-slate-700/80 w-full max-w-xl rounded-xl p-2.5 shadow-2xl flex flex-col h-full max-h-[600px]">
             
-            <!-- Cabecera del Inbox compacta -->
             <div class="flex items-center justify-between pb-1.5 px-1 border-b border-slate-800 shrink-0">
                 <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
                     <span>📬</span>
@@ -284,7 +285,6 @@
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[11px] cursor-pointer transition-all">✕ Cerrar</button>
             </div>
 
-            <!-- Barra de contactos / Nuevo chat compacta -->
             <div class="flex items-center gap-1 py-1.5 px-1 shrink-0">
                 <button onclick="startNewChatPrompt()" class="shrink-0 text-[11px] bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-2 py-1 rounded cursor-pointer">+ Nuevo</button>
                 <div id="inboxConversationsList" class="flex flex-nowrap items-center gap-1 overflow-x-auto custom-scrollbar min-w-0 flex-1">
@@ -292,7 +292,6 @@
                 </div>
             </div>
 
-            <!-- Contenedor interno del chat delgado -->
             <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800/80 rounded-lg overflow-hidden min-h-0">
                 <div id="inboxChatHeader" class="bg-slate-900/90 px-2.5 py-1 border-b border-slate-800 text-[11px] font-bold text-cyan-300 shrink-0 flex items-center space-x-1.5 truncate">
                     <span>💬</span>
@@ -306,7 +305,6 @@
                     🔒 Solo lectura
                 </div>
 
-                <!-- Barra de escritura inferior estilizada y delgada -->
                 <div id="inboxComposer" class="hidden p-1.5 border-t border-slate-800 flex items-center gap-1.5 shrink-0 bg-slate-900/95">
                     <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg cursor-pointer text-cyan-400 border border-slate-700/80 shrink-0 flex items-center justify-center">
                         <span class="text-xs">📷</span>
@@ -477,9 +475,6 @@
             const u = String(url ?? '').trim();
             return /^(https?:\/\/|data:image\/)/i.test(u) ? u : '';
         }
-        function safeColor(color) {
-            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#ffffff';
-        }
         const ALLOWED_FONTS = ['Inter', 'Bebas Neue', 'Anton', 'Oswald', 'Archivo Black', 'Russo One', 'Teko', 'Orbitron', 'Exo 2', 'Rajdhani', 'Chakra Petch', 'Rubik', 'Outfit', 'Plus Jakarta Sans', 'Nunito'];
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
         function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
@@ -515,7 +510,7 @@
             });
         }
 
-        let currentUser = { nick: '', avatar: '', isAdmin: false, textColor: '#ffffff', font: 'Inter', fontSize: 'text-xs' };
+        let currentUser = { nick: '', avatar: '', isAdmin: false, font: 'Inter', fontSize: 'text-xs' };
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
@@ -550,7 +545,6 @@
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
-                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
                     checkAdminUIs();
@@ -603,7 +597,6 @@
             if(!nickInput) { await uiAlert('Por favor ingresa un apodo válido.'); return; }
 
             currentUser.nick = nickInput;
-            currentUser.textColor = '#00ffcc';
             currentUser.font = 'Inter';
             currentUser.fontSize = 'text-xs';
 
@@ -619,7 +612,7 @@
                 compressImage(fileInput, 128, 0.8)
                     .then(data => { currentUser.avatar = data; })
                     .catch(async () => {
-                        await uiAlert('⚠️ La imagen seleccionada (.jfif u otro formato) no pudo procesarse correctamente. Se usará tu avatar por defecto.');
+                        await uiAlert('⚠️ La imagen seleccionada no pudo procesarse correctamente. Se usará tu avatar por defecto.');
                     })
                     .finally(finalizeLogin);
             } else { finalizeLogin(); }
@@ -1064,7 +1057,6 @@
         }
 
         window.updateUserStyle = function() {
-            currentUser.textColor = document.getElementById('pickerTextColor').value;
             currentUser.font = document.getElementById('selectFont').value;
             currentUser.fontSize = document.getElementById('selectFontSize').value;
             store.set('tdc_chat_user', JSON.stringify(currentUser));
@@ -1186,7 +1178,6 @@
                 avatar: currentUser.avatar,
                 text: text,
                 youtube: getYouTubeEmbedUrl(text),
-                textColor: currentUser.textColor,
                 font: currentUser.font,
                 fontSize: currentUser.fontSize,
                 isAdmin: currentUser.isAdmin,
@@ -1222,7 +1213,6 @@
                         sender: currentUser.nick,
                         avatar: currentUser.avatar,
                         image: uploadEvent.target.result,
-                        textColor: currentUser.textColor,
                         font: currentUser.font,
                         fontSize: currentUser.fontSize,
                         isAdmin: currentUser.isAdmin,
@@ -1238,7 +1228,6 @@
                         sender: currentUser.nick,
                         avatar: currentUser.avatar,
                         image: data,
-                        textColor: currentUser.textColor,
                         font: currentUser.font,
                         fontSize: currentUser.fontSize,
                         isAdmin: currentUser.isAdmin,
@@ -1246,7 +1235,7 @@
                     };
                     return push(ref(db, 'chat_messages'), newMsg);
                 }).catch(async () => {
-                    await uiAlert("⚠️ No se pudo procesar la imagen seleccionada. Intenta con un JPG o PNG válido.");
+                    await uiAlert("⚠️ No se pudo procesar la imagen seleccionada.");
                 });
             }
         }
@@ -1292,7 +1281,6 @@
                 const fontName = safeFont(msg.font);
                 const fontFamily = `'${fontName}', sans-serif`;
                 const sizeClass = ALLOWED_SIZES.includes(msg.fontSize) ? msg.fontSize : 'text-xs';
-                const textColor = safeColor(msg.textColor);
                 const avatar = safeUrl(msg.avatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}&background=00ffcc&color=000&bold=true`;
 
                 let contentHtml = '';
@@ -1305,9 +1293,9 @@
                     } else if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
-                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
                     } else {
-                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
                     }
                 }
 
@@ -1329,7 +1317,7 @@
                     <img src="${esc(avatar)}" class="w-14 h-14 rounded-xl object-cover border border-cyan-400 shrink-0 shadow">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-1.5">
-                            <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily} !important;" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
+                            <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate text-white" style="font-family: ${fontFamily} !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8);" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
                             ${adminBadge}
                             ${bannedBadge}
                             <span class="text-[9px] text-slate-400 shrink-0">${esc(msg.time)}</span>
@@ -1439,8 +1427,8 @@
                         const isMe = msg.sender === currentUser.nick;
                         p.className = `p-2.5 rounded-xl text-xs w-full max-w-[85%] break-words whitespace-pre-wrap group relative shrink-0 ${isMe ? 'bg-cyan-950/85 text-cyan-200 ml-auto border border-cyan-500/40 shadow' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
-                        let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
-                        if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
+                        let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5 text-white" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${esc(msg.sender)}:</strong>`;
+                        if (msg.text) innerHtml += `<span class="text-white" style="text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.85);">${parseMarkdown(msg.text)}</span>`;
                         if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="openImageModal('${esc(safeUrl(msg.image))}')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
 
                         innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
