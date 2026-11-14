@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es" class="dark h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TDC Wrestling Latino Chat Oficial</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,24 +20,29 @@
             }
         }
     </script>
-    <!-- Google Fonts combinadas -->
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Bungee&family=Creepster&family=Dancing+Script:wght@700&family=Eater&family=Fredoka+One&family=Inter:wght@400;700;900&family=Monoton&family=Orbitron:wght@700&family=Permanent+Marker&family=Press+Start+2P&family=Rock+Salt&family=Russo+One&family=VT323&family=Wallpoet&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts completas -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Chakra+Petch:wght@500;700&family=Exo+2:wght@500;700&family=Inter:wght@400;700;900&family=Nunito:wght@600;800&family=Orbitron:wght@600;700&family=Oswald:wght@500;700&family=Outfit:wght@500;700&family=Plus+Jakarta+Sans:wght@500;700&family=Rajdhani:wght@600;700&family=Rubik:wght@500;700&family=Russo+One&family=Teko:wght@500;600&display=swap" rel="stylesheet">
     <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        html, body { height: 100%; margin: 0; overflow: hidden; -webkit-text-size-adjust: 100%; }
+        .custom-scrollbar { overscroll-behavior: contain; }
+        @media (pointer: coarse) { input[type="text"], input[type="password"], select, textarea { font-size: 16px !important; } }
+        @media (hover: none) { .msg-del { opacity: 0.7 !important; } }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
         b, strong { font-weight: 900 !important; color: #ffffff; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
         i, em { font-style: italic !important; opacity: 0.95; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans transition-all duration-300" id="bodyTheme">
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-zinc-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden" id="bodyTheme">
 
     <!-- MODAL DE INGRESO -->
-    <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
+    <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex overflow-y-auto p-3">
+        <div class="m-auto bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-2xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
-                <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar al ring.</p>
+                <h2 class="text-xl font-black text-cyan-400 tracking-wider">¡Bienvenido a TDC Wrestling Latino!</h2>
+                <p class="text-xs text-slate-400">Ingresa tu apodo y configura tu perfil para entrar a TDC.</p>
             </div>
             
             <div class="space-y-3">
@@ -48,7 +53,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1">Foto de perfil (Sube archivo o pega URL):</label>
-                    <input type="file" id="inputAvatarFile" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500 mb-2">
+                    <input type="file" id="inputAvatarFile" accept="image/*,.jfif" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500 mb-2">
                     <input type="text" id="inputAvatarUrl" placeholder="O pega la URL de tu imagen aquí..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 </div>
 
@@ -58,196 +63,311 @@
                 </div>
 
                 <div id="adminCodeContainer" class="hidden">
-                    <input type="password" id="inputAdminCode" placeholder="Código Secreto de Admin (tdc2026)" class="w-full bg-slate-800 border border-red-500/50 rounded-xl px-3 py-2 text-xs text-red-300 focus:outline-none focus:border-red-500">
+                    <input type="password" id="inputAdminCode" placeholder="Código Secreto de Admin" class="w-full bg-slate-800 border border-red-500/50 rounded-xl px-3 py-2 text-xs text-red-300 focus:outline-none focus:border-red-500">
                 </div>
             </div>
 
             <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 flex items-center justify-center space-x-2 cursor-pointer">
-                <span>Entrar al Ring</span>
+                <span>Entrar</span>
                 <span>🚀</span>
             </button>
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header id="headerTheme" class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-md transition-all">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white shadow-lg">TDC</div>
-            <div>
-                <h1 id="appTitle" class="text-base font-black tracking-wider text-white">TDC Wrestling Latino Chat Oficial</h1>
-                <p id="appSubtitle" class="text-[10px] text-slate-400">Unetenos en los shows en vivo</p>
+    <!-- HEADER RESPONSIVO Y COMPACTO -->
+    <header id="headerTheme" class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-3 py-2.5 flex items-center justify-between shadow-md shrink-0 transition-all">
+        <div class="flex items-center space-x-2 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs shadow-md shrink-0">TDC</div>
+            <div class="min-w-0">
+                <h1 id="appTitle" class="text-xs font-black tracking-wide text-white truncate">TDC Wrestling Latino</h1>
+                <p id="appSubtitle" class="text-[9px] text-slate-400 truncate">Chat Oficial en Vivo</p>
             </div>
         </div>
-        <div class="flex items-center space-x-2">
-            <!-- BOTÓN EXCLUSIVO DE ADMIN: ABRIR/CERRAR SALA -->
-            <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Abrir o Cerrar Sala">
+        <div class="flex items-center space-x-1.5 shrink-0">
+            <button onclick="openInboxModalMain()" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-200 px-2.5 py-1.5 rounded-lg border border-cyan-500/50 text-xs font-bold cursor-pointer transition-all flex items-center space-x-1 shadow" title="Centro de Mensajería">
+                <span>📬</span>
+                <span class="hidden min-[380px]:inline">Inbox</span>
+            </button>
+            <button id="btnAdminToggleChat" onclick="toggleChatRoomStatus()" class="hidden bg-amber-600 hover:bg-amber-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Abrir/Cerrar Sala">
                 <span id="roomStatusIcon">🔒</span>
-                <span id="roomStatusText" class="hidden sm:inline">Cerrar Chat</span>
             </button>
-            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 px-2.5 py-1.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow flex items-center space-x-1" title="Borrar todo el chat">
+            <button id="btnAdminClear" onclick="clearAllMessages()" class="hidden bg-rose-600 hover:bg-rose-500 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Limpiar Chat">
                 <span>🗑️</span>
-                <span class="hidden sm:inline">Limpiar</span>
             </button>
-            <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
+            <button id="btnAdminBans" onclick="openBannedList()" class="hidden bg-red-700 hover:bg-red-600 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Usuarios Bloqueados">
+                <span>🚫</span>
+            </button>
+            <button id="btnBlockedWords" onclick="openBlockedWordsPanel()" class="hidden bg-purple-700 hover:bg-purple-600 p-1.5 rounded-lg text-xs text-white transition-all cursor-pointer shadow" title="Palabras Bloqueadas">
+                <span>🛡️</span>
+            </button>
+            <button onclick="togglePanel('skinsPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Skins">
                 <span>🎨</span>
-                <span class="hidden sm:inline">Skins</span>
             </button>
-            <button onclick="togglePanel('configPanel')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 flex items-center space-x-1 transition-all cursor-pointer">
+            <button onclick="togglePanel('configPanel')" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg text-xs border border-slate-700 transition-all cursor-pointer" title="Ajustes">
                 <span>⚙️</span>
-                <span class="hidden sm:inline">Ajustes</span>
             </button>
-            <button onclick="logoutUser()" class="bg-rose-950 hover:bg-rose-900 px-2.5 py-1.5 rounded-xl text-xs font-bold border border-rose-700 text-rose-200 transition-all cursor-pointer" title="Cambiar Perfil">
+            <button onclick="logoutUser()" class="bg-rose-950 hover:bg-rose-900 p-1.5 rounded-lg text-xs border border-rose-700 text-rose-200 transition-all cursor-pointer" title="Salir">
                 <span>🚪</span>
             </button>
         </div>
     </header>
 
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full h-full min-h-0">
         
-        <!-- PANEL DE SKINS -->
-        <div id="skinsPanel" class="hidden absolute md:relative z-20 w-full md:w-80 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-4 space-y-4 custom-scrollbar overflow-y-auto">
+        <!-- PANEL DE SKINS COMPLETAS -->
+        <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-black text-cyan-400">⚡ Skins & Estilos</h3>
-                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs">✕</button>
+                <h3 class="text-xs font-black text-cyan-400">⚡ Skins & Degrades</h3>
+                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
             </div>
-            <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-300">Selecciona tu Skin:</label>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="setSkin('cyberpunk')" class="text-left px-3 py-2 rounded-xl bg-cyan-950/85 hover:bg-cyan-900 border border-cyan-400 text-xs font-bold text-cyan-200 transition-all cursor-pointer">🌆 Cyberpunk Neon</button>
-                    <button onclick="setSkin('crimson')" class="text-left px-3 py-2 rounded-xl bg-rose-950/85 hover:bg-rose-900 border border-rose-500 text-xs font-bold text-rose-200 transition-all cursor-pointer">🐉 TDC Crimson Dragon</button>
-                    <button onclick="setSkin('matrix')" class="text-left px-3 py-2 rounded-xl bg-emerald-950/85 hover:bg-emerald-900 border border-emerald-500 text-xs font-bold text-emerald-200 transition-all cursor-pointer">💻 Matrix Terminal</button>
-                    <button onclick="setSkin('glass')" class="text-left px-3 py-2 rounded-xl bg-blue-950/85 hover:bg-blue-900 border border-blue-400 text-xs font-bold text-blue-200 transition-all cursor-pointer">🔮 Glassmorphism</button>
-                    <button onclick="setSkin('minimal')" class="text-left px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 text-xs font-bold text-zinc-100 transition-all cursor-pointer">🌙 Minimal Dark</button>
+            <div class="space-y-1.5">
+                <div class="grid grid-cols-1 gap-1.5 text-xs">
+                    <button onclick="setSkin('bloodRuby')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-red-950 to-rose-900 hover:from-red-900 hover:to-rose-800 border border-red-500 font-bold text-red-200 cursor-pointer shadow">🩸 Blood Ruby (Rojo Vibrante)</button>
+                    <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-red-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
+                    <button onclick="setSkin('skyCeleste')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-sky-950 to-cyan-900 hover:from-sky-900 hover:to-cyan-800 border border-sky-400 font-bold text-sky-200 cursor-pointer shadow">🌊 Sky Celeste (Celeste Luminoso)</button>
+                    <button onclick="setSkin('midnightTeal')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-950 to-cyan-950 hover:from-teal-900 hover:to-cyan-900 border border-teal-400 font-bold text-teal-200 cursor-pointer shadow">🐬 Midnight Teal (Cian Profundo)</button>
+                    <button onclick="setSkin('sunsetFire')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-950 to-red-950 hover:from-amber-900 hover:to-red-900 border border-orange-500 font-bold text-orange-200 cursor-pointer shadow">🌅 Sunset Fire (Naranja con Rojo)</button>
+                    <button onclick="setSkin('orangeBlaze')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-orange-950 to-rose-950 hover:from-orange-900 hover:to-rose-900 border border-amber-500 font-bold text-amber-200 cursor-pointer shadow">⚡ Orange Blaze (Fuego Estelar)</button>
+                    <button onclick="setSkin('matrixEmerald')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-950 to-green-900 hover:from-emerald-900 hover:to-green-800 border border-emerald-500 font-bold text-emerald-200 cursor-pointer shadow">💻 Matrix Emerald (Verde Oscuro)</button>
+                    <button onclick="setSkin('toxicLime')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-lime-950 to-emerald-950 hover:from-lime-900 hover:to-emerald-900 border border-lime-400 font-bold text-lime-200 cursor-pointer shadow">🧪 Toxic Lime (Verde Claro Neón)</button>
+                    <button onclick="setSkin('cyberpunk')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-950 to-blue-950 hover:from-cyan-900 hover:to-blue-900 border border-cyan-400 font-bold text-cyan-200 cursor-pointer shadow">🌆 Cyberpunk Neon</button>
+                    <button onclick="setSkin('purpleNeon')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-950 to-indigo-950 hover:from-purple-900 hover:to-indigo-900 border border-purple-400 font-bold text-purple-200 cursor-pointer shadow">💜 Purple Neon</button>
+                    <button onclick="setSkin('glass')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-950/85 hover:bg-blue-900 border border-blue-400 font-bold text-blue-200 cursor-pointer">🔮 Glassmorphism</button>
+                    <button onclick="setSkin('minimal')" class="text-left px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 font-bold text-zinc-100 cursor-pointer">🌙 Minimal Dark</button>
+                    <button onclick="setSkin('sunset')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-950/85 hover:bg-amber-900 border border-orange-500 font-bold text-amber-200 cursor-pointer">🌅 Sunset Amber</button>
+                    <button onclick="setSkin('gold')" class="text-left px-2.5 py-1.5 rounded-lg bg-yellow-950/85 hover:bg-yellow-900 border border-yellow-500 font-bold text-yellow-200 cursor-pointer">⚜️ Deep Gold</button>
+                    <button onclick="setSkin('royal')" class="text-left px-2.5 py-1.5 rounded-lg bg-indigo-950/85 hover:bg-indigo-900 border border-indigo-400 font-bold text-indigo-200 cursor-pointer">🌌 Royal Indigo</button>
+                    <button onclick="setSkin('ruby')" class="text-left px-2.5 py-1.5 rounded-lg bg-pink-950/85 hover:bg-pink-900 border border-pink-500 font-bold text-pink-200 cursor-pointer">🩸 Blood Ruby Clásico</button>
+                    <button onclick="setSkin('teal')" class="text-left px-2.5 py-1.5 rounded-lg bg-teal-950/85 hover:bg-teal-900 border border-teal-400 font-bold text-teal-200 cursor-pointer">🌊 Midnight Teal Clásico</button>
+                    <button onclick="setSkin('yellow')" class="text-left px-2.5 py-1.5 rounded-lg bg-yellow-950/85 hover:bg-yellow-900 border border-yellow-400 font-bold text-yellow-200 cursor-pointer">⚡ Cyber Yellow</button>
+                    <button onclick="setSkin('charcoal')" class="text-left px-2.5 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-slate-600 font-bold text-slate-200 cursor-pointer">🖤 Charcoal Tech</button>
+                    <button onclick="setSkin('violet')" class="text-left px-2.5 py-1.5 rounded-lg bg-fuchsia-950/85 hover:bg-fuchsia-900 border border-fuchsia-400 font-bold text-fuchsia-200 cursor-pointer">🌸 Dark Violet</button>
                 </div>
             </div>
         </div>
 
         <!-- PANEL DE AJUSTES -->
-        <div id="configPanel" class="hidden absolute md:relative z-20 w-full md:w-80 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-4 space-y-4 custom-scrollbar overflow-y-auto">
+        <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-black text-cyan-400">⚙️ Ajustes Personales</h3>
-                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-xs">✕</button>
+                <h3 class="text-xs font-black text-cyan-400">⚙️ Ajustes Personales</h3>
+                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
             </div>
-            <div class="space-y-3 text-xs">
+            <div class="space-y-2.5 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Color de tu Texto:</label>
-                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-9 bg-slate-800 rounded-xl cursor-pointer border border-slate-700 p-1">
+                    <label class="block font-bold text-slate-300 mb-1">Color de Texto:</label>
+                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
-                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
-                        <option value="Inter">Inter (Predeterminada)</option>
+                    <select id="selectFont" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <option value="Inter">Inter (Limpia)</option>
+                        <option value="Bebas Neue">Bebas Neue (Impact)</option>
+                        <option value="Anton">Anton (Extra Bold)</option>
+                        <option value="Oswald">Oswald (Condensada)</option>
+                        <option value="Archivo Black">Archivo Black (Pesada)</option>
+                        <option value="Russo One">Russo One (Fuerte)</option>
+                        <option value="Teko">Teko (Deportiva)</option>
                         <option value="Orbitron">Orbitron (Futurista)</option>
-                        <option value="Bebas Neue">Bebas Neue (Titular)</option>
-                        <option value="Permanent Marker">Permanent Marker (Plumón)</option>
-                        <option value="Impact">Impact (Pesada)</option>
-                        <option value="Russo One">Russo One (Deportiva)</option>
-                        <option value="Bangers">Bangers (Cómic)</option>
-                        <option value="Bungee">Bungee (Bloque)</option>
-                        <option value="VT323">VT323 (Retro Arcade)</option>
-                        <option value="Dancing Script">Dancing Script (Cursiva)</option>
-                        <option value="Fredoka One">Fredoka One (Amigable)</option>
-                        <option value="Rock Salt">Rock Salt (Graffiti)</option>
-                        <option value="Monoton">Monoton (Disco)</option>
-                        <option value="Eater">Eater (Terror)</option>
-                        <option value="Wallpoet">Wallpoet (Minimal)</option>
-                        <option value="Zilla Slab Highlight">Zilla Slab Highlight</option>
-                        <option value="Creepster">Creepster (Horror)</option>
-                        <option value="Press Start 2P">Press Start 2P (8-Bit)</option>
+                        <option value="Exo 2">Exo 2 (Tech)</option>
+                        <option value="Rajdhani">Rajdhani (Tech Condensada)</option>
+                        <option value="Chakra Petch">Chakra Petch (Cyber)</option>
+                        <option value="Rubik">Rubik (Moderna)</option>
+                        <option value="Outfit">Outfit (Elegante)</option>
+                        <option value="Plus Jakarta Sans">Plus Jakarta Sans (Premium)</option>
+                        <option value="Nunito">Nunito (Redondeada)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Tamaño de Letra:</label>
-                    <select id="selectFontSize" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-cyan-500">
-                        <option value="text-xs">Pequeño</option>
-                        <option value="text-sm" selected>Normal</option>
-                        <option value="text-base">Mediano</option>
-                        <option value="text-lg">Grande</option>
-                        <option value="text-xl">Gigante</option>
+                    <label class="block font-bold text-slate-300 mb-1">Tamaño:</label>
+                    <select id="selectFontSize" onchange="updateUserStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <option value="text-[11px]">Pequeño</option>
+                        <option value="text-xs" selected>Normal</option>
+                        <option value="text-sm">Mediano</option>
+                        <option value="text-base">Grande</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <!-- ÁREA PRINCIPAL DEL CHAT -->
-        <div class="flex-1 flex flex-col h-[calc(100vh-65px)]" id="chatMainArea">
+        <div class="flex-1 flex flex-col h-full w-full min-w-0 min-h-0 overflow-hidden relative" id="chatMainArea">
             
             <!-- SUBBAR -->
-            <div id="subBarTheme" class="bg-slate-900/80 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs transition-all">
-                <div class="flex items-center space-x-2">
-                    <span id="roomStatusIndicator" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-bold text-slate-300" id="roomTitle">Somos TDC Wrestling Latino, Unetenos!</span>
+            <div id="subBarTheme" class="bg-slate-900/60 backdrop-blur-md border-b border-slate-800 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0 transition-all">
+                <div class="flex items-center space-x-1.5 truncate">
+                    <span id="roomStatusIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <span class="font-bold text-slate-300 truncate" id="roomTitle">Chat en vivo TDC</span>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <span id="adminOnlineContainer" class="hidden text-slate-400">Activos: <strong id="onlineCount" class="text-cyan-400">0</strong></span>
+                <div class="shrink-0">
+                    <button id="onlineUsersBtnContainer" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-0.5 rounded-lg border border-slate-700 transition-all cursor-pointer flex items-center space-x-1 shadow" onclick="openOnlineUsersModal()" title="Ver usuarios conectados">
+                        <span>🟢 Activos:</span>
+                        <strong id="onlineCount" class="text-cyan-400">0</strong>
+                    </button>
                 </div>
             </div>
 
             <!-- CONTENEDOR DE MENSAJES -->
-            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-reverse space-y-3 custom-scrollbar">
+            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto flex flex-col space-y-2.5 custom-scrollbar min-h-0">
             </div>
 
-            <!-- AVISO DE SALA CERRADA (Se oculta cuando el chat está abierto) -->
-            <div id="chatClosedNotice" class="hidden bg-rose-950/90 border-t border-rose-600/50 p-4 text-center text-rose-200 text-xs font-bold">
-                🔒 El chat se encuentra cerrado temporalmente por el Administrador. ¡Volveremos en el próximo show en vivo!
+            <!-- FRANJA DE "ESCRIBIENDO..." -->
+            <div id="typingIndicatorBar" class="hidden px-3 py-1 bg-slate-900/90 border-t border-slate-800 text-[11px] text-cyan-400 italic flex items-center space-x-1.5 shrink-0 transition-all">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span id="typingText">Alguien está escribiendo...</span>
             </div>
 
-            <!-- EMOJI BAR & BOTONES DE FORMATO RÁPIDO -->
-            <div id="emojiBarTheme" class="bg-slate-900/90 border-t border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar transition-all">
-                <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Negrita"><b>B</b></button>
-                <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2.5 py-1 rounded text-xs font-bold border border-slate-700 cursor-pointer" title="Cursiva"><i>I</i></button>
-                <span class="text-slate-600">|</span>
-                <button onclick="insertEmoji('🔥')" class="text-base hover:scale-125 transition-transform cursor-pointer">🔥</button>
-                <button onclick="insertEmoji('👍')" class="text-base hover:scale-125 transition-transform cursor-pointer">👍</button>
-                <button onclick="insertEmoji('😂')" class="text-base hover:scale-125 transition-transform cursor-pointer">😂</button>
-                <button onclick="insertEmoji('❤️')" class="text-base hover:scale-125 transition-transform cursor-pointer">❤️</button>
-                <button onclick="insertEmoji('🤬')" class="text-base hover:scale-125 transition-transform cursor-pointer">🤬</button>
-                <button onclick="insertEmoji('🤔')" class="text-base hover:scale-125 transition-transform cursor-pointer">🤔</button>
-                <button onclick="insertEmoji('🥳')" class="text-base hover:scale-125 transition-transform cursor-pointer">🥳</button>
-                <button onclick="insertEmoji('👏')" class="text-base hover:scale-125 transition-transform cursor-pointer">👏</button>
-                <button onclick="insertEmoji('😎')" class="text-base hover:scale-125 transition-transform cursor-pointer">😎</button>
-                <button onclick="insertEmoji('🏆')" class="text-base hover:scale-125 transition-transform cursor-pointer">🏆</button>
-                <button onclick="insertEmoji('⭐')" class="text-base hover:scale-125 transition-transform cursor-pointer">⭐</button>
-                <button onclick="insertEmoji('💪')" class="text-base hover:scale-125 transition-transform cursor-pointer">💪</button>
-                <button onclick="insertEmoji('🚀')" class="text-base hover:scale-125 transition-transform cursor-pointer">🚀</button>
+            <!-- AVISO DE SALA CERRADA -->
+            <div id="chatClosedNotice" class="hidden bg-rose-950/90 border-t border-rose-600/50 p-2.5 text-center text-rose-200 text-[11px] font-bold shrink-0">
+                🔒 Chat cerrado temporalmente por el Administrador.
             </div>
 
-            <!-- INPUT BAR (Se bloquea si el chat está cerrado para los usuarios normales) -->
-            <div id="inputBarTheme" class="bg-slate-900 border-t border-slate-800 p-3 flex items-center space-x-2 transition-all">
-                <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
-                    <span>📷</span>
-                    <input type="file" id="imageInput" accept="image/*" onchange="sendImage(event)" class="hidden">
+            <!-- Panel grande de emojis -->
+            <div id="emojiPickerPanel" class="hidden absolute bottom-16 left-2 right-2 sm:left-3 sm:right-3 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 z-30 max-h-52 overflow-y-auto custom-scrollbar">
+                <div id="emojiPickerGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1 text-xl text-center select-none"></div>
+            </div>
+
+            <!-- EMOJI BAR & BOTONES DE FORMATO -->
+            <div id="emojiBarTheme" class="bg-slate-900/80 backdrop-blur-md border-t border-slate-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0 transition-all">
+                <button onclick="insertFormat('<b>', '</b>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Negrita"><b>B</b></button>
+                <button onclick="insertFormat('<i>', '</i>')" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded text-[11px] font-bold border border-slate-700 cursor-pointer shrink-0" title="Cursiva"><i>I</i></button>
+                <span class="text-slate-600 text-xs">|</span>
+                <button onclick="insertEmoji('😱')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😱</button>
+                <button onclick="insertEmoji('😂')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😂</button>
+                <button onclick="insertEmoji('👍')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">👍</button>
+                <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
+                <button onclick="insertEmoji('❤️')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">❤️</button>
+                <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
+                <button onclick="insertEmoji('🤔')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤔</button>
+                
+                <button onclick="toggleEmojiPicker()" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2 py-0.5 rounded text-sm border border-slate-700 cursor-pointer shrink-0" title="Más emojis">😀+</button>
+            </div>
+
+            <!-- INPUT BAR -->
+            <div id="inputBarTheme" class="bg-slate-900/90 backdrop-blur-md border-t border-slate-800 p-2 flex items-center space-x-1.5 shrink-0 transition-all">
+                <label id="labelImageInput" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center shrink-0">
+                    <span class="text-xs">📷</span>
+                    <input type="file" id="imageInput" accept="image/*,.jfif" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Escribe tu mensaje..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-95 cursor-pointer">Enviar</button>
+                <input type="text" id="messageInput" oninput="handleTypingInput()" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube/GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE INBOX PRIVADO -->
-    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl flex flex-col h-[80vh]">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 id="inboxTitle" class="text-base font-black text-cyan-400">📬 Chat Privado</h3>
-                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2.5 py-1 rounded bg-slate-800 text-xs cursor-pointer">✕</button>
+    <!-- MODAL DE USUARIOS CONECTADOS -->
+    <div id="onlineUsersModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-cyan-500/50 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-cyan-400 flex items-center space-x-2">
+                    <span>🟢</span>
+                    <span>Usuarios Conectados Ahora</span>
+                </h3>
+                <button onclick="closeOnlineUsersModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
             </div>
-            <div id="inboxContent" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar flex flex-col-reverse space-y-reverse">
+            <div id="onlineUsersListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 space-y-1.5 min-h-[140px]">
+                <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
             </div>
-            <div class="pt-3 border-t border-slate-800 flex items-center space-x-2">
-                <label class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl cursor-pointer text-cyan-400 border border-slate-700 transition-all flex items-center justify-center">
-                    <span>📷</span>
-                    <input type="file" id="inboxImageInput" accept="image/*" onchange="sendInboxImage(event)" class="hidden">
-                </label>
-                <input type="text" id="inboxInput" onkeypress="handleInboxKeyPress(event)" placeholder="Escribe tu mensaje privado..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Enviar</button>
+            <p class="text-[10px] text-slate-500 mt-3 text-center">Haz clic en expulsar para sacar una sesión fantasma o iniciar chat privado.</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE INBOX (AJUSTADO CON LÍNEAS DELGADAS Y COMPACTAS) -->
+    <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-3">
+        <div class="bg-slate-900 border border-slate-700/80 w-full max-w-xl rounded-xl p-2.5 shadow-2xl flex flex-col h-full max-h-[600px]">
+            
+            <!-- Cabecera del Inbox compacta -->
+            <div class="flex items-center justify-between pb-1.5 px-1 border-b border-slate-800 shrink-0">
+                <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
+                    <span>📬</span>
+                    <span>Mensajes privados</span>
+                </h3>
+                <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[11px] cursor-pointer transition-all">✕ Cerrar</button>
+            </div>
+
+            <!-- Barra de contactos / Nuevo chat compacta -->
+            <div class="flex items-center gap-1 py-1.5 px-1 shrink-0">
+                <button onclick="startNewChatPrompt()" class="shrink-0 text-[11px] bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-2 py-1 rounded cursor-pointer">+ Nuevo</button>
+                <div id="inboxConversationsList" class="flex flex-nowrap items-center gap-1 overflow-x-auto custom-scrollbar min-w-0 flex-1">
+                    <span class="text-[10px] text-slate-500 whitespace-nowrap">No hay chats aún.</span>
+                </div>
+            </div>
+
+            <!-- Contenedor interno del chat delgado -->
+            <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800/80 rounded-lg overflow-hidden min-h-0">
+                <div id="inboxChatHeader" class="bg-slate-900/90 px-2.5 py-1 border-b border-slate-800 text-[11px] font-bold text-cyan-300 shrink-0 flex items-center space-x-1.5 truncate">
+                    <span>💬</span>
+                    <span>Selecciona un chat de arriba</span>
+                </div>
+                <div id="inboxContent" class="flex-1 overflow-y-auto p-2.5 space-y-2 custom-scrollbar flex flex-col min-h-0">
+                    <div class="text-center text-slate-500 text-xs my-auto">Elige una conversación de la parte superior para comenzar.</div>
+                </div>
+
+                <div id="inboxReadOnlyNote" class="hidden px-2 py-2 border-t border-slate-800 bg-slate-900/90 text-center text-[11px] text-amber-300 font-bold shrink-0">
+                    🔒 Solo lectura
+                </div>
+
+                <!-- Barra de escritura inferior estilizada y delgada -->
+                <div id="inboxComposer" class="hidden p-1.5 border-t border-slate-800 flex items-center gap-1.5 shrink-0 bg-slate-900/95">
+                    <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg cursor-pointer text-cyan-400 border border-slate-700/80 shrink-0 flex items-center justify-center">
+                        <span class="text-xs">📷</span>
+                        <input type="file" id="inboxImageInput" accept="image/*,.jfif" onchange="sendInboxImage(event)" class="hidden">
+                    </label>
+                    <textarea id="inboxInput" rows="1" onkeydown="handleInboxKeyPress(event)" placeholder="Escribe un mensaje privado..." class="flex-1 min-w-0 resize-none bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500 max-h-20 custom-scrollbar"></textarea>
+                    <button onclick="sendInboxMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs shrink-0 cursor-pointer shadow">Enviar</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- DIÁLOGOS PROPIOS -->
+    <div id="dialogModal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex overflow-y-auto p-3">
+        <div class="m-auto w-full max-w-sm bg-slate-900 border border-slate-700 rounded-2xl p-4 shadow-2xl space-y-3">
+            <p id="dialogMessage" class="text-sm text-slate-200 whitespace-pre-line break-words"></p>
+            <input type="text" id="dialogInput" class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+            <div class="flex justify-end gap-2">
+                <button id="dialogCancel" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs border border-slate-700 cursor-pointer">Cancelar</button>
+                <button id="dialogOk" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LISTA DE BLOQUEADOS -->
+    <div id="bannedListModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-red-400">🚫 Usuarios Bloqueados</h3>
+                <button onclick="closeBannedList()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+            </div>
+            <div id="bannedListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 min-h-[120px]">
+                <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-3 text-center">Nota: Si la persona cambia de apodo puede volver a entrar.</p>
+        </div>
+    </div>
+
+    <!-- PANEL DE PALABRAS BLOQUEADAS -->
+    <div id="blockedWordsModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-purple-700/50 w-full max-w-lg rounded-2xl p-4 shadow-2xl flex flex-col max-h-[80vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+                <h3 class="text-sm font-black text-purple-400">🛡️ Palabras Bloqueadas</h3>
+                <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
+                <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
+                <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow">Guardar Lista</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AVISOS -->
+    <div id="toastContainer" class="fixed bottom-16 left-2 right-2 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- FIREBASE & LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBfHf7to54O5jnozK26dJG6an74n2R5tHY",
@@ -263,35 +383,180 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let currentUser = {
-            nick: '',
-            avatar: '',
-            isAdmin: false,
-            textColor: '#ffffff',
-            font: 'Inter',
-            fontSize: 'text-sm'
-        };
+        const store = (() => {
+            const mem = {};
+            let ok = false;
+            try {
+                window.localStorage.setItem('__tdc_test', '1');
+                window.localStorage.removeItem('__tdc_test');
+                ok = true;
+            } catch (e) { ok = false; }
+            return {
+                get(k) { try { if (ok) return window.localStorage.getItem(k); } catch (e) {} return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
+                set(k, v) { try { if (ok) { window.localStorage.setItem(k, v); return; } } catch (e) {} mem[k] = String(v); },
+                remove(k) { try { if (ok) window.localStorage.removeItem(k); } catch (e) {} delete mem[k]; }
+            };
+        })();
 
+        let activeDialogClose = null;
+        function showDialog({ message, input = false, defaultValue = '', cancelable = false }) {
+            return new Promise(resolve => {
+                if (activeDialogClose) activeDialogClose(input ? null : false);
+
+                const modal = document.getElementById('dialogModal');
+                const msgEl = document.getElementById('dialogMessage');
+                const inp = document.getElementById('dialogInput');
+                const okBtn = document.getElementById('dialogOk');
+                const cancelBtn = document.getElementById('dialogCancel');
+
+                msgEl.textContent = message;
+                inp.value = defaultValue;
+                inp.classList.toggle('hidden', !input);
+                cancelBtn.classList.toggle('hidden', !(cancelable || input));
+                modal.classList.remove('hidden');
+                if (input) setTimeout(() => inp.focus(), 50);
+
+                const close = (value) => {
+                    modal.classList.add('hidden');
+                    okBtn.onclick = null;
+                    cancelBtn.onclick = null;
+                    inp.onkeydown = null;
+                    activeDialogClose = null;
+                    resolve(value);
+                };
+                activeDialogClose = close;
+                okBtn.onclick = () => close(input ? inp.value : true);
+                cancelBtn.onclick = () => close(input ? null : false);
+                inp.onkeydown = (ev) => {
+                    if (ev.key === 'Enter') okBtn.onclick();
+                    else if (ev.key === 'Escape') cancelBtn.onclick();
+                };
+            });
+        }
+        const uiAlert = (message) => showDialog({ message });
+        const uiConfirm = (message) => showDialog({ message, cancelable: true });
+        const uiPrompt = (message) => showDialog({ message, input: true });
+
+        function showToast({ text, actionLabel, onAction, duration = 12000 }) {
+            const box = document.getElementById('toastContainer');
+            if (!box) return;
+            const el = document.createElement('div');
+            el.className = 'pointer-events-auto flex items-center gap-2 bg-slate-800 border border-cyan-500/50 text-slate-100 text-xs rounded-xl px-3 py-2 shadow-xl';
+            const span = document.createElement('span');
+            span.className = 'flex-1 min-w-0 break-words whitespace-pre-line';
+            span.textContent = text;
+            el.appendChild(span);
+            const dismiss = () => el.remove();
+            if (actionLabel) {
+                const b = document.createElement('button');
+                b.className = 'bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer';
+                b.textContent = actionLabel;
+                b.onclick = () => { dismiss(); if (onAction) onAction(); };
+                el.appendChild(b);
+            }
+            const x = document.createElement('button');
+            x.className = 'text-slate-400 hover:text-white px-1 shrink-0 cursor-pointer';
+            x.textContent = '✕';
+            x.onclick = dismiss;
+            el.appendChild(x);
+            box.appendChild(el);
+            if (duration) setTimeout(dismiss, duration);
+        }
+
+        function dbError(err) {
+            console.error(err);
+            const code = (err && (err.code || err.message)) || 'error';
+            const hint = /permission/i.test(code) ? '\nRevisa las reglas de Firebase Realtime Database.' : '';
+            showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
+        }
+
+        function esc(value) {
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function safeUrl(url) {
+            const u = String(url ?? '').trim();
+            return /^(https?:\/\/|data:image\/)/i.test(u) ? u : '';
+        }
+        function safeColor(color) {
+            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#ffffff';
+        }
+        const ALLOWED_FONTS = ['Inter', 'Bebas Neue', 'Anton', 'Oswald', 'Archivo Black', 'Russo One', 'Teko', 'Orbitron', 'Exo 2', 'Rajdhani', 'Chakra Petch', 'Rubik', 'Outfit', 'Plus Jakarta Sans', 'Nunito'];
+        const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
+        function safeFont(font) { return ALLOWED_FONTS.includes(font) ? font : 'Inter'; }
+
+        function scaleDigits(html, fontName) { return html; }
+        function isValidYouTubeEmbed(url) {
+            return typeof url === 'string' && /^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}$/.test(url);
+        }
+
+        function compressImage(file, maxSize, quality) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error('No se pudo leer la imagen'));
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error('Imagen no válida'));
+                    img.onload = () => {
+                        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+                        const w = Math.max(1, Math.round(img.width * scale));
+                        const h = Math.max(1, Math.round(img.height * scale));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        let currentUser = { nick: '', avatar: '', isAdmin: false, textColor: '#ffffff', font: 'Inter', fontSize: 'text-xs' };
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
         let activeUsersKey = null;
-        let isChatOpen = true; // Estado global del chat
+        let isChatOpen = true;
+
+        let adminNodeNicks = new Set();
+        let latestRooms = null;
+        let bannedUsers = {};
+        let blockedWordsList = [];
+        let onlineUsersMap = {};
+        let typingTimeout = null;
+        let myPresenceKey = null;
+
+        const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
+        function isAdminNick(nick) {
+            const k = nickKey(nick);
+            return adminNodeNicks.has(k) || messages.some(m => m.isAdmin && nickKey(m.sender) === k);
+        }
+        function isBanned(nick) { return !!bannedUsers[nickKey(nick)]; }
+        function updateInboxComposer() {
+            const composer = document.getElementById('inboxComposer');
+            const note = document.getElementById('inboxReadOnlyNote');
+            if (!composer || !note) return;
+            composer.classList.toggle('hidden', !currentTargetUser);
+            note.classList.add('hidden');
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = localStorage.getItem('tdc_chat_user');
+            const savedUser = store.get('tdc_chat_user');
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
                     document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
-                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-sm';
-                    
+                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
                     checkAdminUIs();
                     initFirebaseListeners();
                 } catch(e) {
-                    localStorage.removeItem('tdc_chat_user');
+                    store.remove('tdc_chat_user');
                     document.getElementById('loginModal').classList.remove('hidden');
                 }
             } else {
@@ -299,152 +564,201 @@
             }
         });
 
+        function isMainAdmin() {
+            if (!currentUser.isAdmin) return false;
+            const n = String(currentUser.nick || '').trim().toLowerCase();
+            return n === 'gran enigma' || n === 'the gran enigma';
+        }
+
         function checkAdminUIs() {
+            const onlineBtn = document.getElementById('onlineUsersBtnContainer');
             if(currentUser.isAdmin) {
                 document.getElementById('btnAdminClear').classList.remove('hidden');
                 document.getElementById('btnAdminToggleChat').classList.remove('hidden');
-                document.getElementById('adminOnlineContainer').classList.remove('hidden');
+                document.getElementById('btnAdminBans').classList.remove('hidden');
+                document.getElementById('btnBlockedWords').classList.toggle('hidden', !isMainAdmin());
+                if (onlineBtn) onlineBtn.classList.remove('hidden');
             } else {
                 document.getElementById('btnAdminClear').classList.add('hidden');
                 document.getElementById('btnAdminToggleChat').classList.add('hidden');
-                document.getElementById('adminOnlineContainer').classList.add('hidden');
+                document.getElementById('btnAdminBans').classList.add('hidden');
+                document.getElementById('btnBlockedWords').classList.add('hidden');
+                if (onlineBtn) onlineBtn.classList.add('hidden');
             }
         }
 
         window.toggleAdminCode = function(checkbox) {
             const container = document.getElementById('adminCodeContainer');
-            if (checkbox.checked) {
-                container.classList.remove('hidden');
-            } else {
-                container.classList.add('hidden');
-                document.getElementById('inputAdminCode').value = '';
-            }
+            if (checkbox.checked) container.classList.remove('hidden');
+            else { container.classList.add('hidden'); document.getElementById('inputAdminCode').value = ''; }
         }
 
-        window.handleLogin = function() {
+        window.handleLogin = async function() {
             const nickInput = document.getElementById('inputNick').value.trim();
             const urlInput = document.getElementById('inputAvatarUrl').value.trim();
             const fileInput = document.getElementById('inputAvatarFile').files[0];
             const wantsAdmin = document.getElementById('checkAdmin').checked;
             const adminCode = document.getElementById('inputAdminCode').value.trim();
 
-            if(!nickInput) {
-                alert('Por favor ingresa un apodo (nick) válido.');
-                return;
-            }
+            if(!nickInput) { await uiAlert('Por favor ingresa un apodo válido.'); return; }
 
             currentUser.nick = nickInput;
             currentUser.textColor = '#00ffcc';
             currentUser.font = 'Inter';
-            currentUser.fontSize = 'text-sm';
+            currentUser.fontSize = 'text-xs';
 
             if(wantsAdmin) {
-                if(adminCode === 'tdc2026') {
-                    currentUser.isAdmin = true;
-                } else {
-                    alert('Código de administrador incorrecto. Ingresarás como usuario estándar.');
-                    currentUser.isAdmin = false;
-                }
-            } else {
-                currentUser.isAdmin = false;
-            }
+                if(adminCode === 'tdc2026') currentUser.isAdmin = true;
+                else { await uiAlert('Código incorrecto. Ingresarás como usuario estándar.'); currentUser.isAdmin = false; }
+            } else { currentUser.isAdmin = false; }
 
             currentUser.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(nickInput)}&background=00ffcc&color=000&bold=true`;
 
-            if(urlInput) {
-                currentUser.avatar = urlInput;
-                finalizeLogin();
-            } else if(fileInput) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentUser.avatar = e.target.result;
-                    finalizeLogin();
-                };
-                reader.onerror = function() { finalizeLogin(); };
-                reader.readAsDataURL(fileInput);
-            } else {
-                finalizeLogin();
-            }
+            if(urlInput) { currentUser.avatar = urlInput; finalizeLogin(); }
+            else if(fileInput) {
+                compressImage(fileInput, 128, 0.8)
+                    .then(data => { currentUser.avatar = data; })
+                    .catch(async () => {
+                        await uiAlert('⚠️ La imagen seleccionada (.jfif u otro formato) no pudo procesarse correctamente. Se usará tu avatar por defecto.');
+                    })
+                    .finally(finalizeLogin);
+            } else { finalizeLogin(); }
         }
 
         window.finalizeLogin = function() {
-            localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
+            store.set('tdc_chat_user', JSON.stringify(currentUser));
             document.getElementById('loginModal').classList.add('hidden');
             checkAdminUIs();
             initFirebaseListeners();
         }
 
-        window.logoutUser = function() {
-            if(confirm('¿Deseas cerrar sesión y cambiar tu apodo/foto de perfil?')) {
-                localStorage.removeItem('tdc_chat_user');
+        window.logoutUser = async function() {
+            if(await uiConfirm('¿Deseas cambiar tu perfil o salir de la sesión?')) {
+                if (myPresenceKey) remove(ref(db, 'online_users/' + myPresenceKey)).catch(() => {});
+                store.remove('tdc_chat_user');
                 location.reload();
             }
         }
 
         function initFirebaseListeners() {
-            // 1. Chat General
-            const messagesRef = ref(db, 'chat_messages');
-            onValue(messagesRef, (snapshot) => {
+            if (currentUser.isAdmin) {
+                set(ref(db, 'admins/' + nickKey(currentUser.nick)), true).catch(dbError);
+            }
+            onValue(ref(db, 'admins'), (snapshot) => {
+                const data = snapshot.val();
+                adminNodeNicks = new Set(data ? Object.keys(data) : []);
+                updateInboxComposer();
+            }, (err) => console.error(err));
+
+            onValue(ref(db, 'banned_users'), (snapshot) => { bannedUsers = snapshot.val() || {}; }, (err) => console.error(err));
+
+            onValue(ref(db, 'blocked_words'), (snapshot) => {
+                const data = snapshot.val();
+                if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
+                else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+                else blockedWordsList = [];
+            }, (err) => console.error(err));
+
+            onValue(ref(db, 'chat_messages'), (snapshot) => {
                 const data = snapshot.val();
                 messages = [];
                 if (data) {
-                    Object.keys(data).forEach(key => {
-                        messages.push({ firebaseKey: key, ...data[key] });
-                    });
-                    messages.sort((a, b) => b.id - a.id);
+                    Object.keys(data).forEach(key => { messages.push({ firebaseKey: key, ...data[key] }); });
+                    messages.sort((a, b) => a.id - b.id);
                 }
                 renderMessages();
-            });
+                updateInboxComposer();
+            }, (err) => dbError(err));
 
-            // 2. Escuchar el Estado de la Sala (Abierto / Cerrado)
-            const chatStatusRef = ref(db, 'chat_room_status');
-            onValue(chatStatusRef, (snapshot) => {
+            onValue(ref(db, 'chat_room_status'), (snapshot) => {
                 const status = snapshot.val();
-                // Si nunca se ha creado, por defecto está abierto (true)
                 isChatOpen = (status !== null) ? status.isOpen : true;
                 updateRoomVisualStatus();
             });
 
-            // 3. Presencia Online
-            const myPresenceRef = push(ref(db, 'online_users'));
+            myPresenceKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+            const myPresenceRef = ref(db, 'online_users/' + myPresenceKey);
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
 
-            const onlineUsersRef = ref(db, 'online_users');
-            onValue(onlineUsersRef, (snapshot) => {
-                const data = snapshot.val();
-                const activeCount = data ? Object.keys(data).length : 1;
-                const counterElement = document.getElementById('onlineCount');
-                if (counterElement) {
-                    counterElement.textContent = activeCount;
+            onValue(myPresenceRef, (snapshot) => {
+                if (!snapshot.exists() && store.get('tdc_chat_user')) {
+                    showToast({ text: '⚠️ Has sido desconectado o expulsado de la sala.', duration: 5000 });
+                    store.remove('tdc_chat_user');
+                    setTimeout(() => location.reload(), 1500);
                 }
             });
 
-            // 4. Notificaciones Privadas
-            const privateChatsRef = ref(db, 'private_chats');
-            onValue(privateChatsRef, (snapshot) => {
+            onValue(ref(db, 'online_users'), (snapshot) => {
+                const data = snapshot.val() || {};
+                onlineUsersMap = data;
+                
+                let uniqueNicks = new Set();
+                Object.values(data).forEach(item => {
+                    if (item && item.nick) uniqueNicks.add(item.nick);
+                });
+
+                const activeCount = uniqueNicks.size;
+                const counterElement = document.getElementById('onlineCount');
+                if (counterElement) counterElement.textContent = activeCount;
+            });
+
+            onValue(ref(db, 'typing_users'), (snapshot) => {
+                const data = snapshot.val() || {};
+                const typingBar = document.getElementById('typingIndicatorBar');
+                const typingText = document.getElementById('typingText');
+                
+                let activeTypers = [];
+                const now = Date.now();
+                
+                Object.keys(data).forEach(k => {
+                    const info = data[k];
+                    if (info && info.nick && info.nick !== currentUser.nick) {
+                        if (now - (info.time || 0) < 4000) {
+                            activeTypers.push(info.nick);
+                        }
+                    }
+                });
+
+                if (activeTypers.length > 0) {
+                    let text = "";
+                    if (activeTypers.length === 1) {
+                        text = `✍️ ${activeTypers[0]} está escribiendo...`;
+                    } else if (activeTypers.length === 2) {
+                        text = `✍️ ${activeTypers[0]} y ${activeTypers[1]} están escribiendo...`;
+                    } else {
+                        text = `✍️ Varios usuarios están escribiendo...`;
+                    }
+                    typingText.textContent = text;
+                    typingBar.classList.remove('hidden');
+                } else {
+                    typingBar.classList.add('hidden');
+                }
+            });
+
+            onValue(ref(db, 'private_chats'), (snapshot) => {
                 const allRooms = snapshot.val();
+                latestRooms = allRooms;
+                if (allRooms) loadConversationsList(allRooms);
                 if (!allRooms) return;
 
                 Object.keys(allRooms).forEach(roomKey => {
                     if (roomKey.includes(currentUser.nick)) {
                         const roomMessages = allRooms[roomKey];
                         if (!roomMessages) return;
-
                         const msgKeys = Object.keys(roomMessages);
-                        const lastMsgKey = msgKeys[msgKeys.length - 1];
-                        const lastMsg = roomMessages[lastMsgKey];
+                        const lastMsg = roomMessages[msgKeys[msgKeys.length - 1]];
 
                         if (lastMsg && lastMsg.sender !== currentUser.nick) {
                             const notifId = roomKey + "_" + lastMsg.id;
-                            if (!window.notifiedMessages) window.notifiedMessages = {};
-                            
-                            if (!window.notifiedMessages[notifId]) {
-                                window.notifiedMessages[notifId] = true;
+                            if (!store.get("notified_" + notifId)) {
+                                store.set("notified_" + notifId, "true");
                                 if (currentTargetUser !== lastMsg.sender) {
-                                    if (confirm(`📬 ¡Nuevo mensaje privado de "${lastMsg.sender}"!\n\n¿Deseas abrir el chat con él/ella?`)) {
-                                        openInboxWith(lastMsg.sender);
-                                    }
+                                    showToast({
+                                        text: `📬 Nuevo mensaje privado de "${lastMsg.sender}"`,
+                                        actionLabel: 'Abrir',
+                                        onAction: () => { openInboxModalMain(); openInboxWith(lastMsg.sender); }
+                                    });
                                 }
                             }
                         }
@@ -453,14 +767,76 @@
             });
         }
 
-        // --- FUNCIÓN DE ADMIN PARA ABRIR O CERRAR EL CHAT EN TIEMPO REAL ---
-        window.toggleChatRoomStatus = function() {
+        window.openOnlineUsersModal = function() {
+            if (!currentUser.isAdmin) return;
+            const modal = document.getElementById('onlineUsersModal');
+            const listContent = document.getElementById('onlineUsersListContent');
+            if (!modal || !listContent) return;
+
+            const entries = Object.entries(onlineUsersMap || {});
+            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([sessionKey, item]) => {
+                if (!item || !item.nick) return '';
+                const nick = item.nick;
+                const isAdmin = isAdminNick(nick);
+                const isMe = nick === currentUser.nick;
+                return `
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
+                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
+                            ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
+                            ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            modal.classList.remove('hidden');
+        }
+
+        window.closeOnlineUsersModal = function() {
+            document.getElementById('onlineUsersModal').classList.add('hidden');
+        }
+
+        window.clickOnlineUser = function(targetNick) {
+            if (targetNick === currentUser.nick || isBanned(currentUser.nick)) return;
+            closeOnlineUsersModal();
+            openInboxModalMain();
+            openInboxWith(targetNick);
+        }
+
+        window.kickUserSession = async function(sessionKey, targetNick) {
+            if (!currentUser.isAdmin) return;
+            if (await uiConfirm(`⚡ ¿Deseas expulsar la sesión activa de "${targetNick}"?`)) {
+                remove(ref(db, 'online_users/' + sessionKey)).catch(dbError);
+                showToast({ text: `⚡ Sesión de "${targetNick}" expulsada correctamente.`, duration: 4000 });
+                openOnlineUsersModal();
+            }
+        };
+
+        window.handleTypingInput = function() {
+            if (!currentUser.nick || isBanned(currentUser.nick)) return;
+            const typingRef = ref(db, 'typing_users/' + nickKey(currentUser.nick));
+            
+            set(typingRef, {
+                nick: currentUser.nick,
+                time: serverTimestamp()
+            }).catch(() => {});
+
+            if (typingTimeout) clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                remove(typingRef).catch(() => {});
+            }, 3000);
+        }
+
+        window.toggleChatRoomStatus = async function() {
             if (!currentUser.isAdmin) return;
             const newStatus = !isChatOpen;
-            const actionText = newStatus ? "abrir el chat para todos" : "CERRAR el chat para evitar spam";
-            
-            if (confirm(`⚠️ ¿Estás seguro de ${actionText}?`)) {
-                set(ref(db, 'chat_room_status'), { isOpen: newStatus });
+            if (await uiConfirm(`⚠️ ¿Deseas ${newStatus ? "abrir" : "cerrar"} el chat?`)) {
+                set(ref(db, 'chat_room_status'), { isOpen: newStatus }).catch(dbError);
             }
         }
 
@@ -468,34 +844,91 @@
             const indicator = document.getElementById('roomStatusIndicator');
             const notice = document.getElementById('chatClosedNotice');
             const inputBar = document.getElementById('inputBarTheme');
-            const toggleBtnText = document.getElementById('roomStatusText');
             const toggleBtnIcon = document.getElementById('roomStatusIcon');
 
             if (isChatOpen) {
-                indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                indicator.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0";
                 notice.classList.add('hidden');
-                if (!currentUser.isAdmin) {
-                    inputBar.classList.remove('hidden'); // Mostrar input a usuarios si está abierto
-                }
-                if (toggleBtnText) toggleBtnText.textContent = "Cerrar Chat";
+                if (!currentUser.isAdmin) inputBar.classList.remove('hidden');
                 if (toggleBtnIcon) toggleBtnIcon.textContent = "🔒";
             } else {
-                indicator.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                indicator.className = "w-2 h-2 rounded-full bg-rose-500 shrink-0";
                 notice.classList.remove('hidden');
-                // Si no es admin, ocultamos la barra de escritura para que nadie mande spam
-                if (!currentUser.isAdmin) {
-                    inputBar.classList.add('hidden');
-                }
-                if (toggleBtnText) toggleBtnText.textContent = "Abrir Chat";
+                if (!currentUser.isAdmin) inputBar.classList.add('hidden');
                 if (toggleBtnIcon) toggleBtnIcon.textContent = "🔓";
             }
         }
 
-        window.clearAllMessages = function() {
+        window.clearAllMessages = async function() {
             if(!currentUser.isAdmin) return;
-            if(confirm('⚠️ ¿Estás seguro de limpiar todo el chat en la nube?')) {
-                remove(ref(db, 'chat_messages'));
+            if(await uiConfirm('⚠️ ¿Borrar todo el chat?')) remove(ref(db, 'chat_messages')).catch(dbError);
+        }
+
+        window.banUser = async function(targetNick) {
+            if (!currentUser.isAdmin || !targetNick || targetNick === currentUser.nick) return;
+            if (isAdminNick(targetNick)) { uiAlert('No puedes bloquear a otro administrador.'); return; }
+            if (await uiConfirm(`¿Bloquear a "${targetNick}"?`)) {
+                set(ref(db, 'banned_users/' + nickKey(targetNick)), { nick: targetNick, bannedBy: currentUser.nick, bannedAt: Date.now() }).catch(dbError);
+                showToast({ text: `🚫 "${targetNick}" ha sido bloqueado.`, duration: 5000 });
             }
+        };
+
+        window.unbanUser = async function(targetNick) {
+            if (!currentUser.isAdmin) return;
+            if (await uiConfirm(`¿Desbloquear a "${targetNick}"?`)) {
+                remove(ref(db, 'banned_users/' + nickKey(targetNick))).catch(dbError);
+                showToast({ text: `✅ "${targetNick}" desbloqueado.`, duration: 5000 });
+            }
+        };
+
+        window.openBannedList = function() {
+            if (!currentUser.isAdmin) return;
+            const modal = document.getElementById('bannedListModal');
+            const list = document.getElementById('bannedListContent');
+            if (!modal || !list) return;
+
+            const entries = Object.values(bannedUsers || {});
+            list.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>` : entries.map(u => `
+                <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
+                        <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
+                    </div>
+                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0">Desbloquear</button>
+                </div>
+            `).join('');
+            modal.classList.remove('hidden');
+        };
+
+        window.closeBannedList = function() { document.getElementById('bannedListModal').classList.add('hidden'); };
+
+        window.openBlockedWordsPanel = function() {
+            if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
+            const modal = document.getElementById('blockedWordsModal');
+            const input = document.getElementById('blockedWordsInput');
+            input.value = blockedWordsList.join('\n');
+            document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
+            modal.classList.remove('hidden');
+        };
+
+        window.closeBlockedWordsPanel = function() { document.getElementById('blockedWordsModal').classList.add('hidden'); };
+
+        window.saveBlockedWords = async function() {
+            if (!isMainAdmin()) return;
+            const raw = document.getElementById('blockedWordsInput').value || '';
+            const unique = [...new Set(raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean))];
+            try {
+                await set(ref(db, 'blocked_words'), unique);
+                blockedWordsList = unique;
+                document.getElementById('blockedWordsCount').textContent = unique.length + ' palabras';
+                showToast({ text: `🛡️ ${unique.length} palabras bloqueadas guardadas.`, duration: 5000 });
+            } catch (err) { dbError(err); }
+        };
+
+        function containsBlockedWord(text) {
+            if (!text || blockedWordsList.length === 0) return false;
+            const lower = String(text).toLowerCase();
+            return blockedWordsList.some(word => word && lower.includes(word));
         }
 
         window.setSkin = function(skinName) {
@@ -504,44 +937,129 @@
             const subBar = document.getElementById('subBarTheme');
             const emojiBar = document.getElementById('emojiBarTheme');
             const inputBar = document.getElementById('inputBarTheme');
-            const mainArea = document.getElementById('chatMainArea');
             
-            if(skinName === 'cyberpunk') {
-                body.className = "bg-[#050b14] text-cyan-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#0b132b] border-b-2 border-cyan-400 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,204,0.4)]";
-                subBar.className = "bg-[#070e1a] border-b border-cyan-500/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#050b14]";
-                emojiBar.className = "bg-[#070e1a] border-t border-cyan-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#0b132b] border-t border-cyan-500/40 p-3 flex items-center space-x-2";
-            } else if(skinName === 'crimson') {
-                body.className = "bg-[#0f0205] text-rose-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#1a0308] border-b-2 border-rose-600 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(255,0,85,0.4)]";
-                subBar.className = "bg-[#140206] border-b border-rose-600/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#0f0205]";
-                emojiBar.className = "bg-[#140206] border-t border-rose-600/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#1a0308] border-t border-rose-600/40 p-3 flex items-center space-x-2";
-            } else if(skinName === 'matrix') {
-                body.className = "bg-[#020d05] text-emerald-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-[#031c0a] border-b-2 border-emerald-500 px-4 py-3 flex items-center justify-between shadow-[0_0_20px_rgba(0,255,0,0.4)]";
-                subBar.className = "bg-[#021407] border-b border-emerald-500/30 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-[#020d05]";
-                emojiBar.className = "bg-[#021407] border-t border-emerald-500/30 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-[#031c0a] border-t border-emerald-500/40 p-3 flex items-center space-x-2";
+            if(skinName === 'bloodRuby') {
+                body.className = "bg-gradient-to-br from-red-950 via-slate-950 to-rose-950 text-rose-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-red-950/80 backdrop-blur-md border-b-2 border-red-600 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-red-950/50 backdrop-blur-md border-b border-red-600/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-red-950/50 backdrop-blur-md border-t border-red-600/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-red-950/80 backdrop-blur-md border-t border-red-600/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'crimsonFlame') {
+                body.className = "bg-gradient-to-br from-rose-950 via-red-950 to-black text-rose-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-rose-950/80 backdrop-blur-md border-b-2 border-rose-500 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-rose-950/50 backdrop-blur-md border-b border-rose-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-rose-950/50 backdrop-blur-md border-t border-rose-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-rose-950/80 backdrop-blur-md border-t border-rose-500/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'skyCeleste') {
+                body.className = "bg-gradient-to-br from-sky-950 via-slate-950 to-blue-950 text-sky-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-sky-950/80 backdrop-blur-md border-b-2 border-sky-400 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-sky-950/50 backdrop-blur-md border-b border-sky-400/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-sky-950/50 backdrop-blur-md border-t border-sky-400/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-sky-950/80 backdrop-blur-md border-t border-sky-400/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'midnightTeal') {
+                body.className = "bg-gradient-to-br from-teal-950 via-slate-900 to-cyan-950 text-teal-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-teal-950/80 backdrop-blur-md border-b-2 border-teal-400 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-teal-950/50 backdrop-blur-md border-b border-teal-400/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-teal-950/50 backdrop-blur-md border-t border-teal-400/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-teal-950/80 backdrop-blur-md border-t border-teal-400/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'sunsetFire') {
+                body.className = "bg-gradient-to-br from-amber-950 via-red-950 to-slate-950 text-orange-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-amber-950/80 backdrop-blur-md border-b-2 border-orange-500 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-amber-950/50 backdrop-blur-md border-b border-orange-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-amber-950/50 backdrop-blur-md border-t border-orange-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-amber-950/80 backdrop-blur-md border-t border-orange-500/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'orangeBlaze') {
+                body.className = "bg-gradient-to-br from-orange-950 via-rose-950 to-black text-amber-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-orange-950/80 backdrop-blur-md border-b-2 border-amber-500 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-orange-950/50 backdrop-blur-md border-b border-amber-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-orange-950/50 backdrop-blur-md border-t border-amber-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-orange-950/80 backdrop-blur-md border-t border-amber-500/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'matrixEmerald') {
+                body.className = "bg-gradient-to-br from-emerald-950 via-green-950 to-slate-950 text-emerald-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-emerald-950/80 backdrop-blur-md border-b-2 border-emerald-500 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-emerald-950/50 backdrop-blur-md border-b border-emerald-500/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-emerald-950/50 backdrop-blur-md border-t border-emerald-500/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-emerald-950/80 backdrop-blur-md border-t border-emerald-500/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'toxicLime') {
+                body.className = "bg-gradient-to-br from-lime-950 via-emerald-950 to-zinc-950 text-lime-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-lime-950/80 backdrop-blur-md border-b-2 border-lime-400 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-lime-950/50 backdrop-blur-md border-b border-lime-400/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-lime-950/50 backdrop-blur-md border-t border-lime-400/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-lime-950/80 backdrop-blur-md border-t border-lime-400/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'cyberpunk') {
+                body.className = "bg-gradient-to-br from-cyan-950 via-slate-950 to-blue-950 text-cyan-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-cyan-950/80 backdrop-blur-md border-b-2 border-cyan-400 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-cyan-950/50 backdrop-blur-md border-b border-cyan-400/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-cyan-950/50 backdrop-blur-md border-t border-cyan-400/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-cyan-950/80 backdrop-blur-md border-t border-cyan-400/40 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'purpleNeon') {
+                body.className = "bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 text-purple-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-purple-950/80 backdrop-blur-md border-b-2 border-purple-400 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-purple-950/50 backdrop-blur-md border-b border-purple-400/30 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-purple-950/50 backdrop-blur-md border-t border-purple-400/30 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-purple-950/80 backdrop-blur-md border-t border-purple-400/40 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'glass') {
-                body.className = "bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-blue-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-blue-900/40 backdrop-blur-md border-b border-blue-400/40 px-4 py-3 flex items-center justify-between shadow-2xl";
-                subBar.className = "bg-blue-950/40 backdrop-blur-md border-b border-blue-400/20 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-transparent";
-                emojiBar.className = "bg-blue-950/40 backdrop-blur-md border-t border-blue-400/20 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-blue-900/40 backdrop-blur-md border-t border-blue-400/30 p-3 flex items-center space-x-2";
+                body.className = "bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-blue-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-blue-900/40 backdrop-blur-md border-b border-blue-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-blue-950/40 backdrop-blur-md border-b border-blue-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-blue-950/40 backdrop-blur-md border-t border-blue-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-blue-900/40 backdrop-blur-md border-t border-blue-400/30 p-2 flex items-center space-x-1.5 shrink-0";
             } else if(skinName === 'minimal') {
-                body.className = "bg-zinc-950 text-zinc-100 min-h-screen flex flex-col font-sans transition-all duration-300";
-                header.className = "bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex items-center justify-between";
-                subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs";
-                mainArea.className = "flex-1 flex flex-col h-[calc(100vh-65px)] bg-zinc-950";
-                emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto custom-scrollbar";
-                inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-3 flex items-center space-x-2";
+                body.className = "bg-zinc-950 text-zinc-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-zinc-900 border-b border-zinc-800 px-3 py-2.5 flex items-center justify-between shrink-0";
+                subBar.className = "bg-zinc-900/50 border-b border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-zinc-900/50 border-t border-zinc-800 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-zinc-900 border-t border-zinc-800 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'sunset') {
+                body.className = "bg-gradient-to-br from-amber-950 via-slate-900 to-orange-950 text-amber-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-amber-900/40 backdrop-blur-md border-b border-orange-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-amber-950/40 backdrop-blur-md border-b border-orange-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-amber-950/40 backdrop-blur-md border-t border-orange-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-amber-900/40 backdrop-blur-md border-t border-orange-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'gold') {
+                body.className = "bg-gradient-to-br from-yellow-950 via-slate-900 to-amber-950 text-yellow-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-yellow-900/40 backdrop-blur-md border-b border-yellow-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-yellow-950/40 backdrop-blur-md border-b border-yellow-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-yellow-950/40 backdrop-blur-md border-t border-yellow-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-yellow-900/40 backdrop-blur-md border-t border-yellow-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'royal') {
+                body.className = "bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 text-indigo-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-indigo-900/40 backdrop-blur-md border-b border-indigo-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-indigo-950/40 backdrop-blur-md border-b border-indigo-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-indigo-950/40 backdrop-blur-md border-t border-indigo-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-indigo-900/40 backdrop-blur-md border-t border-indigo-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'ruby') {
+                body.className = "bg-gradient-to-br from-pink-950 via-slate-900 to-rose-950 text-pink-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-pink-900/40 backdrop-blur-md border-b border-pink-500/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-pink-950/40 backdrop-blur-md border-b border-pink-500/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-pink-950/40 backdrop-blur-md border-t border-pink-500/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-pink-900/40 backdrop-blur-md border-t border-pink-500/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'teal') {
+                body.className = "bg-gradient-to-br from-teal-950 via-slate-900 to-cyan-950 text-teal-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-teal-900/40 backdrop-blur-md border-b border-teal-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-teal-950/40 backdrop-blur-md border-b border-teal-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-teal-950/40 backdrop-blur-md border-t border-teal-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-teal-900/40 backdrop-blur-md border-t border-teal-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'yellow') {
+                body.className = "bg-gradient-to-br from-yellow-950 via-slate-900 to-yellow-900 text-yellow-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-yellow-900/40 backdrop-blur-md border-b border-yellow-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-yellow-950/40 backdrop-blur-md border-b border-yellow-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-yellow-950/40 backdrop-blur-md border-t border-yellow-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-yellow-900/40 backdrop-blur-md border-t border-yellow-400/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'charcoal') {
+                body.className = "bg-gradient-to-br from-neutral-950 via-slate-900 to-zinc-950 text-slate-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-neutral-900/60 backdrop-blur-md border-b border-slate-600/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-neutral-950/60 backdrop-blur-md border-b border-slate-600/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-neutral-950/60 backdrop-blur-md border-t border-slate-600/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-neutral-900/60 backdrop-blur-md border-t border-slate-600/30 p-2 flex items-center space-x-1.5 shrink-0";
+            } else if(skinName === 'violet') {
+                body.className = "bg-gradient-to-br from-fuchsia-950 via-slate-900 to-purple-950 text-fuchsia-100 h-full w-full flex flex-col font-sans overflow-hidden";
+                header.className = "bg-fuchsia-900/40 backdrop-blur-md border-b border-fuchsia-400/40 px-3 py-2.5 flex items-center justify-between shadow-xl shrink-0";
+                subBar.className = "bg-fuchsia-950/40 backdrop-blur-md border-b border-fuchsia-400/20 px-3 py-1.5 flex items-center justify-between text-[11px] shrink-0";
+                emojiBar.className = "bg-fuchsia-950/40 backdrop-blur-md border-t border-fuchsia-400/20 px-2 py-1.5 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar shrink-0";
+                inputBar.className = "bg-fuchsia-900/40 backdrop-blur-md border-t border-fuchsia-400/30 p-2 flex items-center space-x-1.5 shrink-0";
             }
+            updateRoomVisualStatus();
             togglePanel('skinsPanel');
         }
 
@@ -549,7 +1067,7 @@
             currentUser.textColor = document.getElementById('pickerTextColor').value;
             currentUser.font = document.getElementById('selectFont').value;
             currentUser.fontSize = document.getElementById('selectFontSize').value;
-            localStorage.setItem('tdc_chat_user', JSON.stringify(currentUser));
+            store.set('tdc_chat_user', JSON.stringify(currentUser));
         }
 
         window.togglePanel = function(panelId) {
@@ -563,12 +1081,55 @@
             input.focus();
         }
 
+        const EXTRA_EMOJIS = [
+            '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','🙂','🤗',
+            '🤩','🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','🥱','😴','😌','😛','😜',
+            '😝','🤤','😒','😓','😔','😕','🙃','🤑','😲','☹️','🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨',
+            '😩','🤯','😬','😰','😱','🥵','🥶','😳','🤪','😵','😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🥴','😇',
+            '🥳','🥺','🤠','🤡','🤥','🤫','🤭','🧐','🤓','😈','👿','👹','👺','💀','👻','👽','🤖','💩','😺','😸',
+            '😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞',
+            '💓','💗','💖','💘','💝','👍','👎','👊','✊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','💪','🦾','🖕',
+            '✌️','🤞','🤟','🤘','👌','🤌','🤏','👈','👉','👆','👇','☝️','👋','🤚','🖐️','✋','🖖','🔥','⭐','🌟',
+            '✨','💥','💢','💦','💨','🚀','🎉','🎊','🏆','🥇','⚽','🏀','🏈','⚾','🎾','🥊','🎮','🎲','🎯','🎵',
+            '🎶','🍺','🍻','🍷','🍸','🍹','☕','🍕','🍔','🍟'
+        ];
+
+        window.toggleEmojiPicker = function() {
+            const panel = document.getElementById('emojiPickerPanel');
+            const grid = document.getElementById('emojiPickerGrid');
+            if (!panel || !grid) return;
+
+            if (panel.classList.contains('hidden')) {
+                if (grid.children.length === 0) {
+                    EXTRA_EMOJIS.forEach(e => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'hover:bg-slate-800 rounded p-1 transition-transform hover:scale-125 cursor-pointer';
+                        btn.textContent = e;
+                        btn.onclick = () => { insertEmoji(e); };
+                        grid.appendChild(btn);
+                    });
+                }
+                panel.classList.remove('hidden');
+            } else {
+                panel.classList.add('hidden');
+            }
+        };
+
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('emojiPickerPanel');
+            const bar = document.getElementById('emojiBarTheme');
+            if (!panel || panel.classList.contains('hidden')) return;
+            if (bar && !bar.contains(e.target)) {
+                panel.classList.add('hidden');
+            }
+        });
+
         window.insertFormat = function(tagStart, tagEnd) {
             const input = document.getElementById('messageInput');
             const start = input.selectionStart;
             const end = input.selectionEnd;
             const text = input.value;
-            
             input.value = text.substring(0, start) + tagStart + text.substring(start, end) + tagEnd + text.substring(end);
             input.focus();
             input.setSelectionRange(start + tagStart.length, end + tagStart.length);
@@ -576,6 +1137,7 @@
 
         function parseMarkdown(text) {
             let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
             safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
             safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
             return safe;
@@ -593,15 +1155,30 @@
             return /^(\p{Emoji}|\p{Emoji_Component}|\p{Extended_Pictographic}|\s)+$/u.test(trimmed);
         }
 
+        function isOnlyNumbers(text) {
+            return /^\d+$/.test(String(text).trim());
+        }
+
         window.sendMessage = function() {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes escribir en el chat.");
+                return;
+            }
             if (!isChatOpen && !currentUser.isAdmin) {
-                alert("El chat está cerrado en este momento.");
+                uiAlert("El chat está cerrado.");
                 return;
             }
 
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if(!text) return;
+
+            if (containsBlockedWord(text)) {
+                uiAlert("Tu mensaje contiene palabras no permitidas y no se puede enviar.");
+                return;
+            }
+
+            remove(ref(db, 'typing_users/' + nickKey(currentUser.nick))).catch(() => {});
 
             const newMsg = {
                 id: Date.now(),
@@ -616,7 +1193,7 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            push(ref(db, 'chat_messages'), newMsg);
+            push(ref(db, 'chat_messages'), newMsg).catch(dbError);
             input.value = '';
         }
 
@@ -625,97 +1202,221 @@
         }
 
         window.sendImage = function(e) {
+            if (isBanned(currentUser.nick)) {
+                uiAlert("Estás bloqueado. No puedes enviar imágenes.");
+                e.target.value = '';
+                return;
+            }
             if (!isChatOpen && !currentUser.isAdmin) return;
             const file = e.target.files[0];
+            e.target.value = '';
             if(!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const newMsg = {
-                    id: Date.now(),
-                    sender: currentUser.nick,
-                    avatar: currentUser.avatar,
-                    image: event.target.result,
-                    textColor: currentUser.textColor,
-                    font: currentUser.font,
-                    fontSize: currentUser.fontSize,
-                    isAdmin: currentUser.isAdmin,
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            const isGif = file.type.includes('gif') || (file.name && file.name.toLowerCase().endsWith('.gif'));
+
+            if (isGif) {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    const newMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        avatar: currentUser.avatar,
+                        image: uploadEvent.target.result,
+                        textColor: currentUser.textColor,
+                        font: currentUser.font,
+                        fontSize: currentUser.fontSize,
+                        isAdmin: currentUser.isAdmin,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    push(ref(db, 'chat_messages'), newMsg).catch(dbError);
                 };
-                push(ref(db, 'chat_messages'), newMsg);
-            };
-            reader.readAsDataURL(file);
-            e.target.value = '';
+                reader.readAsDataURL(file);
+            } else {
+                compressImage(file, 900, 0.75).then(data => {
+                    const newMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        avatar: currentUser.avatar,
+                        image: data,
+                        textColor: currentUser.textColor,
+                        font: currentUser.font,
+                        fontSize: currentUser.fontSize,
+                        isAdmin: currentUser.isAdmin,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    return push(ref(db, 'chat_messages'), newMsg);
+                }).catch(async () => {
+                    await uiAlert("⚠️ No se pudo procesar la imagen seleccionada. Intenta con un JPG o PNG válido.");
+                });
+            }
         }
 
         window.deleteMessage = function(firebaseKey) {
-            remove(ref(db, `chat_messages/${firebaseKey}`));
+            remove(ref(db, `chat_messages/${firebaseKey}`)).catch(dbError);
+            const el = document.getElementById(`msg_${firebaseKey}`);
+            if (el) el.remove();
+            renderedMessageKeys.delete(firebaseKey);
         }
+
+        let renderedMessageKeys = new Set();
 
         function renderMessages() {
             const container = document.getElementById('chatMessages');
-            container.innerHTML = '';
+            if (!container) return;
 
-            messages.forEach(msg => {
+            if (messages.length === 0) {
+                container.innerHTML = '';
+                renderedMessageKeys.clear();
+                return;
+            }
+
+            const newMessages = messages.filter(msg => !renderedMessageKeys.has(msg.firebaseKey));
+
+            if (newMessages.length === 0 && container.children.length > 0) {
+                return;
+            }
+
+            newMessages.forEach(msg => {
+                renderedMessageKeys.add(msg.firebaseKey);
+
                 const div = document.createElement('div');
-                div.className = "flex items-start space-x-3 py-3 px-2 border-b border-white/20 hover:bg-black/20 rounded-xl transition-all group";
+                div.id = `msg_${msg.firebaseKey}`;
+                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-white/10 hover:bg-black/20 rounded-none transition-all group shrink-0";
 
-                const canDelete = currentUser.isAdmin || msg.sender === currentUser.nick;
-                const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-cyan-500/30 ml-1.5">ADMIN</span>` : '';
+                const sender = String(msg.sender ?? '');
+                const canDelete = currentUser.isAdmin || sender === currentUser.nick;
+                const canBan = currentUser.isAdmin && sender !== currentUser.nick && !isAdminNick(sender);
+                const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30 ml-1">ADMIN</span>` : '';
+                const bannedBadge = isBanned(sender) ? `<span class="bg-red-500/20 text-red-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-red-500/30 ml-1">BLOQUEADO</span>` : '';
+
+                const fontName = safeFont(msg.font);
+                const fontFamily = `'${fontName}', sans-serif`;
+                const sizeClass = ALLOWED_SIZES.includes(msg.fontSize) ? msg.fontSize : 'text-xs';
+                const textColor = safeColor(msg.textColor);
+                const avatar = safeUrl(msg.avatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}&background=00ffcc&color=000&bold=true`;
 
                 let contentHtml = '';
                 if(msg.text) {
-                    if (isOnlyEmojis(msg.text)) {
-                        contentHtml += `<div class="text-5xl py-1 select-none leading-none">${msg.text}</div>`;
+                    const text = String(msg.text).trim();
+                    const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
+
+                    if (isDirectImgUrl) {
+                        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                    } else if (isOnlyEmojis(text)) {
+                        contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
+                    } else if (isOnlyNumbers(text)) {
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
                     } else {
-                        const fontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-                        const formattedText = parseMarkdown(msg.text);
-                        contentHtml += `<p class="${msg.fontSize || 'text-sm'} break-words" style="color: ${msg.textColor}; font-family: ${fontFamily};">${formattedText}</p>`;
+                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
                     }
                 }
-                if(msg.image) {
-                    contentHtml += `<img src="${msg.image}" class="max-w-[320px] max-h-[280px] rounded-2xl mt-2 border border-slate-700 object-cover shadow-xl">`;
+
+                const imageSrc = safeUrl(msg.image);
+                if(imageSrc) {
+                    contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                 }
-                if(msg.youtube) {
+
+                if(isValidYouTubeEmbed(msg.youtube)) {
+                    const ytUrl = msg.youtube.includes('?') ? `${msg.youtube}&playsinline=1` : `${msg.youtube}?playsinline=1`;
                     contentHtml += `
-                        <div class="mt-2 w-full max-w-[340px] aspect-video rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
-                            <iframe src="${msg.youtube}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                        <div class="mt-2 w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-black">
+                            <iframe src="${ytUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     `;
                 }
 
-                const senderFontFamily = msg.font === 'Impact' ? 'Impact, sans-serif' : `'${msg.font}', sans-serif`;
-
                 div.innerHTML = `
-                    <img src="${msg.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-400 shrink-0 shadow-lg">
+                    <img src="${esc(avatar)}" class="w-14 h-14 rounded-xl object-cover border border-cyan-400 shrink-0 shadow">
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center space-x-2">
-                            <span onclick="promptOpenInbox('${msg.sender.replace(/'/g, "\\'")}')" class="font-extrabold text-sm cursor-pointer hover:text-cyan-400 transition-colors" style="font-family: ${senderFontFamily};" title="Haz clic para enviar mensaje privado">${msg.sender}</span>
+                        <div class="flex items-center space-x-1.5">
+                            <span data-nick="${esc(sender)}" onclick="promptOpenInbox(this.dataset.nick)" class="font-extrabold text-xs cursor-pointer hover:text-cyan-400 transition-colors truncate" style="font-family: ${fontFamily} !important;" title="Enviar privado">${scaleDigits(esc(sender), fontName)}</span>
                             ${adminBadge}
-                            <span class="text-[10px] text-slate-400">${msg.time}</span>
+                            ${bannedBadge}
+                            <span class="text-[9px] text-slate-400 shrink-0">${esc(msg.time)}</span>
                         </div>
-                        <div class="mt-1">${contentHtml}</div>
+                        <div class="mt-0.5">${contentHtml}</div>
                     </div>
-                    ${canDelete ? `<button onclick="deleteMessage('${msg.firebaseKey}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-2 py-1 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>` : ''}
+                    <div class="flex flex-col items-center gap-1 shrink-0">
+                        ${canDelete ? `<button data-key="${esc(msg.firebaseKey)}" onclick="deleteMessage(this.dataset.key)" class="msg-del opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer" title="Borrar">🗑️</button>` : ''}
+                        ${canBan ? `<button data-nick="${esc(sender)}" onclick="banUser(this.dataset.nick)" class="msg-del opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-400 text-xs px-1 py-0.5 transition-opacity cursor-pointer" title="Bloquear usuario">🚫</button>` : ''}
+                    </div>
                 `;
                 container.appendChild(div);
             });
+
+            const existingKeys = new Set(messages.map(m => m.firebaseKey));
+            Array.from(container.children).forEach(child => {
+                const key = child.id.replace('msg_', '');
+                if (!existingKeys.has(key)) {
+                    child.remove();
+                    renderedMessageKeys.delete(key);
+                }
+            });
+
+            container.scrollTop = container.scrollHeight;
         }
 
         window.promptOpenInbox = function(targetUser) {
-            if (targetUser === currentUser.nick) {
-                alert("¡No puedes enviarte un mensaje privado a ti mismo!");
-                return;
-            }
-            if (confirm(`¿Deseas abrir un chat privado con "${targetUser}"?`)) {
-                openInboxWith(targetUser);
+            if (targetUser === currentUser.nick || isBanned(currentUser.nick)) return;
+            openInboxModalMain();
+            openInboxWith(targetUser);
+        }
+
+        window.openInboxModalMain = function() {
+            if (isBanned(currentUser.nick)) { uiAlert("Estás bloqueado."); return; }
+            document.getElementById('inboxModal').classList.remove('hidden');
+            if(!currentTargetUser) openInboxWith(null);
+        }
+
+        window.startNewChatPrompt = async function() {
+            if (isBanned(currentUser.nick)) return;
+            const recipient = await uiPrompt("Ingresa el apodo exacto del usuario:");
+            if(recipient && recipient.trim() !== "" && recipient.trim() !== currentUser.nick) {
+                openInboxWith(recipient.trim());
             }
         }
 
-        function openInboxWith(targetUser) {
-            currentTargetUser = targetUser;
-            document.getElementById('inboxTitle').textContent = `📬 Chat privado con: ${targetUser}`;
+        function loadConversationsList(allRooms) {
+            const listContainer = document.getElementById('inboxConversationsList');
+            if(!listContainer) return;
+            listContainer.innerHTML = '';
+
+            let contacts = new Set();
+            Object.keys(allRooms).forEach(roomKey => {
+                if (roomKey.includes(currentUser.nick)) {
+                    roomKey.split('_').forEach(p => { if (p !== currentUser.nick && p) contacts.add(p); });
+                }
+            });
+
+            if (contacts.size === 0) {
+                listContainer.innerHTML = `<span class="text-[10px] text-slate-500 whitespace-nowrap">No hay chats aún. Usa "+ Nuevo".</span>`;
+                return;
+            }
+
+            contacts.forEach(contact => {
+                const btn = document.createElement('button');
+                btn.className = `text-[11px] px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center space-x-1 shrink-0 whitespace-nowrap max-w-[9rem] ${currentTargetUser === contact ? 'bg-cyan-600 text-white shadow' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'}`;
+                btn.innerHTML = `<span>💬</span><span class="truncate">${esc(contact)}</span>`;
+                btn.onclick = () => openInboxWith(contact);
+                listContainer.appendChild(btn);
+            });
+        }
+
+        window.openInboxWith = function(targetUser) {
             document.getElementById('inboxModal').classList.remove('hidden');
+            
+            if (!targetUser) {
+                document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Selecciona un chat de arriba</span>`;
+                document.getElementById('inboxContent').innerHTML = `<div class="text-center text-slate-500 text-xs my-auto">Elige una conversación arriba para comenzar.</div>`;
+                currentTargetUser = null;
+                activeUsersKey = null;
+                updateInboxComposer();
+                return;
+            }
+
+            currentTargetUser = targetUser;
+            document.getElementById('inboxChatHeader').innerHTML = `<span>💬</span><span>Chat Privado con: ${esc(targetUser)}</span>`;
+            updateInboxComposer();
 
             activeUsersKey = [currentUser.nick, targetUser].sort().join('_').replace(/[.#$\[\]]/g, "_");
             const inboxRef = ref(db, `private_chats/${activeUsersKey}`);
@@ -725,31 +1426,31 @@
             inboxUnsubscribe = onValue(inboxRef, (snapshot) => {
                 const data = snapshot.val();
                 const inboxContainer = document.getElementById('inboxContent');
+                if(!inboxContainer) return;
                 inboxContainer.innerHTML = '';
 
                 if (data) {
                     let privMessages = [];
                     Object.keys(data).forEach(key => privMessages.push({ firebaseKey: key, ...data[key] }));
-                    privMessages.sort((a, b) => b.id - a.id);
+                    privMessages.sort((a, b) => a.id - b.id);
 
                     privMessages.forEach(msg => {
                         const p = document.createElement('div');
                         const isMe = msg.sender === currentUser.nick;
-                        p.className = `p-2.5 rounded-xl ${currentUser.fontSize || 'text-xs'} max-w-[80%] break-words group relative ${isMe ? 'bg-cyan-950/80 text-cyan-200 ml-auto border border-cyan-500/30' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
+                        p.className = `p-2.5 rounded-xl text-xs w-full max-w-[85%] break-words whitespace-pre-wrap group relative shrink-0 ${isMe ? 'bg-cyan-950/85 text-cyan-200 ml-auto border border-cyan-500/40 shadow' : 'bg-slate-800 text-slate-200 mr-auto border border-slate-700'}`;
                         
-                        let innerHtml = `<strong class="block text-[10px] opacity-70">${msg.sender}:</strong>`;
+                        let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        if (msg.image) innerHtml += `<img src="${msg.image}" class="max-w-[240px] max-h-[200px] rounded-xl mt-2 border border-slate-700 object-cover shadow">`;
+                        if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="openImageModal('${esc(safeUrl(msg.image))}')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
 
-                        if (isMe) {
-                            innerHtml += `<button onclick="deleteInboxMessage('${activeUsersKey}', '${msg.firebaseKey}')" class="absolute -left-5 top-2 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Borrar mensaje">🗑️</button>`;
-                        }
+                        innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
                         p.innerHTML = innerHtml;
                         inboxContainer.appendChild(p);
                     });
+                    inboxContainer.scrollTop = inboxContainer.scrollHeight;
                 } else {
-                    inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">No hay mensajes aún con ${targetUser}. ¡Di hola!</p>`;
+                    inboxContainer.innerHTML = `<p class="text-center text-xs text-slate-500 my-auto">Inicia la charla privada con ${esc(targetUser)}.</p>`;
                 }
             });
         }
@@ -761,10 +1462,11 @@
         }
 
         window.sendInboxMessage = function() {
-            if (!currentTargetUser || !activeUsersKey) return;
+            if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const input = document.getElementById('inboxInput');
             const text = input.value.trim();
             if(!text) return;
+            if (containsBlockedWord(text)) { uiAlert("Tu mensaje contiene palabras no permitidas."); return; }
 
             const privMsg = {
                 id: Date.now(),
@@ -773,35 +1475,119 @@
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            push(ref(db, `private_chats/${activeUsersKey}`), privMsg);
+            push(ref(db, `private_chats/${activeUsersKey}`), privMsg).catch(dbError);
             input.value = '';
         }
 
         window.sendInboxImage = function(e) {
-            if (!currentTargetUser || !activeUsersKey) return;
+            if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
             const file = e.target.files[0];
+            e.target.value = '';
             if(!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const privMsg = {
-                    id: Date.now(),
-                    sender: currentUser.nick,
-                    image: event.target.result,
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            const usersKey = activeUsersKey;
+            const isGif = file.type.includes('gif') || (file.name && file.name.toLowerCase().endsWith('.gif'));
+
+            if (isGif) {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    const privMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        image: uploadEvent.target.result,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    push(ref(db, `private_chats/${usersKey}`), privMsg).catch(dbError);
                 };
-                push(ref(db, `private_chats/${activeUsersKey}`), privMsg);
-            };
-            reader.readAsDataURL(file);
-            e.target.value = '';
+                reader.readAsDataURL(file);
+            } else {
+                compressImage(file, 900, 0.75).then(data => {
+                    const privMsg = {
+                        id: Date.now(),
+                        sender: currentUser.nick,
+                        image: data,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    return push(ref(db, `private_chats/${usersKey}`), privMsg);
+                }).catch(dbError);
+            }
         }
 
-        window.deleteInboxMessage = function(usersKey, firebaseKey) {
-            remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`));
-        }
+        window.deleteInboxMessage = function(usersKey, firebaseKey) { remove(ref(db, `private_chats/${usersKey}/${firebaseKey}`)).catch(dbError); }
 
         window.handleInboxKeyPress = function(e) {
-            if(e.key === 'Enter') sendInboxMessage();
+            if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendInboxMessage(); }
+        }
+    </script>
+
+    <!-- MENÚ FLOTANTE DE CLIC DERECHO -->
+    <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
+        <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
+        <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
+        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
+        <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
+    </div>    
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            const menu = document.getElementById('customContextMenu');
+            if (!menu) return;
+
+            let x = e.clientX;
+            let y = e.clientY;
+            
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            menu.classList.remove('hidden');
+            
+            const menuWidth = menu.offsetWidth || 192;
+            const menuHeight = menu.offsetHeight || 130;
+            
+            if (x + menuWidth > screenWidth) x = screenWidth - menuWidth - 10;
+            if (y + menuHeight > screenHeight) y = screenHeight - menuHeight - 10;
+            
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+        });
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('customContextMenu');
+            if (menu && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        function menuActionReload() {
+            location.reload();
+        }
+
+        function menuActionScrollBottom() {
+            const container = document.getElementById('chatMessages');
+            if (container) container.scrollTop = container.scrollHeight;
+            document.getElementById('customContextMenu').classList.add('hidden');
+        }
+
+        function menuActionOpenSkins() {
+            if (typeof togglePanel === 'function') {
+                togglePanel('skinsPanel');
+            }
+            document.getElementById('customContextMenu').classList.add('hidden');
+        }
+
+        function openImageModal(imgSrc) {
+            const win = window.open();
+            if (win) {
+                win.document.write(`
+                    <html>
+                        <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
+                        <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
+                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                        </body>
+                    </html>
+                `);
+                win.document.close();
+            }
         }
     </script>
 </body>
