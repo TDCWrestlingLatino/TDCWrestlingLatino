@@ -272,11 +272,10 @@
         </div>
     </div>
 
-    <!-- MODAL DE INBOX (AJUSTADO CON LÍNEAS DELGADAS Y COMPACTAS) -->
+    <!-- MODAL DE INBOX -->
     <div id="inboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-3">
         <div class="bg-slate-900 border border-slate-700/80 w-full max-w-xl rounded-xl p-2.5 shadow-2xl flex flex-col h-full max-h-[600px]">
             
-            <!-- Cabecera del Inbox compacta -->
             <div class="flex items-center justify-between pb-1.5 px-1 border-b border-slate-800 shrink-0">
                 <h3 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
                     <span>📬</span>
@@ -285,7 +284,6 @@
                 <button onclick="closeInboxModal()" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[11px] cursor-pointer transition-all">✕ Cerrar</button>
             </div>
 
-            <!-- Barra de contactos / Nuevo chat compacta -->
             <div class="flex items-center gap-1 py-1.5 px-1 shrink-0">
                 <button onclick="startNewChatPrompt()" class="shrink-0 text-[11px] bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-2 py-1 rounded cursor-pointer">+ Nuevo</button>
                 <div id="inboxConversationsList" class="flex flex-nowrap items-center gap-1 overflow-x-auto custom-scrollbar min-w-0 flex-1">
@@ -293,7 +291,6 @@
                 </div>
             </div>
 
-            <!-- Contenedor interno del chat delgado -->
             <div class="flex-1 flex flex-col bg-slate-950/40 border border-slate-800/80 rounded-lg overflow-hidden min-h-0">
                 <div id="inboxChatHeader" class="bg-slate-900/90 px-2.5 py-1 border-b border-slate-800 text-[11px] font-bold text-cyan-300 shrink-0 flex items-center space-x-1.5 truncate">
                     <span>💬</span>
@@ -307,7 +304,6 @@
                     🔒 Solo lectura
                 </div>
 
-                <!-- Barra de escritura inferior estilizada y delgada -->
                 <div id="inboxComposer" class="hidden p-1.5 border-t border-slate-800 flex items-center gap-1.5 shrink-0 bg-slate-900/95">
                     <label class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded-lg cursor-pointer text-cyan-400 border border-slate-700/80 shrink-0 flex items-center justify-center">
                         <span class="text-xs">📷</span>
@@ -354,7 +350,10 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
+palabra2
+insulto
+..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow">Guardar Lista</button>
@@ -472,7 +471,7 @@
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -677,18 +676,15 @@
                 updateRoomVisualStatus();
             });
 
-            myPresenceKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+            let storedPresKey = store.get('tdc_pres_key');
+            if (!storedPresKey || !storedPresKey.startsWith(nickKey(currentUser.nick) + '_')) {
+                storedPresKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+                store.set('tdc_pres_key', storedPresKey);
+            }
+            myPresenceKey = storedPresKey;
             const myPresenceRef = ref(db, 'online_users/' + myPresenceKey);
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
-
-            onValue(myPresenceRef, (snapshot) => {
-                if (!snapshot.exists() && store.get('tdc_chat_user')) {
-                    showToast({ text: '⚠️ Has sido desconectado o expulsado de la sala.', duration: 5000 });
-                    store.remove('tdc_chat_user');
-                    setTimeout(() => location.reload(), 1500);
-                }
-            });
 
             onValue(ref(db, 'online_users'), (snapshot) => {
                 const data = snapshot.val() || {};
@@ -1137,10 +1133,10 @@
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
-            safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
+            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
+            safe = safe.replace(/<i>(.*?)<\/i>/g, '<i>$1</i>');
             return safe;
         }
 
