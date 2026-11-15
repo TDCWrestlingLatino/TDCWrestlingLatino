@@ -124,7 +124,7 @@
             <div class="space-y-1.5">
                 <div class="grid grid-cols-1 gap-1.5 text-xs">
                     <button onclick="setSkin('bloodRuby')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-red-950 to-rose-900 hover:from-red-900 hover:to-rose-800 border border-red-500 font-bold text-red-200 cursor-pointer shadow">🩸 Blood Ruby (Rojo Vibrante)</button>
-                    <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-rose-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
+                    <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-red-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
                     <button onclick="setSkin('skyCeleste')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-sky-950 to-cyan-900 hover:from-sky-900 hover:to-cyan-800 border border-sky-400 font-bold text-sky-200 cursor-pointer shadow">🌊 Sky Celeste (Celeste Luminoso)</button>
                     <button onclick="setSkin('midnightTeal')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-950 to-cyan-950 hover:from-teal-900 hover:to-cyan-900 border border-teal-400 font-bold text-teal-200 cursor-pointer shadow">🐬 Midnight Teal (Cian Profundo)</button>
                     <button onclick="setSkin('sunsetFire')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-950 to-red-950 hover:from-amber-900 hover:to-red-900 border border-orange-500 font-bold text-orange-200 cursor-pointer shadow">🌅 Sunset Fire (Naranja con Rojo)</button>
@@ -673,10 +673,11 @@
                 updateRoomVisualStatus();
             });
 
-            let storedPresKey = store.get('tdc_pres_key');
+            // Usar sessionStorage para aislar sesiones por pestaña y evitar duplicados fantasma
+            let storedPresKey = sessionStorage.getItem('tdc_pres_key');
             if (!storedPresKey || !storedPresKey.startsWith(nickKey(currentUser.nick) + '_')) {
                 storedPresKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
-                store.set('tdc_pres_key', storedPresKey);
+                sessionStorage.setItem('tdc_pres_key', storedPresKey);
             }
             myPresenceKey = storedPresKey;
             const myPresenceRef = ref(db, 'online_users/' + myPresenceKey);
@@ -767,10 +768,19 @@
             const listContent = document.getElementById('onlineUsersListContent');
             if (!modal || !listContent) return;
 
-            const entries = Object.entries(onlineUsersMap || {});
-            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([sessionKey, item]) => {
-                if (!item || !item.nick) return '';
-                const nick = item.nick;
+            // Agrupar/deduplicar por nickname para evitar mostrarse doble
+            const uniqueUsersMap = {};
+            Object.entries(onlineUsersMap || {}).forEach(([sessionKey, item]) => {
+                if (item && item.nick) {
+                    // Si ya existe, guardamos la sesión o priorizamos la propia
+                    if (!uniqueUsersMap[item.nick] || item.nick === currentUser.nick) {
+                        uniqueUsersMap[item.nick] = sessionKey;
+                    }
+                }
+            });
+
+            const entries = Object.entries(uniqueUsersMap);
+            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([nick, sessionKey]) => {
                 const isAdmin = isAdminNick(nick);
                 const isMe = nick === currentUser.nick;
                 return `
@@ -1068,7 +1078,6 @@
             const panel = document.getElementById(panelId);
             if (!panel) return;
             const isHidden = panel.classList.contains('hidden');
-            // Cerrar ambos paneles antes de abrir el solicitado para evitar superposiciones
             document.getElementById('skinsPanel').classList.add('hidden');
             document.getElementById('configPanel').classList.add('hidden');
             if (isHidden) {
