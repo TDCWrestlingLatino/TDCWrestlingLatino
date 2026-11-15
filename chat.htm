@@ -116,15 +116,15 @@
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full h-full min-h-0">
         
         <!-- PANEL DE SKINS COMPLETAS -->
-        <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
+        <div id="skinsPanel" class="hidden absolute inset-y-0 left-0 z-30 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚡ Skins & Degrades</h3>
-                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
+                <button onclick="togglePanel('skinsPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px] cursor-pointer">✕</button>
             </div>
             <div class="space-y-1.5">
                 <div class="grid grid-cols-1 gap-1.5 text-xs">
                     <button onclick="setSkin('bloodRuby')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-red-950 to-rose-900 hover:from-red-900 hover:to-rose-800 border border-red-500 font-bold text-red-200 cursor-pointer shadow">🩸 Blood Ruby (Rojo Vibrante)</button>
-                    <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-red-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
+                    <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-rose-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
                     <button onclick="setSkin('skyCeleste')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-sky-950 to-cyan-900 hover:from-sky-900 hover:to-cyan-800 border border-sky-400 font-bold text-sky-200 cursor-pointer shadow">🌊 Sky Celeste (Celeste Luminoso)</button>
                     <button onclick="setSkin('midnightTeal')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-950 to-cyan-950 hover:from-teal-900 hover:to-cyan-900 border border-teal-400 font-bold text-teal-200 cursor-pointer shadow">🐬 Midnight Teal (Cian Profundo)</button>
                     <button onclick="setSkin('sunsetFire')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-950 to-red-950 hover:from-amber-900 hover:to-red-900 border border-orange-500 font-bold text-orange-200 cursor-pointer shadow">🌅 Sunset Fire (Naranja con Rojo)</button>
@@ -148,15 +148,15 @@
         </div>
 
         <!-- PANEL DE AJUSTES -->
-        <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-20 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto">
+        <div id="configPanel" class="hidden absolute inset-y-0 left-0 z-30 w-64 max-w-[85%] bg-slate-900/95 backdrop-blur-md border-r border-slate-800 p-3 space-y-3 custom-scrollbar overflow-y-auto shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-cyan-400">⚙️ Ajustes Personales</h3>
-                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px]">✕</button>
+                <button onclick="togglePanel('configPanel')" class="text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 text-[10px] cursor-pointer">✕</button>
             </div>
             <div class="space-y-2.5 text-xs">
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Color de Texto:</label>
-                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
+                    <input type="color" id="pickerTextColor" value="#00ffcc" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
@@ -263,7 +263,7 @@
                     <span>🟢</span>
                     <span>Usuarios Conectados Ahora</span>
                 </h3>
-                <button onclick="closeOnlineUsersModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+                <button onclick="closeOnlineUsersModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <div id="onlineUsersListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 space-y-1.5 min-h-[140px]">
                 <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
@@ -333,7 +333,7 @@
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col max-h-[70vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
                 <h3 class="text-sm font-black text-red-400">🚫 Usuarios Bloqueados</h3>
-                <button onclick="closeBannedList()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+                <button onclick="closeBannedList()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <div id="bannedListContent" class="flex-1 overflow-y-auto custom-scrollbar mt-2 min-h-[120px]">
                 <p class="text-center text-slate-500 text-xs py-6">Cargando...</p>
@@ -347,16 +347,13 @@
         <div class="bg-slate-900 border border-purple-700/50 w-full max-w-lg rounded-2xl p-4 shadow-2xl flex flex-col max-h-[80vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
                 <h3 class="text-sm font-black text-purple-400">🛡️ Palabras Bloqueadas</h3>
-                <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
+                <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
-palabra2
-insulto
-..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
-                <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow">Guardar Lista</button>
+                <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow cursor-pointer">Guardar Lista</button>
             </div>
         </div>
     </div>
@@ -471,14 +468,14 @@ insulto
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
             return /^(https?:\/\/|data:image\/)/i.test(u) ? u : '';
         }
         function safeColor(color) {
-            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#ffffff';
+            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#00ffcc';
         }
         const ALLOWED_FONTS = ['Inter', 'Bebas Neue', 'Anton', 'Oswald', 'Archivo Black', 'Russo One', 'Teko', 'Orbitron', 'Exo 2', 'Rajdhani', 'Chakra Petch', 'Rubik', 'Outfit', 'Plus Jakarta Sans', 'Nunito'];
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
@@ -515,7 +512,7 @@ insulto
             });
         }
 
-        let currentUser = { nick: '', avatar: '', isAdmin: false, textColor: '#ffffff', font: 'Inter', fontSize: 'text-xs' };
+        let currentUser = { nick: '', avatar: '', isAdmin: false, textColor: '#00ffcc', font: 'Inter', fontSize: 'text-xs' };
         let messages = [];
         let currentTargetUser = null;
         let inboxUnsubscribe = null;
@@ -550,7 +547,7 @@ insulto
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
-                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
+                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#00ffcc';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
                     checkAdminUIs();
@@ -891,7 +888,7 @@ insulto
                         <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
                         <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
                     </div>
-                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0">Desbloquear</button>
+                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
                 </div>
             `).join('');
             modal.classList.remove('hidden');
@@ -1068,7 +1065,15 @@ insulto
         }
 
         window.togglePanel = function(panelId) {
-            document.getElementById(panelId).classList.toggle('hidden');
+            const panel = document.getElementById(panelId);
+            if (!panel) return;
+            const isHidden = panel.classList.contains('hidden');
+            // Cerrar ambos paneles antes de abrir el solicitado para evitar superposiciones
+            document.getElementById('skinsPanel').classList.add('hidden');
+            document.getElementById('configPanel').classList.add('hidden');
+            if (isHidden) {
+                panel.classList.remove('hidden');
+            }
         }
 
         window.insertEmoji = function(emoji) {
@@ -1133,10 +1138,10 @@ insulto
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
-            safe = safe.replace(/<i>(.*?)<\/i>/g, '<i>$1</i>');
+            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
+            safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
             return safe;
         }
 
@@ -1521,7 +1526,7 @@ insulto
     <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
         <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
         <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
-        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
+        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span><b></b></button>
         <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
     </div>    
     <script>
@@ -1579,7 +1584,7 @@ insulto
                     <html>
                         <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
                         <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
-                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-resis:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
                         </body>
                     </html>
                 `);
