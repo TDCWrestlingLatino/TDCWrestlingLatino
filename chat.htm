@@ -554,11 +554,18 @@ insulto
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
-                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
-                    document.getElementById('selectFont').value = currentUser.font || 'Inter';
-                    document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
+                    try {
+                        document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
+                        document.getElementById('selectFont').value = currentUser.font || 'Inter';
+                        document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
+                    } catch(err) {}
                     checkAdminUIs();
-                    initFirebaseListeners();
+                    try {
+                        initFirebaseListeners();
+                    } catch(fbErr) {
+                        console.error("Firebase init error:", fbErr);
+                        showToast({ text: "⚠️ Conectando con la base de datos...", duration: 5000 });
+                    }
                 } catch(e) {
                     store.remove('tdc_chat_user');
                     store.remove('tdc_pres_key');
