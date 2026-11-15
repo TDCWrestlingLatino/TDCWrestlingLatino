@@ -249,7 +249,7 @@
                     <span class="text-xs">📷</span>
                     <input type="file" id="imageInput" accept="image/*,.jfif" onchange="sendImage(event)" class="hidden">
                 </label>
-                <input type="text" id="messageInput" oninput="handleTypingInput()" onkeydown="handleKeyPress(event)" placeholder="Escribe aqui ..... " class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <input type="text" id="messageInput" oninput="handleTypingInput()" onkeydown="handleKeyPress(event)" placeholder="Escribe tu mensaje o pega enlace de YouTube/GIF..." class="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
                 <button id="sendButton" onclick="sendMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition-all active:scale-95 cursor-pointer shrink-0">Enviar</button>
             </div>
         </div>
@@ -354,7 +354,10 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
+palabra2
+insulto
+..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow">Guardar Lista</button>
@@ -472,7 +475,7 @@
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -558,6 +561,7 @@
                     initFirebaseListeners();
                 } catch(e) {
                     store.remove('tdc_chat_user');
+                    store.remove('tdc_pres_key');
                     document.getElementById('loginModal').classList.remove('hidden');
                 }
             } else {
@@ -637,6 +641,7 @@
             if(await uiConfirm('¿Deseas cambiar tu perfil o salir de la sesión?')) {
                 if (myPresenceKey) remove(ref(db, 'online_users/' + myPresenceKey)).catch(() => {});
                 store.remove('tdc_chat_user');
+                store.remove('tdc_pres_key');
                 location.reload();
             }
         }
@@ -677,18 +682,15 @@
                 updateRoomVisualStatus();
             });
 
-            myPresenceKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+            let storedPresKey = store.get('tdc_pres_key');
+            if (!storedPresKey || !storedPresKey.startsWith(nickKey(currentUser.nick) + '_')) {
+                storedPresKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
+                store.set('tdc_pres_key', storedPresKey);
+            }
+            myPresenceKey = storedPresKey;
             const myPresenceRef = ref(db, 'online_users/' + myPresenceKey);
             set(myPresenceRef, { nick: currentUser.nick, time: serverTimestamp() });
             onDisconnect(myPresenceRef).remove();
-
-            onValue(myPresenceRef, (snapshot) => {
-                if (!snapshot.exists() && store.get('tdc_chat_user')) {
-                    showToast({ text: '⚠️ Has sido desconectado o expulsado de la sala.', duration: 5000 });
-                    store.remove('tdc_chat_user');
-                    setTimeout(() => location.reload(), 1500);
-                }
-            });
 
             onValue(ref(db, 'online_users'), (snapshot) => {
                 const data = snapshot.val() || {};
@@ -1137,10 +1139,10 @@
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
-            safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
+            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
+            safe = safe.replace(/<i>(.*?)<\/i>/g, '<i>$1</i>');
             return safe;
         }
 
