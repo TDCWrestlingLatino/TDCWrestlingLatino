@@ -350,10 +350,7 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
-palabra2
-insulto
-..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow cursor-pointer">Guardar Lista</button>
@@ -471,7 +468,7 @@ insulto
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -676,7 +673,6 @@ insulto
                 updateRoomVisualStatus();
             });
 
-            // Usar sessionStorage para aislar sesiones por pestaña y evitar duplicados fantasma
             let storedPresKey = sessionStorage.getItem('tdc_pres_key');
             if (!storedPresKey || !storedPresKey.startsWith(nickKey(currentUser.nick) + '_')) {
                 storedPresKey = nickKey(currentUser.nick) + '_' + Math.random().toString(36).substring(2, 8);
@@ -771,11 +767,9 @@ insulto
             const listContent = document.getElementById('onlineUsersListContent');
             if (!modal || !listContent) return;
 
-            // Agrupar/deduplicar por nickname para evitar mostrarse doble
             const uniqueUsersMap = {};
             Object.entries(onlineUsersMap || {}).forEach(([sessionKey, item]) => {
                 if (item && item.nick) {
-                    // Si ya existe, guardamos la sesión o priorizamos la propia
                     if (!uniqueUsersMap[item.nick] || item.nick === currentUser.nick) {
                         uniqueUsersMap[item.nick] = sessionKey;
                     }
@@ -1150,10 +1144,10 @@ insulto
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
-            safe = safe.replace(/<i>(.*?)<\/i>/g, '<i>$1</i>');
+            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
+            safe = safe.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<i>$1</i>');
             return safe;
         }
 
@@ -1215,41 +1209,46 @@ insulto
             if(e.key === 'Enter') sendMessage();
         }
 
-        // PEGAR IMAGEN CON CTRL + V EN EL CHAT PRINCIPAL
-        document.getElementById('messageInput').addEventListener('paste', function(e) {
-            if (isBanned(currentUser.nick)) {
-                uiAlert("Estás bloqueado. No puedes enviar imágenes.");
-                return;
-            }
-            if (!isChatOpen && !currentUser.isAdmin) return;
+        // Evento de pegar imagen en el chat principal
+        document.addEventListener('DOMContentLoaded', () => {
+            const msgInput = document.getElementById('messageInput');
+            if (msgInput) {
+                msgInput.addEventListener('paste', function(e) {
+                    if (isBanned(currentUser.nick)) {
+                        uiAlert("Estás bloqueado. No puedes enviar imágenes.");
+                        return;
+                    }
+                    if (!isChatOpen && !currentUser.isAdmin) return;
 
-            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-            for (let index in items) {
-                const item = items[index];
-                if (item.kind === 'file' && item.type.startsWith('image/')) {
-                    e.preventDefault();
-                    const blob = item.getAsFile();
-                    
-                    showToast({ text: "⏳ Procesando imagen pegada...", duration: 2500 });
+                    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                    for (let index in items) {
+                        const item = items[index];
+                        if (item.kind === 'file' && item.type.startsWith('image/')) {
+                            e.preventDefault();
+                            const blob = item.getAsFile();
+                            
+                            showToast({ text: "⏳ Procesando imagen pegada...", duration: 2500 });
 
-                    compressImage(blob, 900, 0.75).then(data => {
-                        const newMsg = {
-                            id: Date.now(),
-                            sender: currentUser.nick,
-                            avatar: currentUser.avatar,
-                            image: data,
-                            textColor: currentUser.textColor,
-                            font: currentUser.font,
-                            fontSize: currentUser.fontSize,
-                            isAdmin: currentUser.isAdmin,
-                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                        };
-                        return push(ref(db, 'chat_messages'), newMsg);
-                    }).catch(async () => {
-                        await uiAlert("⚠️ No se pudo procesar la imagen del portapapeles.");
-                    });
-                    break;
-                }
+                            compressImage(blob, 900, 0.75).then(data => {
+                                const newMsg = {
+                                    id: Date.now(),
+                                    sender: currentUser.nick,
+                                    avatar: currentUser.avatar,
+                                    image: data,
+                                    textColor: currentUser.textColor,
+                                    font: currentUser.font,
+                                    fontSize: currentUser.fontSize,
+                                    isAdmin: currentUser.isAdmin,
+                                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                                };
+                                return push(ref(db, 'chat_messages'), newMsg);
+                            }).catch(async () => {
+                                await uiAlert("⚠️ No se pudo procesar la imagen del portapapeles.");
+                            });
+                            break;
+                        }
+                    }
+                });
             }
         });
 
@@ -1531,29 +1530,34 @@ insulto
             input.value = '';
         }
 
-        // PEGAR IMAGEN CON CTRL + V EN EL INBOX PRIVADO
-        document.getElementById('inboxInput').addEventListener('paste', function(e) {
-            if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
+        // Evento de pegar imagen en el Inbox privado
+        document.addEventListener('DOMContentLoaded', () => {
+            const inboxInput = document.getElementById('inboxInput');
+            if (inboxInput) {
+                inboxInput.addEventListener('paste', function(e) {
+                    if (isBanned(currentUser.nick) || !currentTargetUser || !activeUsersKey) return;
 
-            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-            for (let index in items) {
-                const item = items[index];
-                if (item.kind === 'file' && item.type.startsWith('image/')) {
-                    e.preventDefault();
-                    const blob = item.getAsFile();
-                    const usersKey = activeUsersKey;
+                    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                    for (let index in items) {
+                        const item = items[index];
+                        if (item.kind === 'file' && item.type.startsWith('image/')) {
+                            e.preventDefault();
+                            const blob = item.getAsFile();
+                            const usersKey = activeUsersKey;
 
-                    compressImage(blob, 900, 0.75).then(data => {
-                        const privMsg = {
-                            id: Date.now(),
-                            sender: currentUser.nick,
-                            image: data,
-                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                        };
-                        return push(ref(db, `private_chats/${usersKey}`), privMsg);
-                    }).catch(dbError);
-                    break;
-                }
+                            compressImage(blob, 900, 0.75).then(data => {
+                                const privMsg = {
+                                    id: Date.now(),
+                                    sender: currentUser.nick,
+                                    image: data,
+                                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                                };
+                                return push(ref(db, `private_chats/${usersKey}`), privMsg);
+                            }).catch(dbError);
+                            break;
+                        }
+                    }
+                });
             }
         });
 
