@@ -1314,7 +1314,7 @@
                     if (isDirectImgUrl) {
                         contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                     } else if (isOnlyEmojis(text)) {
-                        contentHtml += `<div class="text-3xl py-0.5 select-none leading-none">${esc(text)}</div>`;
+                        contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
                         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
                     } else {
