@@ -130,8 +130,8 @@
                     <button onclick="setSkin('crimsonFlame')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-red-800 border border-rose-500 font-bold text-rose-200 cursor-pointer shadow">🔥 Crimson Flame (Rojo Fuego)</button>
                     <button onclick="setSkin('skyCeleste')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-sky-950 to-cyan-900 hover:from-sky-900 hover:to-cyan-800 border border-sky-400 font-bold text-sky-200 cursor-pointer shadow">🌊 Sky Celeste (Celeste Luminoso)</button>
                     <button onclick="setSkin('midnightTeal')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-950 to-cyan-950 hover:from-teal-900 hover:to-cyan-900 border border-teal-400 font-bold text-teal-200 cursor-pointer shadow">🐬 Midnight Teal (Cian Profundo)</button>
-                    <button onclick="setSkin('sunsetFire')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-950 to-red-950 hover:from-amber-900 hover:to-red-900 border border-orange-500 font-bold text-orange-200 cursor-pointer shadow">🌅 Sunset Fire (Naranja con Rojo)</button>
-                    <button onclick="setSkin('orangeBlaze')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-orange-950 to-rose-950 hover:from-orange-900 hover:to-rose-900 border border-amber-500 font-bold text-amber-200 cursor-pointer shadow">⚡ Orange Blaze (Fuego Estelar)</button>
+                    <button onclick="setSkin('sunsetFire')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-950 to-red-950 hover:from-amber-900 hover:to-red-950 border border-orange-500 font-bold text-orange-200 cursor-pointer shadow">🌅 Sunset Fire (Naranja con Rojo)</button>
+                    <button onclick="setSkin('orangeBlaze')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-orange-950 to-rose-950 hover:from-orange-900 hover:to-rose-950 border border-amber-500 font-bold text-amber-200 cursor-pointer shadow">⚡ Orange Blaze (Fuego Estelar)</button>
                     <button onclick="setSkin('matrixEmerald')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-950 to-green-900 hover:from-emerald-900 hover:to-green-800 border border-emerald-500 font-bold text-emerald-200 cursor-pointer shadow">💻 Matrix Emerald (Verde Oscuro)</button>
                     <button onclick="setSkin('toxicLime')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-lime-950 to-emerald-950 hover:from-lime-900 hover:to-emerald-900 border border-lime-400 font-bold text-lime-200 cursor-pointer shadow">🧪 Toxic Lime (Verde Claro Neón)</button>
                     <button onclick="setSkin('cyberpunk')" class="text-left px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-950 to-blue-950 hover:from-cyan-900 hover:to-blue-900 border border-cyan-400 font-bold text-cyan-200 cursor-pointer shadow">🌆 Cyberpunk Neon</button>
@@ -241,6 +241,7 @@
                 <button onclick="insertEmoji('😬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😬</button>
                 <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
                 <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
+                
                 
                 <button onclick="toggleEmojiPicker()" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2 py-0.5 rounded text-sm border border-slate-700 cursor-pointer shrink-0" title="Más emojis">😀+</button>
             </div>
@@ -355,10 +356,7 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
-palabra2
-insulto
-..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow cursor-pointer">Guardar Lista</button>
@@ -476,7 +474,7 @@ insulto
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -534,6 +532,56 @@ insulto
         let onlineUsersMap = {};
         let typingTimeout = null;
         let myPresenceKey = null;
+
+        let initialChatLoaded = false;
+        let audioCtxInstance = null;
+
+        document.addEventListener('pointerdown', () => {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx && !audioCtxInstance) audioCtxInstance = new AudioCtx();
+                if (audioCtxInstance && audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
+            } catch (e) {}
+        }, { once: true });
+
+        function playMentionChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!audioCtxInstance) audioCtxInstance = new AudioCtx();
+                if (audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
+
+                const now = audioCtxInstance.currentTime;
+                const notes = [880, 1174.66];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtxInstance.createOscillator();
+                    const gain = audioCtxInstance.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+
+                    gain.gain.setValueAtTime(0.0001, now + idx * 0.11);
+                    gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.11 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.11 + 0.38);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtxInstance.destination);
+                    osc.start(now + idx * 0.11);
+                    osc.stop(now + idx * 0.11 + 0.4);
+                });
+            } catch (e) {}
+        }
+
+        function isCurrentUserMentioned(text) {
+            if (!text || !currentUser || !currentUser.nick) return false;
+            const myNick = String(currentUser.nick).trim().toLowerCase();
+            if (!myNick) return false;
+            const regex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
+            let match;
+            while ((match = regex.exec(String(text))) !== null) {
+                if (match[1].toLowerCase() === myNick) return true;
+            }
+            return false;
+        }
 
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
         function isAdminNick(nick) {
@@ -785,25 +833,23 @@ insulto
             });
 
             const entries = Object.entries(uniqueUsersMap);
-            listContent.innerHTML = entries.length === 0
-                ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>`
-                : entries.map(([nick, sessionKey]) => {
-                    const isAdmin = isAdminNick(nick);
-                    const isMe = nick === currentUser.nick;
-                    return `
-                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
-                            <div data-nick="${esc(nick)}" onclick="clickOnlineUser(this.dataset.nick)" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-                                <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
-                                ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
-                                ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
-                            </div>
-                            <div class="flex items-center gap-1 shrink-0">
-                                ${!isMe ? `<button data-session="${esc(sessionKey)}" data-nick="${esc(nick)}" onclick="kickUserSession(this.dataset.session, this.dataset.nick)" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
-                            </div>
+            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([nick, sessionKey]) => {
+                const isAdmin = isAdminNick(nick);
+                const isMe = nick === currentUser.nick;
+                return `
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
+                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
+                            ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
+                            ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
                         </div>
-                    `;
-                }).join('');
+                        <div class="flex items-center gap-1 shrink-0">
+                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
             modal.classList.remove('hidden');
         }
@@ -899,17 +945,15 @@ insulto
             if (!modal || !list) return;
 
             const entries = Object.values(bannedUsers || {});
-            list.innerHTML = entries.length === 0
-                ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>`
-                : entries.map(u => `
-                    <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
-                        <div class="min-w-0">
-                            <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
-                            <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
-                        </div>
-                        <button data-nick="${esc(u.nick)}" onclick="unbanUser(this.dataset.nick)" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
+            list.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>` : entries.map(u => `
+                <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
+                        <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
                     </div>
-                `).join('');
+                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
+                </div>
+            `).join('');
             modal.classList.remove('hidden');
         };
 
@@ -1140,7 +1184,7 @@ insulto
             const panel = document.getElementById('emojiPickerPanel');
             const bar = document.getElementById('emojiBarTheme');
             if (!panel || panel.classList.contains('hidden')) return;
-            if (bar && !bar.contains(e.target)) {
+            if (bar && !bar.contains(e.target) && !panel.contains(e.target)) {
                 panel.classList.add('hidden');
             }
         });
@@ -1156,9 +1200,9 @@ insulto
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
+            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
             safe = safe.replace(/(^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g, '$1<span class="mention-tag">@$2</span>');
             return safe;
         }
@@ -1266,7 +1310,7 @@ insulto
                 return;
             }
             box.innerHTML = mentionMatches.map((nick, i) => `
-                <button type="button" data-nick="${esc(nick)}" onmousedown="event.preventDefault(); applyMentionSelection(this.dataset.nick)" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
+                <button type="button" onmousedown="event.preventDefault(); applyMentionSelection('${esc(nick).replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
                     <span>@${esc(nick)}</span>
                     <span class="text-[10px] text-cyan-400">Mencionar</span>
                 </button>
@@ -1417,7 +1461,6 @@ insulto
             });
         });
 
-        // Evento de pegar imagen en el chat principal
         document.addEventListener('DOMContentLoaded', () => {
             const msgInput = document.getElementById('messageInput');
             if (msgInput) {
@@ -1517,56 +1560,6 @@ insulto
             renderedMessageKeys.delete(firebaseKey);
         }
 
-        let initialChatLoaded = false;
-        let audioCtxInstance = null;
-
-        document.addEventListener('pointerdown', () => {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (AudioCtx && !audioCtxInstance) audioCtxInstance = new AudioCtx();
-                if (audioCtxInstance && audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
-            } catch (e) {}
-        }, { once: true });
-
-        function playMentionChime() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                if (!audioCtxInstance) audioCtxInstance = new AudioCtx();
-                if (audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
-
-                const now = audioCtxInstance.currentTime;
-                const notes = [880, 1174.66];
-                notes.forEach((freq, idx) => {
-                    const osc = audioCtxInstance.createOscillator();
-                    const gain = audioCtxInstance.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, now + idx * 0.11);
-
-                    gain.gain.setValueAtTime(0.0001, now + idx * 0.11);
-                    gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.11 + 0.02);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.11 + 0.38);
-
-                    osc.connect(gain);
-                    gain.connect(audioCtxInstance.destination);
-                    osc.start(now + idx * 0.11);
-                    osc.stop(now + idx * 0.11 + 0.4);
-                });
-            } catch (e) {}
-        }
-
-        function isCurrentUserMentioned(text) {
-            if (!text || !currentUser || !currentUser.nick) return false;
-            const myNick = String(currentUser.nick).trim().toLowerCase();
-            if (!myNick) return false;
-            const regex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
-            let match;
-            while ((match = regex.exec(String(text))) !== null) {
-                if (match[1].toLowerCase() === myNick) return true;
-            }
-            return false;
-        }
-
         let renderedMessageKeys = new Set();
 
         function renderMessages() {
@@ -1591,7 +1584,7 @@ insulto
 
                 const div = document.createElement('div');
                 div.id = `msg_${msg.firebaseKey}`;
-                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-slate-700/60 hover:bg-black/20 rounded-none transition-all group shrink-0";
+                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-white/100 hover:bg-black/20 rounded-none transition-all group shrink-0";
 
                 const sender = String(msg.sender ?? '');
                 const canDelete = currentUser.isAdmin || sender === currentUser.nick;
@@ -1611,10 +1604,7 @@ insulto
                     const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
 
                     if (isDirectImgUrl) {
-                        const validDirectUrl = safeUrl(text);
-                        if (validDirectUrl) {
-                            contentHtml += `<img data-src="${esc(validDirectUrl)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
-                        }
+                        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                     } else if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
@@ -1626,7 +1616,7 @@ insulto
 
                 const imageSrc = safeUrl(msg.image);
                 if(imageSrc) {
-                    contentHtml += `<img data-src="${esc(imageSrc)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                    contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                 }
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
@@ -1764,8 +1754,7 @@ insulto
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        const privImg = safeUrl(msg.image);
-                        if (privImg) innerHtml += `<img data-src="${esc(privImg)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                        if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="openImageModal('${esc(safeUrl(msg.image))}')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
 
                         innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
@@ -1803,7 +1792,6 @@ insulto
             input.value = '';
         }
 
-        // Evento de pegar imagen en el Inbox privado
         document.addEventListener('DOMContentLoaded', () => {
             const inboxInput = document.getElementById('inboxInput');
             if (inboxInput) {
@@ -1879,7 +1867,7 @@ insulto
     <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
         <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
         <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
-        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
+        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span><b></b></button>
         <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
     </div>    
     <script>
@@ -1931,25 +1919,17 @@ insulto
         }
 
         function openImageModal(imgSrc) {
-            const u = String(imgSrc ?? '').trim();
-            if (!/^(https?:\/\/|data:image\/)/i.test(u)) return;
             const win = window.open();
             if (win) {
-                const img = win.document.createElement('img');
-                img.src = u;
-                img.style.maxWidth = '100%';
-                img.style.maxHeight = '100%';
-                img.style.objectFit = 'contain';
-                img.style.borderRadius = '8px';
-                img.style.boxShadow = '0 0 20px rgba(0,0,0,0.8)';
-                win.document.body.style.margin = '0';
-                win.document.body.style.background = '#050505';
-                win.document.body.style.display = 'flex';
-                win.document.body.style.alignItems = 'center';
-                win.document.body.style.justifyContent = 'center';
-                win.document.body.style.height = '100vh';
-                win.document.title = 'TDC Wrestling Latino - Imagen Ampliada';
-                win.document.body.appendChild(img);
+                win.document.write(`
+                    <html>
+                        <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
+                        <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
+                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-resis:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                        </body>
+                    </html>
+                `);
+                win.document.close();
             }
         }
     </script>
