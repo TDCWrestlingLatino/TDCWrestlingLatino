@@ -655,13 +655,12 @@
 
             onValue(ref(db, 'banned_users'), (snapshot) => { bannedUsers = snapshot.val() || {}; }, (err) => console.error(err));
 
-            onValue(ref(db, 'blocked_words'), (snapshot) => {
-                const data = snapshot.val();
-                if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
-                else if (typeof data === 'string') blockedWordsList = data.split('
-').map(w => w.toLowerCase().trim()).filter(Boolean);
-                else blockedWordsList = [];
-            }, (err) => console.error(err));
+  onValue(ref(db, 'blocked_words'), (snapshot) => {
+    const data = snapshot.val();
+    if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
+    else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+    else blockedWordsList = [];
+}, (err) => console.error(err));
 
             onValue(ref(db, 'chat_messages'), (snapshot) => {
                 const data = snapshot.val();
