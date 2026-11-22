@@ -467,12 +467,11 @@
         }
 
         function dbError(err) {
-            console.error(err);
-            const code = (err && (err.code || err.message)) || 'error';
-            const hint = /permission/i.test(code) ? '
-Revisa las reglas de Firebase Realtime Database.' : '';
-            showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
-        }
+    console.error(err);
+    const code = (err && (err.code || err.message)) || 'error';
+    const hint = /permission/i.test(code) ? '\nRevisa las reglas de Firebase Realtime Database.' : '';
+    showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
+}
 
         function esc(value) {
             return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
