@@ -469,7 +469,8 @@
         function dbError(err) {
             console.error(err);
             const code = (err && (err.code || err.message)) || 'error';
-            const hint = /permission/i.test(code) ? '\nRevisa las reglas de Firebase Realtime Database.' : '';
+            const hint = /permission/i.test(code) ? '
+Revisa las reglas de Firebase Realtime Database.' : '';
             showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
         }
 
@@ -658,7 +659,8 @@
             onValue(ref(db, 'blocked_words'), (snapshot) => {
                 const data = snapshot.val();
                 if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
-                else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+                else if (typeof data === 'string') blockedWordsList = data.split('
+').map(w => w.toLowerCase().trim()).filter(Boolean);
                 else blockedWordsList = [];
             }, (err) => console.error(err));
 
@@ -788,14 +790,14 @@
                 const isMe = nick === currentUser.nick;
                 return `
                     <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
-                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
+                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
                             <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
                             ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
                             ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
-                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
+                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -901,7 +903,7 @@
                         <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
                         <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
                     </div>
-                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
+                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
                 </div>
             `).join('');
             modal.classList.remove('hidden');
@@ -913,7 +915,8 @@
             if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
             const modal = document.getElementById('blockedWordsModal');
             const input = document.getElementById('blockedWordsInput');
-            input.value = blockedWordsList.join('\n');
+            input.value = blockedWordsList.join('
+');
             document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
             modal.classList.remove('hidden');
         };
@@ -923,7 +926,8 @@
         window.saveBlockedWords = async function() {
             if (!isMainAdmin()) return;
             const raw = document.getElementById('blockedWordsInput').value || '';
-            const unique = [...new Set(raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean))];
+            const unique = [...new Set(raw.split('
+').map(w => w.toLowerCase().trim()).filter(Boolean))];
             try {
                 await set(ref(db, 'blocked_words'), unique);
                 blockedWordsList = unique;
@@ -1260,7 +1264,7 @@
                 return;
             }
             box.innerHTML = mentionMatches.map((nick, i) => `
-                <button type="button" onmousedown="event.preventDefault(); applyMentionSelection('${esc(nick).replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
+                <button type="button" onmousedown="event.preventDefault(); applyMentionSelection('${esc(nick).replace(/'/g, "\'")}')" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
                     <span>@${esc(nick)}</span>
                     <span class="text-[10px] text-cyan-400">Mencionar</span>
                 </button>
@@ -1511,6 +1515,56 @@
             renderedMessageKeys.delete(firebaseKey);
         }
 
+        let initialChatLoaded = false;
+        let audioCtxInstance = null;
+
+        document.addEventListener('pointerdown', () => {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx && !audioCtxInstance) audioCtxInstance = new AudioCtx();
+                if (audioCtxInstance && audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
+            } catch (e) {}
+        }, { once: true });
+
+        function playMentionChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!audioCtxInstance) audioCtxInstance = new AudioCtx();
+                if (audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
+
+                const now = audioCtxInstance.currentTime;
+                const notes = [880, 1174.66];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtxInstance.createOscillator();
+                    const gain = audioCtxInstance.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+
+                    gain.gain.setValueAtTime(0.0001, now + idx * 0.11);
+                    gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.11 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.11 + 0.38);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtxInstance.destination);
+                    osc.start(now + idx * 0.11);
+                    osc.stop(now + idx * 0.11 + 0.4);
+                });
+            } catch (e) {}
+        }
+
+        function isCurrentUserMentioned(text) {
+            if (!text || !currentUser || !currentUser.nick) return false;
+            const myNick = String(currentUser.nick).trim().toLowerCase();
+            if (!myNick) return false;
+            const regex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
+            let match;
+            while ((match = regex.exec(String(text))) !== null) {
+                if (match[1].toLowerCase() === myNick) return true;
+            }
+            return false;
+        }
+
         let renderedMessageKeys = new Set();
 
         function renderMessages() {
@@ -1520,6 +1574,7 @@
             if (messages.length === 0) {
                 container.innerHTML = '';
                 renderedMessageKeys.clear();
+                initialChatLoaded = true;
                 return;
             }
 
@@ -1596,6 +1651,16 @@
                 `;
                 container.appendChild(div);
             });
+
+            if (initialChatLoaded && newMessages.length > 0) {
+                const gotMentioned = newMessages.some(m =>
+                    m &&
+                    String(m.sender ?? '').trim() !== String(currentUser.nick ?? '').trim() &&
+                    isCurrentUserMentioned(m.text)
+                );
+                if (gotMentioned) playMentionChime();
+            }
+            initialChatLoaded = true;
 
             const existingKeys = new Set(messages.map(m => m.firebaseKey));
             Array.from(container.children).forEach(child => {
