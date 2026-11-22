@@ -909,15 +909,14 @@
 
         window.closeBannedList = function() { document.getElementById('bannedListModal').classList.add('hidden'); };
 
-        window.openBlockedWordsPanel = function() {
-            if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
-            const modal = document.getElementById('blockedWordsModal');
-            const input = document.getElementById('blockedWordsInput');
-            input.value = blockedWordsList.join('
-');
-            document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
-            modal.classList.remove('hidden');
-        };
+ window.openBlockedWordsPanel = function() {
+    if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
+    const modal = document.getElementById('blockedWordsModal');
+    const input = document.getElementById('blockedWordsInput');
+    input.value = blockedWordsList.join('\n');
+    document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
+    modal.classList.remove('hidden');
+};
 
         window.closeBlockedWordsPanel = function() { document.getElementById('blockedWordsModal').classList.add('hidden'); };
 
