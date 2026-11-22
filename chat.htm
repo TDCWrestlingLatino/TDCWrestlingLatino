@@ -242,7 +242,6 @@
                 <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
                 <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
                 
-                
                 <button onclick="toggleEmojiPicker()" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2 py-0.5 rounded text-sm border border-slate-700 cursor-pointer shrink-0" title="Más emojis">😀+</button>
             </div>
 
@@ -356,7 +355,10 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
+palabra2
+insulto
+..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow cursor-pointer">Guardar Lista</button>
@@ -467,14 +469,14 @@
         }
 
         function dbError(err) {
-    console.error(err);
-    const code = (err && (err.code || err.message)) || 'error';
-    const hint = /permission/i.test(code) ? '\nRevisa las reglas de Firebase Realtime Database.' : '';
-    showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
-}
+            console.error(err);
+            const code = (err && (err.code || err.message)) || 'error';
+            const hint = /permission/i.test(code) ? '\nRevisa las reglas de Firebase Realtime Database.' : '';
+            showToast({ text: `⚠️ No se pudo completar la acción (${code}).${hint}`, duration: 9000 });
+        }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -655,12 +657,12 @@
 
             onValue(ref(db, 'banned_users'), (snapshot) => { bannedUsers = snapshot.val() || {}; }, (err) => console.error(err));
 
-  onValue(ref(db, 'blocked_words'), (snapshot) => {
-    const data = snapshot.val();
-    if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
-    else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
-    else blockedWordsList = [];
-}, (err) => console.error(err));
+            onValue(ref(db, 'blocked_words'), (snapshot) => {
+                const data = snapshot.val();
+                if (Array.isArray(data)) blockedWordsList = data.map(w => String(w).toLowerCase().trim()).filter(Boolean);
+                else if (typeof data === 'string') blockedWordsList = data.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean);
+                else blockedWordsList = [];
+            }, (err) => console.error(err));
 
             onValue(ref(db, 'chat_messages'), (snapshot) => {
                 const data = snapshot.val();
@@ -783,23 +785,25 @@
             });
 
             const entries = Object.entries(uniqueUsersMap);
-            listContent.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>` : entries.map(([nick, sessionKey]) => {
-                const isAdmin = isAdminNick(nick);
-                const isMe = nick === currentUser.nick;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
-                        <div onclick="clickOnlineUser('${esc(nick).replace(/'/g, "\'")}')" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-                            <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
-                            ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
-                            ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
+            listContent.innerHTML = entries.length === 0
+                ? `<p class="text-center text-slate-500 text-xs py-6">No hay sesiones activas registradas.</p>`
+                : entries.map(([nick, sessionKey]) => {
+                    const isAdmin = isAdminNick(nick);
+                    const isMe = nick === currentUser.nick;
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-all gap-2">
+                            <div data-nick="${esc(nick)}" onclick="clickOnlineUser(this.dataset.nick)" class="flex items-center space-x-2 truncate flex-1 cursor-pointer" title="Enviar privado">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                                <span class="font-bold text-xs text-white truncate">${esc(nick)}</span>
+                                ${isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30">ADMIN</span>` : ''}
+                                ${isMe ? `<span class="text-[10px] text-cyan-400 italic">(Tú)</span>` : ''}
+                            </div>
+                            <div class="flex items-center gap-1 shrink-0">
+                                ${!isMe ? `<button data-session="${esc(sessionKey)}" data-nick="${esc(nick)}" onclick="kickUserSession(this.dataset.session, this.dataset.nick)" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
+                            </div>
                         </div>
-                        <div class="flex items-center gap-1 shrink-0">
-                            ${!isMe ? `<button onclick="kickUserSession('${sessionKey}', '${esc(nick).replace(/'/g, "\'")}')" class="bg-rose-950 hover:bg-rose-900 text-rose-200 text-[10px] font-bold px-2 py-1 rounded border border-rose-700 cursor-pointer" title="Forzar salida de esta sesión">⚡ Expulsar</button>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
 
             modal.classList.remove('hidden');
         }
@@ -895,36 +899,37 @@
             if (!modal || !list) return;
 
             const entries = Object.values(bannedUsers || {});
-            list.innerHTML = entries.length === 0 ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>` : entries.map(u => `
-                <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
-                    <div class="min-w-0">
-                        <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
-                        <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
+            list.innerHTML = entries.length === 0
+                ? `<p class="text-center text-slate-500 text-xs py-6">No hay usuarios bloqueados.</p>`
+                : entries.map(u => `
+                    <div class="flex items-center justify-between gap-2 py-2 px-2 border-b border-slate-800">
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm text-white truncate">${esc(u.nick)}</div>
+                            <div class="text-[10px] text-slate-400">Por: ${esc(u.bannedBy)}</div>
+                        </div>
+                        <button data-nick="${esc(u.nick)}" onclick="unbanUser(this.dataset.nick)" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
                     </div>
-                    <button onclick="unbanUser('${esc(u.nick).replace(/'/g, "\'")}')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 cursor-pointer">Desbloquear</button>
-                </div>
-            `).join('');
+                `).join('');
             modal.classList.remove('hidden');
         };
 
         window.closeBannedList = function() { document.getElementById('bannedListModal').classList.add('hidden'); };
 
- window.openBlockedWordsPanel = function() {
-    if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
-    const modal = document.getElementById('blockedWordsModal');
-    const input = document.getElementById('blockedWordsInput');
-    input.value = blockedWordsList.join('\n');
-    document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
-    modal.classList.remove('hidden');
-};
+        window.openBlockedWordsPanel = function() {
+            if (!isMainAdmin()) { uiAlert('Solo el Admin principal puede gestionar las palabras bloqueadas.'); return; }
+            const modal = document.getElementById('blockedWordsModal');
+            const input = document.getElementById('blockedWordsInput');
+            input.value = blockedWordsList.join('\n');
+            document.getElementById('blockedWordsCount').textContent = blockedWordsList.length + ' palabras';
+            modal.classList.remove('hidden');
+        };
 
         window.closeBlockedWordsPanel = function() { document.getElementById('blockedWordsModal').classList.add('hidden'); };
 
         window.saveBlockedWords = async function() {
             if (!isMainAdmin()) return;
             const raw = document.getElementById('blockedWordsInput').value || '';
-            const unique = [...new Set(raw.split('
-').map(w => w.toLowerCase().trim()).filter(Boolean))];
+            const unique = [...new Set(raw.split('\n').map(w => w.toLowerCase().trim()).filter(Boolean))];
             try {
                 await set(ref(db, 'blocked_words'), unique);
                 blockedWordsList = unique;
@@ -1151,9 +1156,9 @@
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
+            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
             safe = safe.replace(/(^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g, '$1<span class="mention-tag">@$2</span>');
             return safe;
         }
@@ -1261,7 +1266,7 @@
                 return;
             }
             box.innerHTML = mentionMatches.map((nick, i) => `
-                <button type="button" onmousedown="event.preventDefault(); applyMentionSelection('${esc(nick).replace(/'/g, "\'")}')" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
+                <button type="button" data-nick="${esc(nick)}" onmousedown="event.preventDefault(); applyMentionSelection(this.dataset.nick)" class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer ${i === mentionSelectedIdx ? 'bg-cyan-950 text-cyan-300 font-bold' : 'text-slate-200 hover:bg-slate-800'}">
                     <span>@${esc(nick)}</span>
                     <span class="text-[10px] text-cyan-400">Mencionar</span>
                 </button>
@@ -1586,7 +1591,7 @@
 
                 const div = document.createElement('div');
                 div.id = `msg_${msg.firebaseKey}`;
-                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-white/100 hover:bg-black/20 rounded-none transition-all group shrink-0";
+                div.className = "flex items-start space-x-2.5 py-2 px-1.5 border-b border-slate-700/60 hover:bg-black/20 rounded-none transition-all group shrink-0";
 
                 const sender = String(msg.sender ?? '');
                 const canDelete = currentUser.isAdmin || sender === currentUser.nick;
@@ -1606,7 +1611,10 @@
                     const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
 
                     if (isDirectImgUrl) {
-                        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                        const validDirectUrl = safeUrl(text);
+                        if (validDirectUrl) {
+                            contentHtml += `<img data-src="${esc(validDirectUrl)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                        }
                     } else if (isOnlyEmojis(text)) {
                         contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
                     } else if (isOnlyNumbers(text)) {
@@ -1618,7 +1626,7 @@
 
                 const imageSrc = safeUrl(msg.image);
                 if(imageSrc) {
-                    contentHtml += `<img src="${esc(imageSrc)}" onclick="openImageModal('${esc(imageSrc)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                    contentHtml += `<img data-src="${esc(imageSrc)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
                 }
 
                 if(isValidYouTubeEmbed(msg.youtube)) {
@@ -1756,7 +1764,8 @@
                         
                         let innerHtml = `<strong class="block text-[9px] opacity-70 mb-0.5">${esc(msg.sender)}:</strong>`;
                         if (msg.text) innerHtml += `<span>${parseMarkdown(msg.text)}</span>`;
-                        if (safeUrl(msg.image)) innerHtml += `<img src="${esc(safeUrl(msg.image))}" onclick="openImageModal('${esc(safeUrl(msg.image))}')" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+                        const privImg = safeUrl(msg.image);
+                        if (privImg) innerHtml += `<img data-src="${esc(privImg)}" onclick="openImageModal(this.dataset.src)" class="w-full max-h-[220px] rounded-lg mt-1 border border-slate-700 object-cover cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
 
                         innerHtml += `<button data-users="${esc(activeUsersKey)}" data-key="${esc(msg.firebaseKey)}" onclick="deleteInboxMessage(this.dataset.users, this.dataset.key)" class="absolute top-1 right-1 text-[11px] text-white bg-red-600 hover:bg-red-500 cursor-pointer font-bold px-2 py-0.5 rounded shadow" title="Borrar mensaje">BORRAR</button>`;
 
@@ -1870,7 +1879,7 @@
     <div id="customContextMenu" class="hidden fixed z-[100] bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-1.5 w-48 text-xs text-slate-200 backdrop-blur-md">
         <div class="px-3 py-1 font-bold text-cyan-400 border-b border-slate-800 text-[10px] uppercase tracking-wider">Opciones TDC</div>
         <button onclick="menuActionReload()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🔄</span><span>Actualizar chat</span></button>
-        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span><b></b></button>
+        <button onclick="menuActionScrollBottom()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>⬇️</span><span>Ir al último mensaje</span></button>
         <button onclick="menuActionOpenSkins()" class="w-full text-left px-3 py-2 hover:bg-cyan-950/80 hover:text-cyan-300 flex items-center space-x-2 cursor-pointer"><span>🎨</span><span>Cambiar Skin</span></button>
     </div>    
     <script>
@@ -1922,17 +1931,25 @@
         }
 
         function openImageModal(imgSrc) {
+            const u = String(imgSrc ?? '').trim();
+            if (!/^(https?:\/\/|data:image\/)/i.test(u)) return;
             const win = window.open();
             if (win) {
-                win.document.write(`
-                    <html>
-                        <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
-                        <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
-                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-resis:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
-                        </body>
-                    </html>
-                `);
-                win.document.close();
+                const img = win.document.createElement('img');
+                img.src = u;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                img.style.objectFit = 'contain';
+                img.style.borderRadius = '8px';
+                img.style.boxShadow = '0 0 20px rgba(0,0,0,0.8)';
+                win.document.body.style.margin = '0';
+                win.document.body.style.background = '#050505';
+                win.document.body.style.display = 'flex';
+                win.document.body.style.alignItems = 'center';
+                win.document.body.style.justifyContent = 'center';
+                win.document.body.style.height = '100vh';
+                win.document.title = 'TDC Wrestling Latino - Imagen Ampliada';
+                win.document.body.appendChild(img);
             }
         }
     </script>
