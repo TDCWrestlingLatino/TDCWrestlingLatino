@@ -159,7 +159,7 @@
             <div class="space-y-2.5 text-xs">
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Color de Texto:</label>
-                    <input type="color" id="pickerTextColor" value="#00ffcc" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
+                    <input type="color" id="pickerTextColor" value="#ffffff" onchange="updateUserStyle()" class="w-full h-7 bg-slate-800 rounded-lg cursor-pointer border border-slate-700 p-0.5">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Tipografía:</label>
@@ -484,7 +484,7 @@
             return /^(https?:\/\/|data:image\/)/i.test(u) ? u : '';
         }
         function safeColor(color) {
-            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#00ffcc';
+            return /^#[0-9a-f]{3,8}$/i.test(String(color ?? '')) ? color : '#ffffff';
         }
         const ALLOWED_FONTS = ['Inter', 'Bebas Neue', 'Anton', 'Oswald', 'Archivo Black', 'Russo One', 'Teko', 'Orbitron', 'Exo 2', 'Rajdhani', 'Chakra Petch', 'Rubik', 'Outfit', 'Plus Jakarta Sans', 'Nunito'];
         const ALLOWED_SIZES = ['text-[11px]', 'text-xs', 'text-sm', 'text-base'];
@@ -633,7 +633,7 @@
                 try {
                     currentUser = JSON.parse(savedUser);
                     document.getElementById('loginModal').classList.add('hidden');
-                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#00ffcc';
+                    document.getElementById('pickerTextColor').value = currentUser.textColor || '#ffffff';
                     document.getElementById('selectFont').value = currentUser.font || 'Inter';
                     document.getElementById('selectFontSize').value = currentUser.fontSize || 'text-xs';
                     checkAdminUIs();
@@ -686,7 +686,7 @@
             if(!nickInput) { await uiAlert('Por favor ingresa un apodo válido.'); return; }
 
             currentUser.nick = nickInput;
-            currentUser.textColor = '#00ffcc';
+            currentUser.textColor = '#ffffff';
             currentUser.font = 'Inter';
             currentUser.fontSize = 'text-xs';
 
