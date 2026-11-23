@@ -475,7 +475,12 @@ insulto
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -572,7 +577,7 @@ insulto
             } catch (e) {}
         }
 
-function getKnownMentionNames() {
+        function getKnownMentionNames() {
             const names = new Set(['The Gran Enigma']);
             if (currentUser && currentUser.nick) names.add(String(currentUser.nick).trim());
             Object.values(onlineUsersMap || {}).forEach(u => {
@@ -586,11 +591,11 @@ function getKnownMentionNames() {
                 .sort((a, b) => b.length - a.length);
         }
 
-     function escapeRegExp(str) {
+        function escapeRegExp(str) {
             return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-function hasAnyMention(text) {
+        function hasAnyMention(text) {
             if (!text) return false;
             const raw = String(text);
             const knownNames = getKnownMentionNames();
@@ -1975,7 +1980,7 @@ function hasAnyMention(text) {
                     <html>
                         <head><title>TDC Wrestling Latino - Imagen Ampliada</title></head>
                         <body style="margin:0; background:#050505; display:flex; align-items:center; justify-content:center; height:100vh;">
-                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-resis:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                            <img src="${imgSrc}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
                         </body>
                     </html>
                 `);
