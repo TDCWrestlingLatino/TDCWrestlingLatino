@@ -241,8 +241,6 @@
                 <button onclick="insertEmoji('😬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😬</button>
                 <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
                 <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
-                
-                
                 <button onclick="toggleEmojiPicker()" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2 py-0.5 rounded text-sm border border-slate-700 cursor-pointer shrink-0" title="Más emojis">😀+</button>
             </div>
 
@@ -356,7 +354,10 @@
                 <button onclick="closeBlockedWordsPanel()" class="text-slate-400 hover:text-white font-bold px-2 py-1 rounded-lg bg-slate-800 text-xs cursor-pointer">✕ Cerrar</button>
             </div>
             <p class="text-[11px] text-slate-400 mt-2 mb-2">Escribe o pega las palabras que quieres bloquear (una por línea).</p>
-            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1&#10;palabra2&#10;insulto&#10;..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
+            <textarea id="blockedWordsInput" rows="14" placeholder="palabra1
+palabra2
+insulto
+..." class="w-full flex-1 min-h-[200px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 resize-none custom-scrollbar"></textarea>
             <div class="flex items-center justify-between gap-2 mt-3 shrink-0">
                 <span id="blockedWordsCount" class="text-[11px] text-slate-500">0 palabras</span>
                 <button onclick="saveBlockedWords()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow cursor-pointer">Guardar Lista</button>
@@ -474,7 +475,7 @@
         }
 
         function esc(value) {
-            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return String(value ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, ''');
         }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
@@ -571,16 +572,34 @@
             } catch (e) {}
         }
 
-        function isCurrentUserMentioned(text) {
-            if (!text || !currentUser || !currentUser.nick) return false;
-            const myNick = String(currentUser.nick).trim().toLowerCase();
-            if (!myNick) return false;
-            const regex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
-            let match;
-            while ((match = regex.exec(String(text))) !== null) {
-                if (match[1].toLowerCase() === myNick) return true;
+        function getKnownMentionNames() {
+            const names = new Set(['The Gran Enigma']);
+            if (currentUser && currentUser.nick) names.add(String(currentUser.nick).trim());
+            Object.values(onlineUsersMap || {}).forEach(u => {
+                if (u && u.nick) names.add(String(u.nick).trim());
+            });
+            (messages || []).forEach(m => {
+                if (m && m.sender) names.add(String(m.sender).trim());
+            });
+            return [...names]
+                .filter(Boolean)
+                .sort((a, b) => b.length - a.length);
+        }
+
+        function escapeRegExp(str) {
+            return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function hasAnyMention(text) {
+            if (!text) return false;
+            const raw = String(text);
+            const knownNames = getKnownMentionNames();
+            if (knownNames.length > 0) {
+                const multiNamePattern = knownNames.map(escapeRegExp).join('|');
+                const multiRegex = new RegExp(`(^|[\\s(>])@(${multiNamePattern})(?=$|[\\s.,!?;:)<])`, 'i');
+                if (multiRegex.test(raw)) return true;
             }
-            return false;
+            return /(^|[\s(>])@[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+/.test(raw);
         }
 
         const nickKey = (nick) => String(nick ?? '').replace(/[.#$\[\]\/]/g, '_').toLowerCase();
@@ -1200,10 +1219,18 @@
         }
 
         function parseMarkdown(text) {
-            let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let safe = text.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
-            safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
-            safe = safe.replace(/(^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g, '$1<span class="mention-tag">@$2</span>');
+            safe = safe.replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
+
+            const knownNames = getKnownMentionNames();
+            if (knownNames.length > 0) {
+                const multiNamePattern = knownNames.map(escapeRegExp).join('|');
+                const multiRegex = new RegExp(`(^|[\\s(>])@(${multiNamePattern})(?=$|[\\s.,!?;:)<])`, 'gi');
+                safe = safe.replace(multiRegex, '$1<span class="mention-tag">@$2</span>');
+            }
+
+            safe = safe.replace(/(^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)(?![^<]*<\/span>)/g, '$1<span class="mention-tag">@$2</span>');
             return safe;
         }
 
@@ -1323,7 +1350,7 @@
             if (!input) return;
             const cursor = input.selectionStart ?? input.value.length;
             const beforeCursor = input.value.slice(0, cursor);
-            const match = beforeCursor.match(/(?:^|\s)@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]*)$/);
+            const match = beforeCursor.match(/(?:^|\s)@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._\s-]*)$/);
 
             if (!match) {
                 closeMentionBox();
@@ -1648,12 +1675,12 @@
             });
 
             if (initialChatLoaded && newMessages.length > 0) {
-                const gotMentioned = newMessages.some(m =>
+                const hasMentionFromOther = newMessages.some(m =>
                     m &&
                     String(m.sender ?? '').trim() !== String(currentUser.nick ?? '').trim() &&
-                    isCurrentUserMentioned(m.text)
+                    hasAnyMention(m.text)
                 );
-                if (gotMentioned) playMentionChime();
+                if (hasMentionFromOther) playMentionChime();
             }
             initialChatLoaded = true;
 
