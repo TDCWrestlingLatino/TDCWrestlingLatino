@@ -52,7 +52,7 @@
             <div class="space-y-3">
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1">Tu Apodo / Nick *</label>
-                    <input type="text" id="inputNick" placeholder="Ej. MegazordTDC..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+                    <input type="text" id="inputNick" placeholder="Ej. The Gran Enigma..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
                 </div>
 
                 <div>
@@ -476,6 +476,9 @@
         function esc(value) {
             return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
+        function escapeRegex(str) {
+            return String(str ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
         function safeUrl(url) {
             const u = String(url ?? '').trim();
             return /^(https?:\/\/|data:image\/)/i.test(u) ? u : '';
@@ -571,14 +574,41 @@
             } catch (e) {}
         }
 
+        function getKnownMentionCandidates() {
+            const set = new Set([
+                'The Gran Enigma',
+                'Gran Enigma'
+            ]);
+            Object.values(onlineUsersMap || {}).forEach(u => {
+                if (u && u.nick) set.add(String(u.nick).trim());
+            });
+            (messages || []).forEach(m => {
+                if (m && m.sender) set.add(String(m.sender).trim());
+            });
+            if (currentUser && currentUser.nick) set.add(String(currentUser.nick).trim());
+            return [...set]
+                .filter(Boolean)
+                .sort((a, b) => b.length - a.length);
+        }
+
         function isCurrentUserMentioned(text) {
             if (!text || !currentUser || !currentUser.nick) return false;
             const myNick = String(currentUser.nick).trim().toLowerCase();
             if (!myNick) return false;
-            const regex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
+
+            const targets = new Set([myNick]);
+            if (myNick === 'the gran enigma') targets.add('gran enigma');
+            if (myNick === 'gran enigma') targets.add('the gran enigma');
+
+            const source = String(text);
+            const escapedTargets = [...targets].sort((a, b) => b.length - a.length).map(escapeRegex);
+            const multiRegex = new RegExp(`(?:^|[\\s(>])@(${escapedTargets.join('|')})(?=$|[\\s.,!?;:)<])`, 'i');
+            if (multiRegex.test(source)) return true;
+
+            const singleRegex = /(?:^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g;
             let match;
-            while ((match = regex.exec(String(text))) !== null) {
-                if (match[1].toLowerCase() === myNick) return true;
+            while ((match = singleRegex.exec(source)) !== null) {
+                if (targets.has(match[1].toLowerCase())) return true;
             }
             return false;
         }
@@ -1203,7 +1233,21 @@
             let safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300 break-all">$1</a>');
             safe = safe.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<b>$1</b>');
+
+            const knownNicks = getKnownMentionCandidates();
+            const tokenMap = [];
+            knownNicks.forEach((nick) => {
+                const mentionRegex = new RegExp(`(^|[\\s(>])@(${escapeRegex(nick)})(?=$|[\\s.,!?;:)<])`, 'gi');
+                safe = safe.replace(mentionRegex, (fullMatch, prefix, matchedNick) => {
+                    const idx = tokenMap.length;
+                    tokenMap.push(`${prefix}<span class="mention-tag">@${matchedNick}</span>`);
+                    return `@@MENCION_${idx}@@`;
+                });
+            });
+
             safe = safe.replace(/(^|[\s(>])@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]+)/g, '$1<span class="mention-tag">@$2</span>');
+
+            safe = safe.replace(/@@MENCION_(\d+)@@/g, (_, idx) => tokenMap[Number(idx)] || '');
             return safe;
         }
 
@@ -1266,7 +1310,7 @@
         let mentionSelectedIdx = 0;
 
         function getLiveChatUsers() {
-            const set = new Set();
+            const set = new Set(['The Gran Enigma']);
             Object.values(onlineUsersMap || {}).forEach(u => {
                 if (u && u.nick) set.add(String(u.nick).trim());
             });
@@ -1323,7 +1367,7 @@
             if (!input) return;
             const cursor = input.selectionStart ?? input.value.length;
             const beforeCursor = input.value.slice(0, cursor);
-            const match = beforeCursor.match(/(?:^|\s)@([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ._-]*)$/);
+            const match = beforeCursor.match(/(?:^|\s)@([^\n@]*)$/);
 
             if (!match) {
                 closeMentionBox();
