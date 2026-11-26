@@ -239,7 +239,7 @@
                 <button onclick="insertEmoji('😒')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😒</button>
                 <button onclick="insertEmoji('🤤')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤤</button>
                 <button onclick="insertEmoji('😬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">😬</button>
-                <button onclick="insertEmoji(':v')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0"><img src="https://i.imgur.com/gfgKIJQ.png" class="w-5 h-5 object-contain pointer-events-none""></button>
+                <button onclick="insertEmoji(':V')" class="hover:scale-125 transition-transform cursor-pointer shrink-0"><img src="https://i.imgur.com/gfgKIJQ.png" alt=":V" class="w-5 h-5 object-contain pointer-events-none"></button>
                 <button onclick="insertEmoji('🔥')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🔥</button>
                 <button onclick="insertEmoji('🤬')" class="text-sm hover:scale-125 transition-transform cursor-pointer shrink-0">🤬</button>
                 
@@ -1630,34 +1630,37 @@
                 const div = document.createElement('div');
                 div.id = `msg_${msg.firebaseKey}`;
                 div.className = "flex items-start space-x-1 py-1 px-1 border-b border-white/100 hover:bg-black/20 rounded-none transition-all group shrink-0";
-
+                
                 const sender = String(msg.sender ?? '');
                 const canDelete = currentUser.isAdmin || sender === currentUser.nick;
                 const canBan = currentUser.isAdmin && sender !== currentUser.nick && !isAdminNick(sender);
                 const adminBadge = msg.isAdmin ? `<span class="bg-cyan-500/20 text-cyan-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-cyan-500/30 ml-1">ADMIN</span>` : '';
                 const bannedBadge = isBanned(sender) ? `<span class="bg-red-500/20 text-red-400 text-[9px] font-extrabold px-1 py-0.5 rounded border border-red-500/30 ml-1">BLOQUEADO</span>` : '';
-
                 const fontName = safeFont(msg.font);
                 const fontFamily = `'${fontName}', sans-serif`;
                 const sizeClass = ALLOWED_SIZES.includes(msg.fontSize) ? msg.fontSize : 'text-xs';
                 const textColor = safeColor(msg.textColor);
                 const avatar = safeUrl(msg.avatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}&background=00ffcc&color=000&bold=true`;
 
-                let contentHtml = '';
-                if(msg.text) {
-                    const text = String(msg.text).trim();
-                    const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
+         let contentHtml = '';
+if (msg.text) {
+    const text = String(msg.text).trim();
+    const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
 
-                    if (isDirectImgUrl) {
-                        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
-                    } else if (isOnlyEmojis(text)) {
-                        contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
-                    } else if (isOnlyNumbers(text)) {
-                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
-                    } else {
-                        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(parseMarkdown(text), fontName)}</p>`;
-                    }
-                }
+    if (isDirectImgUrl) {
+        contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
+    } else if (isOnlyEmojis(text)) {
+        contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
+    } else if (isOnlyNumbers(text)) {
+        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
+    } else {
+        const textWithPacman = parseMarkdown(text).replace(
+            /:v/gi,
+            '<img src="https://i.imgur.com/gfgKIJQ.png" alt=":v" class="inline-block w-5 h-5 object-contain align-middle mx-0.5">'
+        );
+        contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(textWithPacman, fontName)}</p>`;
+    }
+}
 
                 const imageSrc = safeUrl(msg.image);
                 if(imageSrc) {
