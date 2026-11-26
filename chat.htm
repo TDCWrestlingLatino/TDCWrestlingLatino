@@ -1642,7 +1642,9 @@
                 const textColor = safeColor(msg.textColor);
                 const avatar = safeUrl(msg.avatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}&background=00ffcc&color=000&bold=true`;
 
-         let contentHtml = '';
+         const pacmanImg = '<img src="https://i.imgur.com/DiPrWuk.png" alt=":v" class="inline-block w-5 h-5 object-contain align-middle mx-0.5">';
+
+let contentHtml = '';
 if (msg.text) {
     const text = String(msg.text).trim();
     const isDirectImgUrl = /^https?:\/\/[^\s]+\.(gif|jpg|jpeg|png)(\?[^\s]*)?$/i.test(text);
@@ -1650,14 +1652,12 @@ if (msg.text) {
     if (isDirectImgUrl) {
         contentHtml += `<img src="${esc(text)}" onclick="openImageModal('${esc(text)}')" class="w-full max-h-[240px] rounded-xl mt-1.5 border border-slate-700 object-cover shadow cursor-pointer hover:opacity-90 transition-opacity" title="Haz clic para ver en grande">`;
     } else if (isOnlyEmojis(text)) {
-        contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${esc(text)}</div>`;
+        const emojisWithPacman = esc(text).replace(/:v/gi, pacmanImg);
+        contentHtml += `<div class="text-xl py-0.5 select-none leading-none">${emojisWithPacman}</div>`;
     } else if (isOnlyNumbers(text)) {
         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: 'Inter', sans-serif !important;">${esc(text)}</p>`;
     } else {
-        const textWithPacman = parseMarkdown(text).replace(
-            /:v/gi,
-            '<img src="https://i.imgur.com/DiPrWuk.png" alt=":v" class="inline-block w-4 h-4 object-contain align-middle mx-0.5">'
-        );
+        const textWithPacman = parseMarkdown(text).replace(/:v/gi, pacmanImg);
         contentHtml += `<p class="chat-message-text ${sizeClass} break-words leading-relaxed" style="color: ${textColor} !important; font-family: ${fontFamily} !important;">${scaleDigits(textWithPacman, fontName)}</p>`;
     }
 }
